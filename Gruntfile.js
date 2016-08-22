@@ -58,6 +58,15 @@ module.exports = function (grunt) {
 					]
 				}
 			}
+		},
+		watch: {
+			js: {
+				files: ['src/**/*.coffee'],
+				tasks: ['build'],
+				options: {
+					livereload: true
+				}
+			}
 		}
 	});
 
@@ -66,6 +75,13 @@ module.exports = function (grunt) {
 			'coffeescript_concat',
 			'coffee',
 			'uglify'
+		]
+	);
+
+	grunt.registerTask(
+		'dev', [
+			'build',
+			'watch'
 		]
 	);
 	grunt.registerTask('default', 'build');
