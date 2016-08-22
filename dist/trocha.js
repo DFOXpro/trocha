@@ -1,5 +1,5 @@
 this.trocha = (function() {
-  var $, $ID, $METHOD, $NAME, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
+  var $, $ID, $METHOD, $NAME, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALIAS, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
   _ = '/';
   s = '';
   $ = '$';
@@ -21,6 +21,7 @@ this.trocha = (function() {
   URL = 'url';
   TYPE = 'type';
   PREFIX = 'pre';
+  ALIAS = 'alias';
   POSTFIX = 'post';
   EXTENDED = 'ext';
   METHOD = 'method';
@@ -101,52 +102,55 @@ this.trocha = (function() {
       return posibleRoutes.forEach(function(name) {
         var newResourceParam, newRouteParam, newScopeParam, route;
         route = routesJSON[name];
-        if (typeof route !== 'object') {
-          console.error('Did you mean', _$ + name, '? Route definition must be Object');
+        if (typeof route === 'string') {
+          return parent[name] = route;
+        } else if (typeof route === 'object') {
+          if (route[_$ + TYPE] === SCOPE) {
+            newScopeParam = {};
+            newScopeParam[NAME] = name;
+            if (route[_$ + ID] !== void 0) {
+              newScopeParam[ID] = route[_$ + ID];
+              delete route[_$ + ID];
+            }
+            parent[NEW_SCOPE](newScopeParam);
+          } else if (route[_$ + TYPE] === RESOURCE) {
+            newResourceParam = {};
+            newResourceParam[NAME] = name;
+            if (route[_$ + ID] !== void 0) {
+              newResourceParam[ID] = route[_$ + ID];
+              delete route[_$ + ID];
+            }
+            parent[NEW_RESOURCE](newResourceParam);
+          } else {
+            newRouteParam = {};
+            newRouteParam[NAME] = name;
+            if (route[_$ + ID] !== void 0) {
+              newRouteParam[ID] = route[_$ + ID];
+              delete route[_$ + ID];
+            }
+            if (route[_$ + METHOD]) {
+              newRouteParam[METHOD] = route[_$ + METHOD];
+              delete route[_$ + METHOD];
+            }
+            if (route[_$ + JUST_ID]) {
+              newRouteParam[JUST_ID] = route[_$ + JUST_ID];
+              delete route[_$ + JUST_ID];
+            }
+            if (route[_$ + AFTER_ID]) {
+              newRouteParam[AFTER_ID] = route[_$ + AFTER_ID];
+              delete route[_$ + AFTER_ID];
+            }
+            if (route[_$ + HIDE]) {
+              newRouteParam[HIDE] = route[_$ + HIDE];
+              delete route[_$ + HIDE];
+            }
+            parent[NEW_ROUTE](newRouteParam);
+          }
+          return _prepareRoutes(parent[name], route);
+        } else {
+          console.error('Did you mean', _$ + name, '? Route definition must be Object or String');
           throw 'TrochaJS error: [_prepareRoutes] invalid route definition. name = ' + name;
         }
-        if (route[_$ + TYPE] === SCOPE) {
-          newScopeParam = {};
-          newScopeParam[NAME] = name;
-          if (route[_$ + ID] !== void 0) {
-            newScopeParam[ID] = route[_$ + ID];
-            delete route[_$ + ID];
-          }
-          parent[NEW_SCOPE](newScopeParam);
-        } else if (route[_$ + TYPE] === RESOURCE) {
-          newResourceParam = {};
-          newResourceParam[NAME] = name;
-          if (route[_$ + ID] !== void 0) {
-            newResourceParam[ID] = route[_$ + ID];
-            delete route[_$ + ID];
-          }
-          parent[NEW_RESOURCE](newResourceParam);
-        } else {
-          newRouteParam = {};
-          newRouteParam[NAME] = name;
-          if (route[_$ + ID] !== void 0) {
-            newRouteParam[ID] = route[_$ + ID];
-            delete route[_$ + ID];
-          }
-          if (route[_$ + METHOD]) {
-            newRouteParam[METHOD] = route[_$ + METHOD];
-            delete route[_$ + METHOD];
-          }
-          if (route[_$ + JUST_ID]) {
-            newRouteParam[JUST_ID] = route[_$ + JUST_ID];
-            delete route[_$ + JUST_ID];
-          }
-          if (route[_$ + AFTER_ID]) {
-            newRouteParam[AFTER_ID] = route[_$ + AFTER_ID];
-            delete route[_$ + AFTER_ID];
-          }
-          if (route[_$ + HIDE]) {
-            newRouteParam[HIDE] = route[_$ + HIDE];
-            delete route[_$ + HIDE];
-          }
-          parent[NEW_ROUTE](newRouteParam);
-        }
-        return _prepareRoutes(parent[name], route);
       });
     };
     _preparePath = function(parent, param) {
@@ -154,6 +158,9 @@ this.trocha = (function() {
         var fragment, hide, noIdentifier, query, r;
         if (!routeParams) {
           routeParams = {};
+        }
+        if (param[ALIAS]) {
+          return param[ALIAS];
         }
         r = (routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s);
         delete routeParams[URL];

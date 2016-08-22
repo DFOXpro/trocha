@@ -27,6 +27,7 @@
 	URL = 'url'
 	TYPE = 'type'
 	PREFIX = 'pre'
+	ALIAS = 'alias'
 	POSTFIX = 'post'
 	EXTENDED = 'ext'
 	METHOD = 'method'
