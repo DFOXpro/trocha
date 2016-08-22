@@ -1,0 +1,1 @@
+this.trocha = (()->

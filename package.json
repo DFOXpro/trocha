@@ -1,0 +1,21 @@
+{
+  "name": "Trocha.js",
+  "version": "0.1.1",
+  "description": "Route listing Web clients",
+  "author": "DFOXpro",
+  "private": true,
+  "license": "Mozilla's PL",
+  "dependencies": {
+    "grunt": "latest",
+    "grunt-cli": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-protractor-runner": "^3.2.0",
+    "load-grunt-tasks": "latest",
+    "protractor": "~3.3.0"
+  }
+}

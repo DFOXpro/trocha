@@ -1,0 +1,2 @@
+)()
+#window.trocha = this.trocha
