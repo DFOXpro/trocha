@@ -3,7 +3,7 @@
 				if !routeParams
 					routeParams = {}
 
-				r = `(routeParams[URL] && routes[$domain] ? routes[$domain] : s)` #url
+				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` #url
 				delete routeParams[URL]
 				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
 				delete routeParams[PREFIX]

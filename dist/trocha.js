@@ -1,5 +1,5 @@
 this.trocha = (function() {
-  var $, $ID, $METHOD, $NAME, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
+  var $, $ID, $METHOD, $NAME, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
   _ = '/';
   s = '';
   $ = '$';
@@ -29,6 +29,7 @@ this.trocha = (function() {
   JUST_ID = 'justId';
   AFTER_ID = 'afterId';
   PARENT_ID = 'parentId';
+  ALWAYS_URL = 'alwaysUrl';
   CUSTOM_SELECTOR = 'customSelector';
   AS = $ + 'as';
   $ID = $ + ID;
@@ -42,6 +43,7 @@ this.trocha = (function() {
   $domain = $ + DOMAIN;
   $prefix = $ + PREFIX;
   $postfix = $ + POSTFIX;
+  $alwaysUrl = $ + ALWAYS_URL;
   $resource = $ + RESOURCE.toLowerCase();
   $customSelector = $ + CUSTOM_SELECTOR;
   _show = 'show';
@@ -76,6 +78,9 @@ this.trocha = (function() {
       }
       if (initParams[CUSTOM_SELECTOR]) {
         routes[$customSelector] = initParams[CUSTOM_SELECTOR];
+      }
+      if (initParams[ALWAYS_URL]) {
+        routes[$alwaysUrl] = initParams[ALWAYS_URL];
       }
       routes[NEW_SCOPE] = newScope;
       routes[NEW_ROUTE] = newRoute;
@@ -150,7 +155,7 @@ this.trocha = (function() {
         if (!routeParams) {
           routeParams = {};
         }
-        r = (routeParams[URL] && routes[$domain] ? routes[$domain] : s);
+        r = (routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s);
         delete routeParams[URL];
         r += ((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s);
         delete routeParams[PREFIX];

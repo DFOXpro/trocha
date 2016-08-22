@@ -10,6 +10,8 @@
 				routes[$resource] = initParams[RESOURCE.toLowerCase()]
 			if initParams[CUSTOM_SELECTOR]
 				routes[$customSelector] = initParams[CUSTOM_SELECTOR]
+			if initParams[ALWAYS_URL]
+				routes[$alwaysUrl] = initParams[ALWAYS_URL]
 
 			routes[NEW_SCOPE] = newScope
 			routes[NEW_ROUTE] = newRoute

@@ -36,6 +36,7 @@ this.trocha = (()->
 	JUST_ID = 'justId' #FAILS
 	AFTER_ID = 'afterId' #FAILS
 	PARENT_ID = 'parentId'
+	ALWAYS_URL = 'alwaysUrl'
 	CUSTOM_SELECTOR = 'customSelector'
 
 	#Route return attributes
@@ -53,6 +54,7 @@ this.trocha = (()->
 	$domain = $+DOMAIN
 	$prefix = $+PREFIX
 	$postfix = $+POSTFIX
+	$alwaysUrl = $+ALWAYS_URL
 	$resource = $+RESOURCE.toLowerCase()
 	$customSelector =$+CUSTOM_SELECTOR
 
@@ -89,6 +91,8 @@ this.trocha = (()->
 				routes[$resource] = initParams[RESOURCE.toLowerCase()]
 			if initParams[CUSTOM_SELECTOR]
 				routes[$customSelector] = initParams[CUSTOM_SELECTOR]
+			if initParams[ALWAYS_URL]
+				routes[$alwaysUrl] = initParams[ALWAYS_URL]
 
 			routes[NEW_SCOPE] = newScope
 			routes[NEW_ROUTE] = newRoute
@@ -151,7 +155,7 @@ this.trocha = (()->
 				if !routeParams
 					routeParams = {}
 
-				r = `(routeParams[URL] && routes[$domain] ? routes[$domain] : s)` #url
+				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` #url
 				delete routeParams[URL]
 				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
 				delete routeParams[PREFIX]
