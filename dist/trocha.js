@@ -233,16 +233,23 @@ this.trocha = (function() {
     };
     newRoute = function(param) {
       var parent, r;
+      parent = this;
       if (!param) {
         return console.info('Trocha.newRoute( {' + NAME + ':String, [' + METHOD + ':String(Default = GET),' + ID + ':false|String,' + HIDE + ':Boolean,' + JUST_ID + ':Boolean,' + AFTER_ID + ':Boolean] } )');
       } else if (!param[NAME]) {
         console.error('Trocha.newRoute given parameters: ', param);
-        throw 'Trocha.newRoute: Missing name';
+        throw 'Trocha.newRoute: Missing ' + NAME;
       } else if (typeof param[NAME] !== 'string') {
         console.error('Trocha.newRoute given parameters: ', param);
-        throw 'Trocha.newRoute: require String name';
+        throw 'Trocha.newRoute: require String ' + NAME;
+      } else if (param[ALIAS]) {
+        if (typeof param[ALIAS] !== 'string') {
+          console.error('Trocha.newRoute given parameters: ', param);
+          throw 'Trocha.newRoute: require String ' + ALIAS;
+        } else {
+          return parent[param[NAME]] = param[ALIAS];
+        }
       } else {
-        parent = this;
         r = {};
         r[$METHOD] = param[METHOD] || GET;
         r[$NAME] = param[NAME];

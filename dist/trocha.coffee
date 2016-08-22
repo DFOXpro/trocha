@@ -229,6 +229,8 @@ this.trocha = (()->
 				parent[r[$NAME]] = r
 
 		newRoute = (param)->
+			parent = this
+			#console.log 'newRoute', parent, param
 			if !param
 				console.info 'Trocha.newRoute(
 					{
@@ -242,13 +244,17 @@ this.trocha = (()->
 				)'
 			else if !param[NAME]
 				console.error 'Trocha.newRoute given parameters: ', param
-				throw 'Trocha.newRoute: Missing name'
+				throw 'Trocha.newRoute: Missing ' + NAME
 			else if typeof param[NAME] != 'string'
 				console.error 'Trocha.newRoute given parameters: ', param
-				throw 'Trocha.newRoute: require String name'
+				throw 'Trocha.newRoute: require String ' + NAME
+			else if param[ALIAS]
+				if typeof param[ALIAS] != 'string'
+					console.error 'Trocha.newRoute given parameters: ', param
+					throw 'Trocha.newRoute: require String ' + ALIAS
+				else
+					parent[param[NAME]] = param[ALIAS]
 			else
-				parent = this
-				#console.log 'newRoute', parent, param
 				r = {}
 				r[$METHOD] = param[METHOD] || GET
 				r[$NAME] = param[NAME]

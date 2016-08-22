@@ -51,6 +51,7 @@ module.exports = function (grunt) {
 						'src/end.coffee',
 						'src/return.coffee',
 						'src/routes_engine.coffee',
+						'src/prepare_path.coffee',
 						'src/constructor.coffee',
 						'src/object_definition.coffee',
 						'src/variables.coffee',
@@ -64,7 +65,7 @@ module.exports = function (grunt) {
 				files: ['src/**/*.coffee'],
 				tasks: ['build'],
 				options: {
-					livereload: true
+					livereload: 1337
 				}
 			}
 		}
