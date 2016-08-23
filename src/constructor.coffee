@@ -66,9 +66,12 @@
 						if route[_$+HIDE]
 							newRouteParam[HIDE] = route[_$+HIDE]
 							delete route[_$+HIDE]
+						if route[_$+POSTFIX]
+							newRouteParam[POSTFIX] = route[_$+POSTFIX]
+							delete route[_$+POSTFIX]
 						parent[NEW_ROUTE] newRouteParam
 					_prepareRoutes parent[name], route
 				else
 					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
-					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. name = ' + name
+					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
 ##END CONSTRUCTOR

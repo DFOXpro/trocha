@@ -23,7 +23,11 @@
 					r += `(hide? s : param[NAME])`
 					r += `(noIdentifier ? s : _ + ':' + param[ID])`
 
-				r += `((routeParams[POSTFIX]||routeParams[EXTENDED]) && routes[$postfix] ? routes[$postfix] : s)` #postfix
+				r += `(
+					routes[$postfix] &&
+					(param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
+					? routes[$postfix] : s
+				)` #postfix
 				delete routeParams[POSTFIX]
 				query = fragment = {}
 				if routeParams.query
