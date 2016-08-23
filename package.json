@@ -8,6 +8,7 @@
   "dependencies": {
     "grunt": "latest",
     "grunt-cli": "latest",
+    "grunt-coffeescript-concat": "^0.2.1",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-coffee": "^1.0.0",
     "grunt-contrib-concat": "latest",
