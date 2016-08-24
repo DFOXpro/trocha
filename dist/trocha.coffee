@@ -38,6 +38,7 @@ this.trocha = (()->
 	AFTER_ID = 'afterId' #FAILS
 	PARENT_ID = 'parentId'
 	ALWAYS_URL = 'alwaysUrl'
+	ALWAYS_POST = 'alwaysPost'
 	CUSTOM_SELECTOR = 'customSelector'
 
 	#Route return attributes
@@ -56,6 +57,7 @@ this.trocha = (()->
 	$prefix = $+PREFIX
 	$postfix = $+POSTFIX
 	$alwaysUrl = $+ALWAYS_URL
+	$alwaysPost = $+ALWAYS_POST
 	$resource = $+RESOURCE.toLowerCase()
 	$customSelector =$+CUSTOM_SELECTOR
 
@@ -94,6 +96,8 @@ this.trocha = (()->
 				routes[$customSelector] = initParams[CUSTOM_SELECTOR]
 			if initParams[ALWAYS_URL]
 				routes[$alwaysUrl] = initParams[ALWAYS_URL]
+			if initParams[ALWAYS_POST]
+				routes[$alwaysPost] = initParams[ALWAYS_POST]
 
 			routes[NEW_SCOPE] = newScope
 			routes[NEW_ROUTE] = newRoute
@@ -169,7 +173,8 @@ this.trocha = (()->
 				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
 				delete routeParams[PREFIX]
 
-				r += `(parent[PATH] ? parent[PATH]() : s) + _`
+				r += `(parent[PATH] ? parent[PATH]({post:false}) : s) + _`
+				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` #same as parent
 				#REMOVES parent ID if any
 				if parent[$ID] && (param[ID] == false && !routeParams[ID]) || routeParams[PARENT_ID] == false
 					r = r.replace '/:' + parent[$ID], s
@@ -177,14 +182,15 @@ this.trocha = (()->
 				if (routeParams[JUST_ID] != false) && (param[JUST_ID] && param[ID])
 					r += _ + ':' + param[ID]
 				else
-					hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` #same as parent
 					noIdentifier = `(!param[ID] ? true : routeParams[ID] === false ? true : false)`
 					r += `(hide? s : param[NAME])`
 					r += `(noIdentifier ? s : _ + ':' + param[ID])`
 
 				r += `(
 					routes[$postfix] &&
-					(param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
+					routeParams[POSTFIX] != false &&
+					!hide &&
+					(routes[$alwaysPost] || param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
 					? routes[$postfix] : s
 				)` #postfix
 				delete routeParams[POSTFIX]

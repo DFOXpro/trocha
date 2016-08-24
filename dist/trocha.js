@@ -1,5 +1,5 @@
 this.trocha = (function() {
-  var $, $ID, $METHOD, $NAME, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALIAS, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
+  var $, $ID, $METHOD, $NAME, $alwaysPost, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALIAS, ALWAYS_POST, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
   _ = '/';
   s = '';
   $ = '$';
@@ -31,6 +31,7 @@ this.trocha = (function() {
   AFTER_ID = 'afterId';
   PARENT_ID = 'parentId';
   ALWAYS_URL = 'alwaysUrl';
+  ALWAYS_POST = 'alwaysPost';
   CUSTOM_SELECTOR = 'customSelector';
   AS = $ + 'as';
   $ID = $ + ID;
@@ -45,6 +46,7 @@ this.trocha = (function() {
   $prefix = $ + PREFIX;
   $postfix = $ + POSTFIX;
   $alwaysUrl = $ + ALWAYS_URL;
+  $alwaysPost = $ + ALWAYS_POST;
   $resource = $ + RESOURCE.toLowerCase();
   $customSelector = $ + CUSTOM_SELECTOR;
   _show = 'show';
@@ -82,6 +84,9 @@ this.trocha = (function() {
       }
       if (initParams[ALWAYS_URL]) {
         routes[$alwaysUrl] = initParams[ALWAYS_URL];
+      }
+      if (initParams[ALWAYS_POST]) {
+        routes[$alwaysPost] = initParams[ALWAYS_POST];
       }
       routes[NEW_SCOPE] = newScope;
       routes[NEW_ROUTE] = newRoute;
@@ -170,21 +175,23 @@ this.trocha = (function() {
         delete routeParams[URL];
         r += ((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s);
         delete routeParams[PREFIX];
-        r += (parent[PATH] ? parent[PATH]() : s) + _;
+        r += (parent[PATH] ? parent[PATH]({post:false}) : s) + _;
+        hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE]);
         if (parent[$ID] && (param[ID] === false && !routeParams[ID]) || routeParams[PARENT_ID] === false) {
           r = r.replace('/:' + parent[$ID], s);
         }
         if ((routeParams[JUST_ID] !== false) && (param[JUST_ID] && param[ID])) {
           r += _ + ':' + param[ID];
         } else {
-          hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE]);
           noIdentifier = (!param[ID] ? true : routeParams[ID] === false ? true : false);
           r += (hide? s : param[NAME]);
           r += (noIdentifier ? s : _ + ':' + param[ID]);
         }
         r += (
 					routes[$postfix] &&
-					(param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
+					routeParams[POSTFIX] != false &&
+					!hide &&
+					(routes[$alwaysPost] || param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
 					? routes[$postfix] : s
 				);
         delete routeParams[POSTFIX];
