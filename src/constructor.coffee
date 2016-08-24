@@ -12,6 +12,8 @@
 				routes[$customSelector] = initParams[CUSTOM_SELECTOR]
 			if initParams[ALWAYS_URL]
 				routes[$alwaysUrl] = initParams[ALWAYS_URL]
+			if initParams[ALWAYS_POST]
+				routes[$alwaysPost] = initParams[ALWAYS_POST]
 
 			routes[NEW_SCOPE] = newScope
 			routes[NEW_ROUTE] = newRoute

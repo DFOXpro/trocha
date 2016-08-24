@@ -37,6 +37,7 @@
 	AFTER_ID = 'afterId' #FAILS
 	PARENT_ID = 'parentId'
 	ALWAYS_URL = 'alwaysUrl'
+	ALWAYS_POST = 'alwaysPost'
 	CUSTOM_SELECTOR = 'customSelector'
 
 	#Route return attributes
@@ -55,6 +56,7 @@
 	$prefix = $+PREFIX
 	$postfix = $+POSTFIX
 	$alwaysUrl = $+ALWAYS_URL
+	$alwaysPost = $+ALWAYS_POST
 	$resource = $+RESOURCE.toLowerCase()
 	$customSelector =$+CUSTOM_SELECTOR
 
