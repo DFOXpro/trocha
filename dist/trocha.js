@@ -175,7 +175,7 @@ this.trocha = (function() {
         delete routeParams[URL];
         r += ((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s);
         delete routeParams[PREFIX];
-        r += (parent[PATH] ? parent[PATH]({post:false}) : s) + _;
+        r += (parent[PATH] ? parent[PATH]({post:false}) : s);
         hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE]);
         if (parent[$ID] && (param[ID] === false && !routeParams[ID]) || routeParams[PARENT_ID] === false) {
           r = r.replace('/:' + parent[$ID], s);
@@ -184,7 +184,7 @@ this.trocha = (function() {
           r += _ + ':' + param[ID];
         } else {
           noIdentifier = (!param[ID] ? true : routeParams[ID] === false ? true : false);
-          r += (hide? s : param[NAME]);
+          r += (hide? s : _ + param[NAME]);
           r += (noIdentifier ? s : _ + ':' + param[ID]);
         }
         r += (
