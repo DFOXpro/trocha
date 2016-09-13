@@ -1,2 +1,2 @@
-	trochaReturn = (initParams)->
+	trochaReturn = (initParams) ->
 		routes = {}

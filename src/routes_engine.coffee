@@ -1,8 +1,8 @@
-		as = (parent, param)->
+		as = (parent, param) ->
 			pas = parent[AS]
 			`(!pas ? '' : pas + '_')` + param[NAME]
 
-		newScope = (param)->
+		newScope = (param) ->
 			if !param
 				console.info 'newScope(
 					{
@@ -26,7 +26,7 @@
 				r[NEW_RESOURCE] = newResource
 				parent[r[$NAME]] = r
 
-		newRoute = (param)->
+		newRoute = (param) ->
 			parent = this
 			#console.log 'newRoute', parent, param
 			if !param
@@ -65,7 +65,7 @@
 					r[$ID] = param[ID]
 				parent[r[$NAME]] = r
 
-		newResource = (param)->
+		newResource = (param) ->
 			if !param
 				console.info 'newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
 			else if typeof param != 'object'

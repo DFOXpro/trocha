@@ -1,5 +1,5 @@
-		_preparePath = (parent, param)->
-			(routeParams)->
+		_preparePath = (parent, param) ->
+			(routeParams) ->
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
@@ -38,13 +38,13 @@
 				if routeParams.fragment
 					fragment = JSON.parse JSON.stringify routeParams.fragment
 				delete routeParams.fragment
-				Object.keys(routeParams).forEach (v)-> # Replace given identifiers if false delete identifier like /(:id)/
+				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
 
-				Object.keys(query).forEach (key, i, array)->
+				Object.keys(query).forEach (key, i, array) ->
 					if i == 0
 						r += '?'
 					r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + `(array.length - 1 !== i ? '&' : '')`

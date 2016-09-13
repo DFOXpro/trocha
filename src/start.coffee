@@ -1,1 +1,1 @@
-this.trocha = (()->
+this.trocha = (->
