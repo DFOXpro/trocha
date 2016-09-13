@@ -1,4 +1,4 @@
-this.trocha = (()->
+this.trocha = (->
 ##START VARIABLES
 	#Utility vars
 	_ = '/'
@@ -79,7 +79,7 @@ this.trocha = (()->
 	_basicResource[_list][$+ID] = false
 	_basicResource[_list][$+HIDE] = true
 ##END VARIABLES
-	trochaReturn = (initParams)->
+	trochaReturn = (initParams) ->
 		routes = {}
 
 ##START CONSTRUCTOR
@@ -161,8 +161,8 @@ this.trocha = (()->
 					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
 					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
 ##END CONSTRUCTOR
-		_preparePath = (parent, param)->
-			(routeParams)->
+		_preparePath = (parent, param) ->
+			(routeParams) ->
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
@@ -201,23 +201,23 @@ this.trocha = (()->
 				if routeParams.fragment
 					fragment = JSON.parse JSON.stringify routeParams.fragment
 				delete routeParams.fragment
-				Object.keys(routeParams).forEach (v)-> # Replace given identifiers if false delete identifier like /(:id)/
+				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
 
-				Object.keys(query).forEach (key, i, array)->
+				Object.keys(query).forEach (key, i, array) ->
 					if i == 0
 						r += '?'
 					r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + `(array.length - 1 !== i ? '&' : '')`
 					#console.log r, v, routeParams[v]
 				r
-		as = (parent, param)->
+		as = (parent, param) ->
 			pas = parent[AS]
 			`(!pas ? '' : pas + '_')` + param[NAME]
 
-		newScope = (param)->
+		newScope = (param) ->
 			if !param
 				console.info 'newScope(
 					{
@@ -241,7 +241,7 @@ this.trocha = (()->
 				r[NEW_RESOURCE] = newResource
 				parent[r[$NAME]] = r
 
-		newRoute = (param)->
+		newRoute = (param) ->
 			parent = this
 			#console.log 'newRoute', parent, param
 			if !param
@@ -280,7 +280,7 @@ this.trocha = (()->
 					r[$ID] = param[ID]
 				parent[r[$NAME]] = r
 
-		newResource = (param)->
+		newResource = (param) ->
 			if !param
 				console.info 'newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
 			else if typeof param != 'object'
