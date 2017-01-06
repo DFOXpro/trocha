@@ -28,7 +28,11 @@ testFramework = (options)->
 		while results.toTest.length > 0
 			results.running = results.toTest.pop()
 			console.log "Testing " + results.running.title
-			results.running.fun()
+			try
+				results.running.fun()
+			catch e
+				results.running.fail = true
+				console.error "Failed with ", e
 			if results.running.fail
 				results.bad++
 				if results.running.parent && !results.running.parent.fail
