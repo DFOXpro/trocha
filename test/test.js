@@ -26,9 +26,19 @@ testFramework = function(options) {
     return results.total++;
   };
   r.assert = function(result, expected) {
-    if (data.result !== data.expected) {
+    if ('object' === typeof result) {
+      if ('object' !== typeof expected) {
+        results.running.fail = true;
+        return console.error("Expected any object, but was ", result);
+      }
+    } else if ('function' === typeof expected) {
+      if ('function' !== typeof result) {
+        results.running.fail = true;
+        return console.error("Expected any function, but was ", result);
+      }
+    } else if (result !== expected) {
       results.running.fail = true;
-      return console.error("Expected ", data.expected, ", but was ", data.result);
+      return console.error("Expected ", expected, ", but was ", result);
     }
   };
   r.run = function() {
@@ -68,11 +78,41 @@ test = testFramework({
 
 (function() {
   return describe('Trocha Js Routes List engine', function() {
+    describe('Constants', function() {
+      it('should return HTTP request methods types', function() {
+        assert(trocha.OPTIONS, "OPTIONS");
+        assert(trocha.GET, "GET");
+        assert(trocha.HEAD, "HEAD");
+        assert(trocha.POST, "POST");
+        assert(trocha.PUT, "PUT");
+        assert(trocha.PATCH, "PATCH");
+        assert(trocha.DELETE, "DELETE");
+        assert(trocha.TRACE, "TRACE");
+        return assert(trocha.CONNECT, "CONNECT");
+      });
+      return it('should return default resource tree', function() {
+        return assert(trocha.$RESOURCE, {
+          $id: 'id',
+          show: {
+            $hide: true
+          },
+          edit: {},
+          "new": {
+            $id: false
+          },
+          list: {
+            $hide: true,
+            $id: false
+          }
+        });
+      });
+    });
     return describe('Constructor', function() {
       return it('should create a valid trocha object', function() {
         var r;
+        assert(trocha, function() {});
         r = trocha();
-        return console.log(r);
+        return assert(r, {});
       });
     });
   });

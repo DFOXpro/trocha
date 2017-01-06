@@ -20,9 +20,17 @@ testFramework = (options)->
 		results.total++
 
 	r.assert = (result, expected)->
-		if data.result != data.expected
+		if 'object' == typeof result
+			if 'object' != typeof expected
+				results.running.fail = true
+				console.error "Expected any object, but was ", result
+		else if 'function' == typeof expected
+			if 'function' != typeof result
+				results.running.fail = true
+				console.error "Expected any function, but was ", result
+		else if result != expected
 			results.running.fail = true
-			console.error "Expected ", data.expected, ", but was ", data.result
+			console.error "Expected ", expected, ", but was ", result
 
 	r.run = ()->
 		while results.toTest.length > 0
@@ -51,10 +59,37 @@ test = testFramework {global: true}
 
 (->
 	describe 'Trocha Js Routes List engine', ->
+		describe 'Constants', ->
+			it 'should return HTTP request methods types', ->
+				assert trocha.OPTIONS, "OPTIONS"
+				assert trocha.GET, "GET"
+				assert trocha.HEAD, "HEAD"
+				assert trocha.POST, "POST"
+				assert trocha.PUT, "PUT"
+				assert trocha.PATCH, "PATCH"
+				assert trocha.DELETE, "DELETE"
+				assert trocha.TRACE, "TRACE"
+				assert trocha.CONNECT, "CONNECT"
+			it 'should return default resource tree', ->
+				assert trocha.$RESOURCE, {
+					$id: 'id'
+					show:
+						$hide: true
+					edit: {}
+					new:
+						$id: false
+					list:
+						$hide: true
+						$id: false
+				}
+			#it 'should return routes creation methods', ->
+				#assert trocha.$ROUTE, "ROUTE"
+				#assert trocha.$SCOPE, "SCOPE"
 		describe 'Constructor', ->
 			it 'should create a valid trocha object', ->
+				assert trocha, ->
 				r = trocha()
-				console.log r
+				assert r, {}
 )()
 
 test.run()
