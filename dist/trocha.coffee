@@ -80,6 +80,7 @@ this.trocha = (->
 	_basicResource[_list][$+HIDE] = true
 ##END VARIABLES
 	trochaReturn = (initParams) ->
+		initParams = {} if !initParams
 		routes = {}
 
 ##START CONSTRUCTOR
