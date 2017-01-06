@@ -12,7 +12,11 @@ testFramework = (options)->
 		itFun()
 
 	r.describe = (title, describeFun)->
-		results.toTest.push {title: title, fun: describeFun}
+		desc =
+			title: title
+			fun: describeFun
+		desc.parent = results.running if results.running
+		results.toTest.push desc
 		results.total++
 
 	r.assert = (result, expected)->
@@ -25,7 +29,11 @@ testFramework = (options)->
 			results.running = results.toTest.pop()
 			console.log "Testing " + results.running.title
 			results.running.fun()
-			results.bad++ if results.running.fail
+			if results.running.fail
+				results.bad++
+				if results.running.parent && !results.running.parent.fail
+					results.running.parent.fail = true
+					results.bad++
 		console.log "Of " + results.total + " tests, " + results.bad + " failed, " + (results.total - results.bad) + " passed."
 	r
 
