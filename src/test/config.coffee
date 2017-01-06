@@ -20,9 +20,17 @@ testFramework = (options)->
 		results.total++
 
 	r.assert = (result, expected)->
-		if data.result != data.expected
+		if 'object' == typeof result
+			if 'object' != typeof expected
+				results.running.fail = true
+				console.error "Expected any object, but was ", result
+		else if 'function' == typeof expected
+			if 'function' != typeof result
+				results.running.fail = true
+				console.error "Expected any function, but was ", result
+		else if result != expected
 			results.running.fail = true
-			console.error "Expected ", data.expected, ", but was ", data.result
+			console.error "Expected ", expected, ", but was ", result
 
 	r.run = ()->
 		while results.toTest.length > 0
