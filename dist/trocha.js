@@ -65,6 +65,9 @@ this.trocha = (function() {
   _basicResource[_list][$ + HIDE] = true;
   trochaReturn = function(initParams) {
     var _constructor, _preparePath, _prepareRoutes, as, newResource, newRoute, newScope, routes;
+    if (!initParams) {
+      initParams = {};
+    }
     routes = {};
     _constructor = function(initParams) {
       if (initParams[DOMAIN]) {
