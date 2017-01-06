@@ -38,7 +38,8 @@ module.exports = function (grunt) {
 					bare: true
 				},
 				files:{
-					'dist/trocha.js': 'dist/trocha.coffee' // 1:1 compile
+					'dist/trocha.js': 'dist/trocha.coffee', // 1:1 compile
+					'test/test.js': 'test/test.coffee'
 				}
 			}
 		},
@@ -56,6 +57,11 @@ module.exports = function (grunt) {
 						'src/object_definition.coffee',
 						'src/variables.coffee',
 						'src/start.coffee'
+					],
+					'test/test.coffee': [
+						'src/test/end.coffee',
+						'src/test/core.coffee',
+						'src/test/config.coffee'
 					]
 				}
 			}
@@ -65,7 +71,7 @@ module.exports = function (grunt) {
 				files: ['src/**/*.coffee'],
 				tasks: ['build'],
 				options: {
-					livereload: 1337
+					reload: true
 				}
 			}
 		}
