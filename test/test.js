@@ -14,10 +14,15 @@ testFramework = function(options) {
     return itFun();
   };
   r.describe = function(title, describeFun) {
-    results.toTest.push({
+    var desc;
+    desc = {
       title: title,
       fun: describeFun
-    });
+    };
+    if (results.running) {
+      desc.parent = results.running;
+    }
+    results.toTest.push(desc);
     return results.total++;
   };
   r.assert = function(result, expected) {
@@ -27,12 +32,23 @@ testFramework = function(options) {
     }
   };
   r.run = function() {
+    var e, error;
     while (results.toTest.length > 0) {
       results.running = results.toTest.pop();
       console.log("Testing " + results.running.title);
-      results.running.fun();
+      try {
+        results.running.fun();
+      } catch (error) {
+        e = error;
+        results.running.fail = true;
+        console.error("Failed with ", e);
+      }
       if (results.running.fail) {
         results.bad++;
+        if (results.running.parent && !results.running.parent.fail) {
+          results.running.parent.fail = true;
+          results.bad++;
+        }
       }
     }
     return console.log("Of " + results.total + " tests, " + results.bad + " failed, " + (results.total - results.bad) + " passed.");
