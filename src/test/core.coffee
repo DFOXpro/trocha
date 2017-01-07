@@ -23,12 +23,17 @@
 						$hide: true
 						$id: false
 				}
-			#it 'should return routes creation methods', ->
-				#assert trocha.$ROUTE, "ROUTE"
-				#assert trocha.$SCOPE, "SCOPE"
+			it 'should return routes types', ->
+				assert trocha.ROUTE, "ROUTE"
+				assert trocha.SCOPE, "SCOPE"
+				assert trocha.RESOURCE, "RESOURCE"
 		describe 'Constructor', ->
 			it 'should create a valid trocha object', ->
 				assert trocha, ->
 				r = trocha()
 				assert r, {}
+				assert r._custom, ->
+				assert r._newResource, ->
+				assert r._newRoute, ->
+				assert r._newScope, ->
 )()
