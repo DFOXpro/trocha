@@ -17,7 +17,12 @@ testFramework = function(options) {
     var desc;
     desc = {
       title: title,
-      fun: describeFun
+      fun: describeFun,
+      failWarning: function() {
+        this.fail = true;
+        results.bad++;
+        return console.error(this.title + " failed.");
+      }
     };
     if (results.running) {
       desc.parent = results.running;
@@ -26,19 +31,21 @@ testFramework = function(options) {
     return results.total++;
   };
   r.assert = function(result, expected) {
-    if ('object' === typeof result) {
-      if ('object' !== typeof expected) {
+    var bw;
+    bw = ", but was:";
+    if ('object' === typeof expected) {
+      if ('object' !== typeof result) {
         results.running.fail = true;
-        return console.error("Expected any object, but was ", result);
+        return console.error("Expected any object" + bw, result);
       }
     } else if ('function' === typeof expected) {
       if ('function' !== typeof result) {
         results.running.fail = true;
-        return console.error("Expected any function, but was ", result);
+        return console.error("Expected any function" + bw, result);
       }
     } else if (result !== expected) {
       results.running.fail = true;
-      return console.error("Expected ", expected, ", but was ", result);
+      return console.error("Expected ", expected, bw, result);
     }
   };
   r.run = function() {
@@ -51,13 +58,12 @@ testFramework = function(options) {
       } catch (error) {
         e = error;
         results.running.fail = true;
-        console.error("Failed with ", e);
+        console.error("Exception caught", e);
       }
       if (results.running.fail) {
-        results.bad++;
+        results.running.failWarning();
         if (results.running.parent && !results.running.parent.fail) {
-          results.running.parent.fail = true;
-          results.bad++;
+          results.running.parent.failWarning();
         }
       }
     }
@@ -77,8 +83,53 @@ test = testFramework({
 });
 
 (function() {
-  return describe('Trocha Js Routes List engine', function() {
-    describe('Constants', function() {
+  return describe('Trocha JS Routes List engine', function() {
+    describe('Route creation', function() {
+      it('should create routes via JSON Constructor', function() {
+        var r;
+        r = trocha({
+          routes: {
+            simple_route: {},
+            simple_scope: {
+              $type: trocha.SCOPE
+            },
+            simple_alias: "simple_alias",
+            simple_resource: {
+              $type: trocha.RESOURCE,
+              $id: "simple_id"
+            }
+          }
+        });
+        assert(r.simple_route, {});
+        assert(r.simple_scope, {});
+        assert(r.simple_resource, {});
+        return assert(r.simple_alias, "simple_alias");
+      });
+      return it('should create routes via post init functions', function() {
+        var r;
+        r = trocha();
+        r._newRoute({
+          name: "simple_route"
+        });
+        r._newScope({
+          name: "simple_scope"
+        });
+        r._newResource({
+          name: "simple_resource",
+          id: "simple_id"
+        });
+        r._newAlias({
+          name: "simple_alias",
+          alias: "simple_alias"
+        });
+        assert(r.simple_route, {});
+        assert(r.simple_scope, {});
+        assert(r.simple_resource, {});
+        assert(r.simple_alias, "simple_alias");
+        return console.log(r);
+      });
+    });
+    describe('Constants returns', function() {
       it('should return HTTP request methods types', function() {
         assert(trocha.OPTIONS, "OPTIONS");
         assert(trocha.GET, "GET");
@@ -90,7 +141,7 @@ test = testFramework({
         assert(trocha.TRACE, "TRACE");
         return assert(trocha.CONNECT, "CONNECT");
       });
-      return it('should return default resource tree', function() {
+      it('should return default resource tree', function() {
         return assert(trocha.$RESOURCE, {
           $id: 'id',
           show: {
@@ -106,13 +157,22 @@ test = testFramework({
           }
         });
       });
+      return it('should return routes types', function() {
+        assert(trocha.ROUTE, "ROUTE");
+        assert(trocha.SCOPE, "SCOPE");
+        return assert(trocha.RESOURCE, "RESOURCE");
+      });
     });
     return describe('Constructor', function() {
       return it('should create a valid trocha object', function() {
         var r;
         assert(trocha, function() {});
         r = trocha();
-        return assert(r, {});
+        assert(r, {});
+        assert(r._custom, function() {});
+        assert(r._newResource, function() {});
+        assert(r._newRoute, function() {});
+        return assert(r._newScope, function() {});
       });
     });
   });
