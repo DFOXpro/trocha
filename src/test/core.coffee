@@ -1,6 +1,44 @@
 (->
-	describe 'Trocha Js Routes List engine', ->
-		describe 'Constants', ->
+	describe 'Trocha JS Routes List engine', ->
+		describe 'Route creation', ->
+			it 'should create routes via JSON Constructor', ->
+				r = trocha {
+					routes:
+						simple_route :{}
+						simple_scope: {$type: trocha.SCOPE}
+						simple_alias: "simple_alias"
+						simple_resource:
+							$type: trocha.RESOURCE
+							$id: "simple_id" #resource must have ID
+				}
+				assert r.simple_route, {}
+				assert r.simple_scope, {}
+				assert r.simple_resource, {}
+				#assert r.simple_alias, {} #will fail
+				assert r.simple_alias, "simple_alias" # @TODO remove me after alias fix
+			it 'should create routes via post init functions', ->
+				r = trocha()
+				r._newRoute {
+					name: "simple_route"
+				}
+				r._newScope {
+					name: "simple_scope"
+				}
+				r._newResource {
+					name: "simple_resource"
+					id: "simple_id"
+				}
+				r._newAlias {
+					name: "simple_alias"
+					alias: "simple_alias"
+				}
+				assert r.simple_route, {}
+				assert r.simple_scope, {}
+				assert r.simple_resource, {}
+				assert r.simple_alias, "simple_alias"
+				console.log r
+
+		describe 'Constants returns', ->
 			it 'should return HTTP request methods types', ->
 				assert trocha.OPTIONS, "OPTIONS"
 				assert trocha.GET, "GET"
