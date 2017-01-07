@@ -50,6 +50,7 @@
 	NEW_SCOPE = '_newScope'
 	NEW_ROUTE = '_newRoute'
 	NEW_RESOURCE = '_newResource'
+	NEW_ALIAS = '_newAlias'
 
 	#Main object return attributes
 	$domain = $+DOMAIN

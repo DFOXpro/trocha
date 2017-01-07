@@ -25,6 +25,29 @@
 				r[AS] = as parent, param
 				parent[r[$NAME]] = r
 
+		newAlias = (param) ->
+			console.log 'newAlias', param
+			if !param
+				console.info 'Trocha.newAlias(
+					{
+						'+NAME+':String,
+						'+ALIAS+':String[,
+						'+METHOD+':String(Default = GET)]
+					}
+				)'
+			else if !param[NAME]
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + NAME
+			else if typeof param[NAME] != 'string'
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: require String ' + NAME
+			else if param[ALIAS]
+				if typeof param[ALIAS] != 'string'
+					console.error 'Trocha.newAlias given parameters: ', param
+					throw 'Trocha.newAlias: require String ' + ALIAS
+				else
+					parent[param[NAME]] = param[ALIAS]# @TODO improve this to match with path() output
+
 		newRoute = (param) ->
 			parent = this
 			#console.log 'newRoute', parent, param
@@ -50,7 +73,7 @@
 					console.error 'Trocha.newRoute given parameters: ', param
 					throw 'Trocha.newRoute: require String ' + ALIAS
 				else
-					parent[param[NAME]] = param[ALIAS]
+					newAlias param
 			else
 				r = _basicRouteReturn()
 				r[$METHOD] = param[METHOD] || GET
