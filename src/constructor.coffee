@@ -1,5 +1,6 @@
 ##START CONSTRUCTOR
 		_constructor = (initParams)->
+			routes = _basicRouteReturn()
 			if initParams[DOMAIN]
 				routes[$domain] = s + initParams[DOMAIN]
 			if initParams[PREFIX]
@@ -15,15 +16,20 @@
 			if initParams[ALWAYS_POST]
 				routes[$alwaysPost] = initParams[ALWAYS_POST]
 
-			routes[NEW_SCOPE] = newScope
-			routes[NEW_ROUTE] = newRoute
-			routes[NEW_RESOURCE] = newResource
 			routes[CUSTOM] = (param, routeParam)->
 				_preparePath({}, param)(routeParam)
 			if initParams[ROUTES]
 				_prepareRoutes routes, initParams[ROUTES]
 			#console.info 'TrochaJS', routes
 			routes
+
+		_basicRouteReturn = ->
+			r = {}
+			r[NEW_SCOPE] = newScope
+			r[NEW_ROUTE] = newRoute
+			r[NEW_ALIAS] = newAlias
+			r[NEW_RESOURCE] = newResource
+			r
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
 			_$ = SELECTOR || routes[$customSelector] || $

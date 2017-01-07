@@ -18,12 +18,11 @@
 			else
 				parent = this
 				#console.log 'newScope', parent, param
-				r = {}
+				r = _basicRouteReturn()
+				delete r[NEW_SCOPE] #Prevent consecutive scope, why?
 				r[$NAME] = param[NAME]
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
 				parent[r[$NAME]] = r
 
 		newRoute = (param) ->
@@ -53,12 +52,9 @@
 				else
 					parent[param[NAME]] = param[ALIAS]
 			else
-				r = {}
+				r = _basicRouteReturn()
 				r[$METHOD] = param[METHOD] || GET
 				r[$NAME] = param[NAME]
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
-				r[NEW_SCOPE] = newScope
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
 				if param[ID]
