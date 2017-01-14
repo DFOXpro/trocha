@@ -86,9 +86,9 @@
 
 		newResource = (param) ->
 			if !param
-				console.info 'newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
+				console.info 'newResource({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
 			else if typeof param != 'object'
-				throw 'Trocha.newRoute: require Object input'
+				throw 'Trocha.newResource: require Object input'
 			else
 				newRouteParam = {}
 				if param[RESOURCE.toLowerCase()] || routes[$resource]
