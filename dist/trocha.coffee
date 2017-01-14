@@ -51,6 +51,7 @@ this.trocha = (->
 	NEW_SCOPE = '_newScope'
 	NEW_ROUTE = '_newRoute'
 	NEW_RESOURCE = '_newResource'
+	NEW_ALIAS = '_newAlias'
 
 	#Main object return attributes
 	$domain = $+DOMAIN
@@ -85,6 +86,7 @@ this.trocha = (->
 
 ##START CONSTRUCTOR
 		_constructor = (initParams)->
+			routes = _basicRouteReturn()
 			if initParams[DOMAIN]
 				routes[$domain] = s + initParams[DOMAIN]
 			if initParams[PREFIX]
@@ -100,15 +102,20 @@ this.trocha = (->
 			if initParams[ALWAYS_POST]
 				routes[$alwaysPost] = initParams[ALWAYS_POST]
 
-			routes[NEW_SCOPE] = newScope
-			routes[NEW_ROUTE] = newRoute
-			routes[NEW_RESOURCE] = newResource
 			routes[CUSTOM] = (param, routeParam)->
 				_preparePath({}, param)(routeParam)
 			if initParams[ROUTES]
 				_prepareRoutes routes, initParams[ROUTES]
 			#console.info 'TrochaJS', routes
 			routes
+
+		_basicRouteReturn = ->
+			r = {}
+			r[NEW_SCOPE] = newScope
+			r[NEW_ROUTE] = newRoute
+			r[NEW_ALIAS] = newAlias
+			r[NEW_RESOURCE] = newResource
+			r
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
 			_$ = SELECTOR || routes[$customSelector] || $
@@ -163,7 +170,7 @@ this.trocha = (->
 					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
 ##END CONSTRUCTOR
 		_preparePath = (parent, param) ->
-			(routeParams) ->
+			(routeParams) -> #The actual path function
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
@@ -195,24 +202,26 @@ this.trocha = (->
 					? routes[$postfix] : s
 				)` #postfix
 				delete routeParams[POSTFIX]
-				query = fragment = {}
+				query = {}
 				if routeParams.query
 					query = JSON.parse JSON.stringify routeParams.query
 					delete routeParams.query
 				if routeParams.fragment
-					fragment = JSON.parse JSON.stringify routeParams.fragment
-				delete routeParams.fragment
+					fragment = routeParams.fragment
+					delete routeParams.fragment
+
 				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
 
-				Object.keys(query).forEach (key, i, array) ->
+				Object.keys(query).forEach (key, i, array) -> # Print query values
 					if i == 0
 						r += '?'
 					r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + `(array.length - 1 !== i ? '&' : '')`
-					#console.log r, v, routeParams[v]
+				r += '#' + encodeURIComponent(fragment) if fragment
+
 				r
 		as = (parent, param) ->
 			pas = parent[AS]
@@ -234,13 +243,35 @@ this.trocha = (->
 			else
 				parent = this
 				#console.log 'newScope', parent, param
-				r = {}
+				r = _basicRouteReturn()
+				delete r[NEW_SCOPE] #Prevent consecutive scope, why?
 				r[$NAME] = param[NAME]
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
 				parent[r[$NAME]] = r
+
+		newAlias = (param) ->
+			console.log 'newAlias', param
+			if !param
+				console.info 'Trocha.newAlias(
+					{
+						'+NAME+':String,
+						'+ALIAS+':String[,
+						'+METHOD+':String(Default = GET)]
+					}
+				)'
+			else if !param[NAME]
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + NAME
+			else if typeof param[NAME] != 'string'
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: require String ' + NAME
+			else if param[ALIAS]
+				if typeof param[ALIAS] != 'string'
+					console.error 'Trocha.newAlias given parameters: ', param
+					throw 'Trocha.newAlias: require String ' + ALIAS
+				else
+					parent[param[NAME]] = param[ALIAS]# @TODO improve this to match with path() output
 
 		newRoute = (param) ->
 			parent = this
@@ -267,14 +298,11 @@ this.trocha = (->
 					console.error 'Trocha.newRoute given parameters: ', param
 					throw 'Trocha.newRoute: require String ' + ALIAS
 				else
-					parent[param[NAME]] = param[ALIAS]
+					newAlias param
 			else
-				r = {}
+				r = _basicRouteReturn()
 				r[$METHOD] = param[METHOD] || GET
 				r[$NAME] = param[NAME]
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
-				r[NEW_SCOPE] = newScope
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
 				if param[ID]
@@ -283,9 +311,9 @@ this.trocha = (->
 
 		newResource = (param) ->
 			if !param
-				console.info 'newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
+				console.info 'newResource({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
 			else if typeof param != 'object'
-				throw 'Trocha.newRoute: require Object input'
+				throw 'Trocha.newResource: require Object input'
 			else
 				newRouteParam = {}
 				if param[RESOURCE.toLowerCase()] || routes[$resource]
