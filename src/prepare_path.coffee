@@ -1,5 +1,5 @@
 		_preparePath = (parent, param) ->
-			(routeParams) ->
+			(routeParams) -> #The actual path function
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
@@ -31,22 +31,24 @@
 					? routes[$postfix] : s
 				)` #postfix
 				delete routeParams[POSTFIX]
-				query = fragment = {}
+				query = {}
 				if routeParams.query
 					query = JSON.parse JSON.stringify routeParams.query
 					delete routeParams.query
 				if routeParams.fragment
-					fragment = JSON.parse JSON.stringify routeParams.fragment
-				delete routeParams.fragment
+					fragment = routeParams.fragment
+					delete routeParams.fragment
+
 				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
 
-				Object.keys(query).forEach (key, i, array) ->
+				Object.keys(query).forEach (key, i, array) -> # Print query values
 					if i == 0
 						r += '?'
 					r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + `(array.length - 1 !== i ? '&' : '')`
-					#console.log r, v, routeParams[v]
+				r += '#' + encodeURIComponent(fragment) if fragment
+
 				r
