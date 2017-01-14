@@ -15,14 +15,27 @@ testFramework = (options)->
 		desc =
 			title: title
 			fun: describeFun
+			failWarning: ()->
+				this.fail = true
+				results.bad++
+				console.error this.title + " failed."
 		desc.parent = results.running if results.running
 		results.toTest.push desc
 		results.total++
 
 	r.assert = (result, expected)->
-		if data.result != data.expected
+		bw = ", but was:"
+		if 'object' == typeof expected
+			if 'object' != typeof result
+				results.running.fail = true
+				console.error "Expected any object" + bw, result
+		else if 'function' == typeof expected
+			if 'function' != typeof result
+				results.running.fail = true
+				console.error "Expected any function" + bw, result
+		else if result != expected
 			results.running.fail = true
-			console.error "Expected ", data.expected, ", but was ", data.result
+			console.error "Expected ", expected, bw, result
 
 	r.run = ()->
 		while results.toTest.length > 0
@@ -32,12 +45,11 @@ testFramework = (options)->
 				results.running.fun()
 			catch e
 				results.running.fail = true
-				console.error "Failed with ", e
+				console.error "Exception caught", e
 			if results.running.fail
-				results.bad++
+				results.running.failWarning()
 				if results.running.parent && !results.running.parent.fail
-					results.running.parent.fail = true
-					results.bad++
+					results.running.parent.failWarning()
 		console.log "Of " + results.total + " tests, " + results.bad + " failed, " + (results.total - results.bad) + " passed."
 	r
 
