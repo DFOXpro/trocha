@@ -28,6 +28,7 @@
 			# console.log '_basicRouteReturn', parent, param, optionals
 			optionals = {} if !optionals
 			r = {} # _preparePath parent, param
+			r = optionals[ROUTE] if optionals[ROUTE]
 			_NEW_NAMES = [NEW_SCOPE, NEW_ROUTE, NEW_ALIAS, NEW_RESOURCE]
 			if 'object' == typeof r # this means alias is steril, cant have child routes :v
 				[newScope, newRoute, newAlias, newResource].forEach (newFunction, i)->
@@ -62,7 +63,10 @@
 			posibleRoutes.forEach (name)->
 				route = routesJSON[name]
 				if typeof route == 'string'
-					parent[name] = route
+					newAliasParam = {}
+					newAliasParam[NAME] = name
+					newAliasParam[ALIAS] = route
+					parent[NEW_ALIAS] newAliasParam
 				else if typeof route == 'object'
 					if route[_$+TYPE] == SCOPE
 						newScopeParam = {}

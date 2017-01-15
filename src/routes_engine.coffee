@@ -44,7 +44,19 @@
 					console.error 'Trocha.newAlias given parameters: ', param
 					throw 'Trocha.newAlias: require String ' + ALIAS
 				else
-					parent[param[NAME]] = param[ALIAS]# @TODO improve this to match with path() output
+					parent = this
+					args = {}
+					args[ROUTE] = param[ALIAS] # @TODO If string cant add methods
+					# args[ROUTE] = {}
+					# Object.defineProperty args, ROUTE,
+					# get: -> param[ALIAS]
+					_basicRouteReturn parent, param, args
+					# r = _basicRouteReturn parent, param, args
+					# console.log 'newAlias', r, parent, param
+					
+			else
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + ALIAS
 
 		newRoute = (param) ->
 			if !param
