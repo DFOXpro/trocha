@@ -52,7 +52,7 @@ testFramework = function(options) {
     var e, error;
     while (results.toTest.length > 0) {
       results.running = results.toTest.pop();
-      console.log("Testing " + results.running.title);
+      console.info("Testing " + results.running.title);
       try {
         results.running.fun();
       } catch (error) {
@@ -111,6 +111,9 @@ test = testFramework({
         r._newRoute({
           name: "simple_route"
         });
+        r.simple_route._newRoute({
+          name: "simple_route"
+        });
         r._newScope({
           name: "simple_scope"
         });
@@ -123,13 +126,21 @@ test = testFramework({
           alias: "simple_alias"
         });
         assert(r.simple_route, {});
+        assert(r.simple_route.simple_route, {});
         assert(r.simple_scope, {});
         assert(r.simple_resource, {});
-        assert(r.simple_alias, "simple_alias");
-        return console.log(r);
+        return assert(r.simple_alias, "simple_alias");
       });
     });
     describe('Constants returns', function() {
+      it('should be no editable', function() {
+        trocha.ROUTE = "Atack!";
+        trocha.OPTIONS = "Atack!";
+        trocha.$RESOURCE = "Atack!";
+        assert(trocha.ROUTE, "ROUTE");
+        assert(trocha.OPTIONS, "OPTIONS");
+        return assert(trocha.$RESOURCE, {});
+      });
       it('should return HTTP request methods types', function() {
         assert(trocha.OPTIONS, "OPTIONS");
         assert(trocha.GET, "GET");
