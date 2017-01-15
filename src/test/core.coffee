@@ -21,6 +21,9 @@
 				r._newRoute {
 					name: "simple_route"
 				}
+				r.simple_route._newRoute {
+					name: "simple_route"
+				}
 				r._newScope {
 					name: "simple_scope"
 				}
@@ -33,12 +36,19 @@
 					alias: "simple_alias"
 				}
 				assert r.simple_route, {}
+				assert r.simple_route.simple_route, {}
 				assert r.simple_scope, {}
 				assert r.simple_resource, {}
 				assert r.simple_alias, "simple_alias"
-				# console.log r
 
 		describe 'Constants returns', ->
+			it 'should be no editable', ->
+				trocha.ROUTE = "Atack!"
+				trocha.OPTIONS = "Atack!"
+				trocha.$RESOURCE = "Atack!"
+				assert trocha.ROUTE, "ROUTE"
+				assert trocha.OPTIONS, "OPTIONS"
+				assert trocha.$RESOURCE, {}
 			it 'should return HTTP request methods types', ->
 				assert trocha.OPTIONS, "OPTIONS"
 				assert trocha.GET, "GET"
