@@ -19,8 +19,8 @@
 				throw 'Trocha.newScope: require String name'
 			else
 				parent = this
-				r = _basicRouteReturn()
-				delete r[NEW_SCOPE] #Prevent consecutive scope, why?
+				r = _basicRouteReturn parent, param
+				delete r[NEW_SCOPE] # Prevent consecutive scope, why? 
 				r[$NAME] = param[NAME]
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
@@ -74,14 +74,15 @@
 				else
 					newAlias param
 			else
-				r = _basicRouteReturn()
+				parent = this
+				args = {}
+				r = _basicRouteReturn parent, param, args
 				r[$METHOD] = param[METHOD] || GET
 				r[$NAME] = param[NAME]
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
 				if param[ID]
 					r[$ID] = param[ID]
-				parent = this
 				parent[r[$NAME]] = r
 				# console.log 'newRoute', r, parent, param
 

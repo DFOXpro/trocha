@@ -24,12 +24,16 @@
 			#console.info 'TrochaJS', routes
 			routes
 
-		_basicRouteReturn = ->
-			r = {}
-			r[NEW_SCOPE] = newScope
-			r[NEW_ROUTE] = newRoute
-			r[NEW_ALIAS] = newAlias
-			r[NEW_RESOURCE] = newResource
+		_basicRouteReturn = (parent, param, optionals)->
+			# console.log '_basicRouteReturn', parent, param, optionals
+			optionals = {} if !optionals
+			r = {} # _preparePath parent, param
+			_NEW_NAMES = [NEW_SCOPE, NEW_ROUTE, NEW_ALIAS, NEW_RESOURCE]
+			if 'object' == typeof r # this means alias is steril, cant have child routes :v
+				[newScope, newRoute, newAlias, newResource].forEach (newFunction, i)->
+					# Those functions it's not getters, but this lines prevent overide
+					Object.defineProperty r, _NEW_NAMES[i],
+					get: -> newFunction
 			r
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
