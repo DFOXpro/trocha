@@ -40,7 +40,7 @@ testFramework = (options)->
 	r.run = ()->
 		while results.toTest.length > 0
 			results.running = results.toTest.pop()
-			console.log "Testing " + results.running.title
+			console.info "Testing " + results.running.title
 			try
 				results.running.fun()
 			catch e
