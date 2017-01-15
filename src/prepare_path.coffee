@@ -1,21 +1,23 @@
+## Previous CONSTRUCTOR
+## START PREPARE PATH
 		_preparePath = (parent, param) ->
-			(routeParams) -> #The actual path function
+			(routeParams) -> # The actual path function
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
 					return param[ALIAS]
 
-				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` #url
+				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` # url
 				delete routeParams[URL]
-				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
+				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` # prefix
 				delete routeParams[PREFIX]
 
 				r += `(parent[PATH] ? parent[PATH]({post:false}) : s)`
-				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` #same as parent
-				#REMOVES parent ID if any
+				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` # same as parent
+				# REMOVES parent ID if any
 				if parent[$ID] && (param[ID] == false && !routeParams[ID]) || routeParams[PARENT_ID] == false
 					r = r.replace '/:' + parent[$ID], s
-				#just ID example: /asd/:asd/:qwe
+				# just ID example: /asd/:asd/:qwe
 				if (routeParams[JUST_ID] != false) && (param[JUST_ID] && param[ID])
 					r += _ + ':' + param[ID]
 				else
@@ -29,7 +31,7 @@
 					!hide &&
 					(routes[$alwaysPost] || param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
 					? routes[$postfix] : s
-				)` #postfix
+				)` # postfix
 				delete routeParams[POSTFIX]
 				query = {}
 				if routeParams.query
@@ -52,3 +54,5 @@
 				r += '#' + encodeURIComponent(fragment) if fragment
 
 				r
+## END PREPARE PATH
+## Next ROUTES ENGINE

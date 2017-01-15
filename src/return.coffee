@@ -1,5 +1,3 @@
-##START RETURN
-	#Request method types
 	trochaReturn.OPTIONS = OPTIONS
 	trochaReturn.GET = GET
 	trochaReturn.HEAD = HEAD
@@ -15,5 +13,9 @@
 	trochaReturn[SCOPE] = SCOPE
 	#Basic resource
 	trochaReturn[$+RESOURCE] = JSON.parse JSON.stringify _basicResource
+## Previous ROUTES ENGINE
+## START RETURN
+	# Request method types
 	trochaReturn
-##END RETURN
+## END RETURN
+## Next END

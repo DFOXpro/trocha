@@ -36,7 +36,7 @@
 				assert r.simple_scope, {}
 				assert r.simple_resource, {}
 				assert r.simple_alias, "simple_alias"
-				console.log r
+				# console.log r
 
 		describe 'Constants returns', ->
 			it 'should return HTTP request methods types', ->

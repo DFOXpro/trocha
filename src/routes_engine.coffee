@@ -1,3 +1,5 @@
+## Previous PREPARE PATH
+## START ROUTES ENGINE
 		as = (parent, param) ->
 			pas = parent[AS]
 			`(!pas ? '' : pas + '_')` + param[NAME]
@@ -17,16 +19,15 @@
 				throw 'Trocha.newScope: require String name'
 			else
 				parent = this
-				#console.log 'newScope', parent, param
 				r = _basicRouteReturn()
 				delete r[NEW_SCOPE] #Prevent consecutive scope, why?
 				r[$NAME] = param[NAME]
 				r[PATH] = _preparePath parent, param
 				r[AS] = as parent, param
 				parent[r[$NAME]] = r
+				# console.log 'newScope', r, parent, param
 
 		newAlias = (param) ->
-			console.log 'newAlias', param
 			if !param
 				console.info 'Trocha.newAlias(
 					{
@@ -49,8 +50,6 @@
 					parent[param[NAME]] = param[ALIAS]# @TODO improve this to match with path() output
 
 		newRoute = (param) ->
-			parent = this
-			#console.log 'newRoute', parent, param
 			if !param
 				console.info 'Trocha.newRoute(
 					{
@@ -82,7 +81,9 @@
 				r[AS] = as parent, param
 				if param[ID]
 					r[$ID] = param[ID]
+				parent = this
 				parent[r[$NAME]] = r
+				# console.log 'newRoute', r, parent, param
 
 		newResource = (param) ->
 			if !param
@@ -101,3 +102,5 @@
 				_prepareRoutes this, newRouteParam, selector
 
 		_constructor initParams
+## END ROUTES ENGINE
+## Next RETURN

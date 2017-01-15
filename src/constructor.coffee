@@ -1,4 +1,5 @@
-##START CONSTRUCTOR
+## Previous OBJECT DEFINITION
+## START CONSTRUCTOR
 		_constructor = (initParams)->
 			routes = _basicRouteReturn()
 			if initParams[DOMAIN]
@@ -33,8 +34,7 @@
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
 			_$ = SELECTOR || routes[$customSelector] || $
-			#console.log '_prepareRoutes', parent, routesJSON, _$
-			#window.alert('asd')
+			# console.log '_prepareRoutes', parent, routesJSON, _$
 			delete routesJSON[_$+TYPE]
 			posibleRoutes = Object.keys routesJSON
 			posibleRoutes.forEach (name)->
@@ -56,7 +56,7 @@
 							newResourceParam[ID] = route[_$+ID]
 							delete route[_$+ID]
 						parent[NEW_RESOURCE] newResourceParam
-					else #if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
+					else # if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
 						newRouteParam = {}
 						newRouteParam[NAME] = name
 						if route[_$+ID] != undefined
@@ -82,4 +82,5 @@
 				else
 					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
 					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
-##END CONSTRUCTOR
+## END CONSTRUCTOR
+## Next PREPARE PATH
