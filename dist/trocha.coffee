@@ -1,11 +1,12 @@
 this.trocha = (->
-##START VARIABLES
-	#Utility vars
+## Previous START
+## START VARIABLES
+	# Utility vars
 	_ = '/'
 	s = '' # Force string
 	$ = '$'
 
-	#Request method types
+	# Request method types
 	OPTIONS = 'OPTIONS'
 	GET = 'GET'
 	HEAD = 'HEAD'
@@ -16,7 +17,7 @@ this.trocha = (->
 	TRACE = 'TRACE'
 	CONNECT = 'CONNECT'
 
-	#Route types
+	# Route types
 	ROUTE = 'ROUTE'
 	SCOPE = 'SCOPE'
 	RESOURCE = 'RESOURCE'
@@ -34,14 +35,14 @@ this.trocha = (->
 	METHOD = 'method'
 	DOMAIN = 'domain'
 	ROUTES = 'routes'
-	JUST_ID = 'justId' #FAILS
-	AFTER_ID = 'afterId' #FAILS
+	JUST_ID = 'justId' # FAILS
+	AFTER_ID = 'afterId' # FAILS
 	PARENT_ID = 'parentId'
 	ALWAYS_URL = 'alwaysUrl'
 	ALWAYS_POST = 'alwaysPost'
 	CUSTOM_SELECTOR = 'customSelector'
 
-	#Route return attributes
+	# Route return attributes
 	AS = $+'as'
 	$ID = $+ID
 	PATH = 'path'
@@ -53,7 +54,7 @@ this.trocha = (->
 	NEW_RESOURCE = '_newResource'
 	NEW_ALIAS = '_newAlias'
 
-	#Main object return attributes
+	# Main object return attributes
 	$domain = $+DOMAIN
 	$prefix = $+PREFIX
 	$postfix = $+POSTFIX
@@ -62,9 +63,9 @@ this.trocha = (->
 	$resource = $+RESOURCE.toLowerCase()
 	$customSelector =$+CUSTOM_SELECTOR
 
-	##private
+	## private
 
-	#BASIC RESOURCE
+	# BASIC RESOURCE
 	_show = 'show'
 	_edit = 'edit'
 	_new = 'new'
@@ -79,12 +80,19 @@ this.trocha = (->
 	_basicResource[_new][$+ID] = false
 	_basicResource[_list][$+ID] = false
 	_basicResource[_list][$+HIDE] = true
-##END VARIABLES
+## END VARIABLES
+## Next OBJECT DEFINITION
+
+## Previous VARIABLES
+## START OBJECT DEFINITION
 	trochaReturn = (initParams) ->
 		initParams = {} if !initParams
 		routes = {}
+## END OBJECT DEFINITION
+## Next CONSTRUCTOR
 
-##START CONSTRUCTOR
+## Previous OBJECT DEFINITION
+## START CONSTRUCTOR
 		_constructor = (initParams)->
 			routes = _basicRouteReturn()
 			if initParams[DOMAIN]
@@ -109,24 +117,49 @@ this.trocha = (->
 			#console.info 'TrochaJS', routes
 			routes
 
-		_basicRouteReturn = ->
-			r = {}
-			r[NEW_SCOPE] = newScope
-			r[NEW_ROUTE] = newRoute
-			r[NEW_ALIAS] = newAlias
-			r[NEW_RESOURCE] = newResource
+		_basicRouteReturn = (parent, param, optionals)->
+			# console.log '_basicRouteReturn', parent, param, optionals
+			optionals = {} if !optionals
+			r = {} # _preparePath parent, param
+			r = optionals[ROUTE] if optionals[ROUTE]
+			_NEW_NAMES = [NEW_SCOPE, NEW_ROUTE, NEW_ALIAS, NEW_RESOURCE]
+			if 'object' == typeof r # this means alias is steril, cant have child routes :v
+				[newScope, newRoute, newAlias, newResource].forEach (newFunction, i)->
+					# Those functions it's not getters, but this lines prevent overide
+					Object.defineProperty r, _NEW_NAMES[i],
+					get: -> newFunction
+
+			if(parent && param)
+				r[PATH] = _preparePath parent, param
+				r[$NAME] = param[NAME]
+				r[AS] = as parent, param
+				r[$METHOD] = (param[METHOD] || GET) if optionals[METHOD]
+				r[$ID] = param[ID] if optionals[ID] && param[ID]
+				parent[param[NAME]] = r
+
+			# ?? this attributes need be write disable?
+			# Object.defineProperty r, PATH,
+			# get: -> _preparePath parent, param
+			# Object.defineProperty r, $NAME,
+			# get: -> param[NAME]
+			# Object.defineProperty r, AS,
+			# get: -> as parent, param
+			# Object.defineProperty parent, r[$NAME],
+			# get: -> r
 			r
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
 			_$ = SELECTOR || routes[$customSelector] || $
-			#console.log '_prepareRoutes', parent, routesJSON, _$
-			#window.alert('asd')
+			# console.log '_prepareRoutes', parent, routesJSON, _$
 			delete routesJSON[_$+TYPE]
 			posibleRoutes = Object.keys routesJSON
 			posibleRoutes.forEach (name)->
 				route = routesJSON[name]
 				if typeof route == 'string'
-					parent[name] = route
+					newAliasParam = {}
+					newAliasParam[NAME] = name
+					newAliasParam[ALIAS] = route
+					parent[NEW_ALIAS] newAliasParam
 				else if typeof route == 'object'
 					if route[_$+TYPE] == SCOPE
 						newScopeParam = {}
@@ -142,7 +175,7 @@ this.trocha = (->
 							newResourceParam[ID] = route[_$+ID]
 							delete route[_$+ID]
 						parent[NEW_RESOURCE] newResourceParam
-					else #if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
+					else # if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
 						newRouteParam = {}
 						newRouteParam[NAME] = name
 						if route[_$+ID] != undefined
@@ -168,25 +201,29 @@ this.trocha = (->
 				else
 					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
 					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
-##END CONSTRUCTOR
+## END CONSTRUCTOR
+## Next PREPARE PATH
+
+## Previous CONSTRUCTOR
+## START PREPARE PATH
 		_preparePath = (parent, param) ->
-			(routeParams) -> #The actual path function
+			(routeParams) -> # The actual path function
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
 					return param[ALIAS]
 
-				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` #url
+				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` # url
 				delete routeParams[URL]
-				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
+				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` # prefix
 				delete routeParams[PREFIX]
 
 				r += `(parent[PATH] ? parent[PATH]({post:false}) : s)`
-				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` #same as parent
-				#REMOVES parent ID if any
+				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` # same as parent
+				# REMOVES parent ID if any
 				if parent[$ID] && (param[ID] == false && !routeParams[ID]) || routeParams[PARENT_ID] == false
 					r = r.replace '/:' + parent[$ID], s
-				#just ID example: /asd/:asd/:qwe
+				# just ID example: /asd/:asd/:qwe
 				if (routeParams[JUST_ID] != false) && (param[JUST_ID] && param[ID])
 					r += _ + ':' + param[ID]
 				else
@@ -200,7 +237,7 @@ this.trocha = (->
 					!hide &&
 					(routes[$alwaysPost] || param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
 					? routes[$postfix] : s
-				)` #postfix
+				)` # postfix
 				delete routeParams[POSTFIX]
 				query = {}
 				if routeParams.query
@@ -223,6 +260,11 @@ this.trocha = (->
 				r += '#' + encodeURIComponent(fragment) if fragment
 
 				r
+## END PREPARE PATH
+## Next ROUTES ENGINE
+
+## Previous PREPARE PATH
+## START ROUTES ENGINE
 		as = (parent, param) ->
 			pas = parent[AS]
 			`(!pas ? '' : pas + '_')` + param[NAME]
@@ -242,16 +284,12 @@ this.trocha = (->
 				throw 'Trocha.newScope: require String name'
 			else
 				parent = this
-				#console.log 'newScope', parent, param
-				r = _basicRouteReturn()
-				delete r[NEW_SCOPE] #Prevent consecutive scope, why?
-				r[$NAME] = param[NAME]
-				r[PATH] = _preparePath parent, param
-				r[AS] = as parent, param
-				parent[r[$NAME]] = r
+				_basicRouteReturn parent, param
+				# r = _basicRouteReturn parent, param
+				delete parent[param[NAME]][NEW_SCOPE] # Prevent consecutive scope, why?
+				# console.log 'newScope', r, parent, param
 
 		newAlias = (param) ->
-			console.log 'newAlias', param
 			if !param
 				console.info 'Trocha.newAlias(
 					{
@@ -271,11 +309,21 @@ this.trocha = (->
 					console.error 'Trocha.newAlias given parameters: ', param
 					throw 'Trocha.newAlias: require String ' + ALIAS
 				else
-					parent[param[NAME]] = param[ALIAS]# @TODO improve this to match with path() output
+					parent = this
+					args = {}
+					args[ROUTE] = param[ALIAS] # @TODO If string cant add methods
+					# args[ROUTE] = {}
+					# Object.defineProperty args, ROUTE,
+					# get: -> param[ALIAS]
+					_basicRouteReturn parent, param, args
+					# r = _basicRouteReturn parent, param, args
+					# console.log 'newAlias', r, parent, param
+					
+			else
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + ALIAS
 
 		newRoute = (param) ->
-			parent = this
-			#console.log 'newRoute', parent, param
 			if !param
 				console.info 'Trocha.newRoute(
 					{
@@ -300,14 +348,13 @@ this.trocha = (->
 				else
 					newAlias param
 			else
-				r = _basicRouteReturn()
-				r[$METHOD] = param[METHOD] || GET
-				r[$NAME] = param[NAME]
-				r[PATH] = _preparePath parent, param
-				r[AS] = as parent, param
-				if param[ID]
-					r[$ID] = param[ID]
-				parent[r[$NAME]] = r
+				parent = this
+				args = {}
+				args[METHOD] = true
+				args[ID] = true
+				_basicRouteReturn parent, param, args
+				# r = _basicRouteReturn parent, param, args
+				# console.log 'newRoute', r, parent, param
 
 		newResource = (param) ->
 			if !param
@@ -326,25 +373,27 @@ this.trocha = (->
 				_prepareRoutes this, newRouteParam, selector
 
 		_constructor initParams
-##START RETURN
-	#Request method types
-	trochaReturn.OPTIONS = OPTIONS
-	trochaReturn.GET = GET
-	trochaReturn.HEAD = HEAD
-	trochaReturn.POST = POST
-	trochaReturn.PUT = PUT
-	trochaReturn.PATCH = PATCH
-	trochaReturn.DELETE = DELETE
-	trochaReturn.TRACE = TRACE
-	trochaReturn.CONNECT = CONNECT
-	#Route types
-	trochaReturn[RESOURCE] = RESOURCE
-	trochaReturn[ROUTE] = ROUTE
-	trochaReturn[SCOPE] = SCOPE
-	#Basic resource
-	trochaReturn[$+RESOURCE] = JSON.parse JSON.stringify _basicResource
+## END ROUTES ENGINE
+## Next RETURN
+## Previous ROUTES ENGINE
+## START RETURN
+	# Request method types
+	[
+		# Request method types
+		OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT
+		# Route types
+		RESOURCE, ROUTE, SCOPE
+	].forEach (attribute)->
+		Object.defineProperty trochaReturn, attribute,
+		get: -> attribute
+	# Basic resource
+	Object.defineProperty trochaReturn, $+RESOURCE,
+		get: -> _basicResource
+
 	trochaReturn
-##END RETURN
+## END RETURN
+## Next END
+
 )()
 #window.trocha = this.trocha
 
