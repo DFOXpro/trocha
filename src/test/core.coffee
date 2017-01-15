@@ -42,6 +42,13 @@
 				assert r.simple_alias, "simple_alias"
 
 		describe 'Constants returns', ->
+			it 'should be no editable', ->
+				trocha.ROUTE = "Atack!"
+				trocha.OPTIONS = "Atack!"
+				trocha.$RESOURCE = "Atack!"
+				assert trocha.ROUTE, "ROUTE"
+				assert trocha.OPTIONS, "OPTIONS"
+				assert trocha.$RESOURCE, {}
 			it 'should return HTTP request methods types', ->
 				assert trocha.OPTIONS, "OPTIONS"
 				assert trocha.GET, "GET"
