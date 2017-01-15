@@ -34,6 +34,24 @@
 					# Those functions it's not getters, but this lines prevent overide
 					Object.defineProperty r, _NEW_NAMES[i],
 					get: -> newFunction
+
+			if(parent && param)
+				r[PATH] = _preparePath parent, param
+				r[$NAME] = param[NAME]
+				r[AS] = as parent, param
+				r[$METHOD] = (param[METHOD] || GET) if optionals[METHOD]
+				r[$ID] = param[ID] if optionals[ID] && param[ID]
+				parent[param[NAME]] = r
+
+			# ?? this attributes need be write disable?
+			# Object.defineProperty r, PATH,
+			# get: -> _preparePath parent, param
+			# Object.defineProperty r, $NAME,
+			# get: -> param[NAME]
+			# Object.defineProperty r, AS,
+			# get: -> as parent, param
+			# Object.defineProperty parent, r[$NAME],
+			# get: -> r
 			r
 
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
