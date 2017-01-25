@@ -1,21 +1,23 @@
+## Previous CONSTRUCTOR
+## START PREPARE PATH
 		_preparePath = (parent, param) ->
-			(routeParams) ->
+			(routeParams) -> # The actual path function
 				if !routeParams
 					routeParams = {}
 				if param[ALIAS]
 					return param[ALIAS]
 
-				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` #url
+				r = `(routes[$domain] && !parent[PATH] && (routeParams[URL]||routes[$alwaysUrl]) ? routes[$domain] : s)` # url
 				delete routeParams[URL]
-				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` #prefix
+				r += `((routeParams[PREFIX] || routeParams[EXTENDED]) && routes[$prefix] ? routes[$prefix] : s)` # prefix
 				delete routeParams[PREFIX]
 
 				r += `(parent[PATH] ? parent[PATH]({post:false}) : s)`
-				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` #same as parent
-				#REMOVES parent ID if any
+				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` # same as parent
+				# REMOVES parent ID if any
 				if parent[$ID] && (param[ID] == false && !routeParams[ID]) || routeParams[PARENT_ID] == false
 					r = r.replace '/:' + parent[$ID], s
-				#just ID example: /asd/:asd/:qwe
+				# just ID example: /asd/:asd/:qwe
 				if (routeParams[JUST_ID] != false) && (param[JUST_ID] && param[ID])
 					r += _ + ':' + param[ID]
 				else
@@ -29,24 +31,28 @@
 					!hide &&
 					(routes[$alwaysPost] || param[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
 					? routes[$postfix] : s
-				)` #postfix
+				)` # postfix
 				delete routeParams[POSTFIX]
-				query = fragment = {}
+				query = {}
 				if routeParams.query
 					query = JSON.parse JSON.stringify routeParams.query
 					delete routeParams.query
 				if routeParams.fragment
-					fragment = JSON.parse JSON.stringify routeParams.fragment
-				delete routeParams.fragment
+					fragment = routeParams.fragment
+					delete routeParams.fragment
+
 				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
 
-				Object.keys(query).forEach (key, i, array) ->
+				Object.keys(query).forEach (key, i, array) -> # Print query values
 					if i == 0
 						r += '?'
 					r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + `(array.length - 1 !== i ? '&' : '')`
-					#console.log r, v, routeParams[v]
+				r += '#' + encodeURIComponent(fragment) if fragment
+
 				r
+## END PREPARE PATH
+## Next ROUTES ENGINE

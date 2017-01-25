@@ -1,5 +1,7 @@
-##START CONSTRUCTOR
+## Previous OBJECT DEFINITION
+## START CONSTRUCTOR
 		_constructor = (initParams)->
+			routes = _basicRouteReturn()
 			if initParams[DOMAIN]
 				routes[$domain] = s + initParams[DOMAIN]
 			if initParams[PREFIX]
@@ -15,9 +17,6 @@
 			if initParams[ALWAYS_POST]
 				routes[$alwaysPost] = initParams[ALWAYS_POST]
 
-			routes[NEW_SCOPE] = newScope
-			routes[NEW_ROUTE] = newRoute
-			routes[NEW_RESOURCE] = newResource
 			routes[CUSTOM] = (param, routeParam)->
 				_preparePath({}, param)(routeParam)
 			if initParams[ROUTES]
@@ -25,16 +24,49 @@
 			#console.info 'TrochaJS', routes
 			routes
 
+		_basicRouteReturn = (parent, param, optionals)->
+			# console.log '_basicRouteReturn', parent, param, optionals
+			optionals = {} if !optionals
+			r = {} # _preparePath parent, param
+			r = optionals[ROUTE] if optionals[ROUTE]
+			_NEW_NAMES = [NEW_SCOPE, NEW_ROUTE, NEW_ALIAS, NEW_RESOURCE]
+			if 'object' == typeof r # this means alias is steril, cant have child routes :v
+				[newScope, newRoute, newAlias, newResource].forEach (newFunction, i)->
+					# Those functions it's not getters, but this lines prevent overide
+					Object.defineProperty r, _NEW_NAMES[i],
+					get: -> newFunction
+
+			if(parent && param)
+				r[PATH] = _preparePath parent, param
+				r[$NAME] = param[NAME]
+				r[AS] = as parent, param
+				r[$METHOD] = (param[METHOD] || GET) if optionals[METHOD]
+				r[$ID] = param[ID] if optionals[ID] && param[ID]
+				parent[param[NAME]] = r
+
+			# ?? this attributes need be write disable?
+			# Object.defineProperty r, PATH,
+			# get: -> _preparePath parent, param
+			# Object.defineProperty r, $NAME,
+			# get: -> param[NAME]
+			# Object.defineProperty r, AS,
+			# get: -> as parent, param
+			# Object.defineProperty parent, r[$NAME],
+			# get: -> r
+			r
+
 		_prepareRoutes = (parent, routesJSON, SELECTOR)->
 			_$ = SELECTOR || routes[$customSelector] || $
-			#console.log '_prepareRoutes', parent, routesJSON, _$
-			#window.alert('asd')
+			# console.log '_prepareRoutes', parent, routesJSON, _$
 			delete routesJSON[_$+TYPE]
 			posibleRoutes = Object.keys routesJSON
 			posibleRoutes.forEach (name)->
 				route = routesJSON[name]
 				if typeof route == 'string'
-					parent[name] = route
+					newAliasParam = {}
+					newAliasParam[NAME] = name
+					newAliasParam[ALIAS] = route
+					parent[NEW_ALIAS] newAliasParam
 				else if typeof route == 'object'
 					if route[_$+TYPE] == SCOPE
 						newScopeParam = {}
@@ -50,7 +82,7 @@
 							newResourceParam[ID] = route[_$+ID]
 							delete route[_$+ID]
 						parent[NEW_RESOURCE] newResourceParam
-					else #if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
+					else # if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
 						newRouteParam = {}
 						newRouteParam[NAME] = name
 						if route[_$+ID] != undefined
@@ -76,4 +108,5 @@
 				else
 					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
 					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
-##END CONSTRUCTOR
+## END CONSTRUCTOR
+## Next PREPARE PATH

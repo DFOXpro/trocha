@@ -1,5 +1,5 @@
 this.trocha = (function() {
-  var $, $ID, $METHOD, $NAME, $alwaysPost, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALIAS, ALWAYS_POST, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
+  var $, $ID, $METHOD, $NAME, $alwaysPost, $alwaysUrl, $customSelector, $domain, $postfix, $prefix, $resource, AFTER_ID, ALIAS, ALWAYS_POST, ALWAYS_URL, AS, CONNECT, CUSTOM, CUSTOM_SELECTOR, DELETE, DOMAIN, EXTENDED, GET, HEAD, HIDE, ID, JUST_ID, METHOD, NAME, NEW_ALIAS, NEW_RESOURCE, NEW_ROUTE, NEW_SCOPE, OPTIONS, PARENT_ID, PATCH, PATH, POST, POSTFIX, PREFIX, PUT, RESOURCE, ROUTE, ROUTES, SCOPE, TRACE, TYPE, URL, _, _basicResource, _edit, _list, _new, _show, s, trochaReturn;
   _ = '/';
   s = '';
   $ = '$';
@@ -42,6 +42,7 @@ this.trocha = (function() {
   NEW_SCOPE = '_newScope';
   NEW_ROUTE = '_newRoute';
   NEW_RESOURCE = '_newResource';
+  NEW_ALIAS = '_newAlias';
   $domain = $ + DOMAIN;
   $prefix = $ + PREFIX;
   $postfix = $ + POSTFIX;
@@ -64,9 +65,13 @@ this.trocha = (function() {
   _basicResource[_list][$ + ID] = false;
   _basicResource[_list][$ + HIDE] = true;
   trochaReturn = function(initParams) {
-    var _constructor, _preparePath, _prepareRoutes, as, newResource, newRoute, newScope, routes;
+    var _basicRouteReturn, _constructor, _preparePath, _prepareRoutes, as, newAlias, newResource, newRoute, newScope, routes;
+    if (!initParams) {
+      initParams = {};
+    }
     routes = {};
     _constructor = function(initParams) {
+      routes = _basicRouteReturn();
       if (initParams[DOMAIN]) {
         routes[$domain] = s + initParams[DOMAIN];
       }
@@ -88,9 +93,6 @@ this.trocha = (function() {
       if (initParams[ALWAYS_POST]) {
         routes[$alwaysPost] = initParams[ALWAYS_POST];
       }
-      routes[NEW_SCOPE] = newScope;
-      routes[NEW_ROUTE] = newRoute;
-      routes[NEW_RESOURCE] = newResource;
       routes[CUSTOM] = function(param, routeParam) {
         return _preparePath({}, param)(routeParam);
       };
@@ -99,16 +101,52 @@ this.trocha = (function() {
       }
       return routes;
     };
+    _basicRouteReturn = function(parent, param, optionals) {
+      var _NEW_NAMES, r;
+      if (!optionals) {
+        optionals = {};
+      }
+      r = {};
+      if (optionals[ROUTE]) {
+        r = optionals[ROUTE];
+      }
+      _NEW_NAMES = [NEW_SCOPE, NEW_ROUTE, NEW_ALIAS, NEW_RESOURCE];
+      if ('object' === typeof r) {
+        [newScope, newRoute, newAlias, newResource].forEach(function(newFunction, i) {
+          return Object.defineProperty(r, _NEW_NAMES[i], {
+            get: function() {
+              return newFunction;
+            }
+          });
+        });
+      }
+      if (parent && param) {
+        r[PATH] = _preparePath(parent, param);
+        r[$NAME] = param[NAME];
+        r[AS] = as(parent, param);
+        if (optionals[METHOD]) {
+          r[$METHOD] = param[METHOD] || GET;
+        }
+        if (optionals[ID] && param[ID]) {
+          r[$ID] = param[ID];
+        }
+        parent[param[NAME]] = r;
+      }
+      return r;
+    };
     _prepareRoutes = function(parent, routesJSON, SELECTOR) {
       var _$, posibleRoutes;
       _$ = SELECTOR || routes[$customSelector] || $;
       delete routesJSON[_$ + TYPE];
       posibleRoutes = Object.keys(routesJSON);
       return posibleRoutes.forEach(function(name) {
-        var newResourceParam, newRouteParam, newScopeParam, route;
+        var newAliasParam, newResourceParam, newRouteParam, newScopeParam, route;
         route = routesJSON[name];
         if (typeof route === 'string') {
-          return parent[name] = route;
+          newAliasParam = {};
+          newAliasParam[NAME] = name;
+          newAliasParam[ALIAS] = route;
+          return parent[NEW_ALIAS](newAliasParam);
         } else if (typeof route === 'object') {
           if (route[_$ + TYPE] === SCOPE) {
             newScopeParam = {};
@@ -195,15 +233,15 @@ this.trocha = (function() {
 					? routes[$postfix] : s
 				);
         delete routeParams[POSTFIX];
-        query = fragment = {};
+        query = {};
         if (routeParams.query) {
           query = JSON.parse(JSON.stringify(routeParams.query));
           delete routeParams.query;
         }
         if (routeParams.fragment) {
-          fragment = JSON.parse(JSON.stringify(routeParams.fragment));
+          fragment = routeParams.fragment;
+          delete routeParams.fragment;
         }
-        delete routeParams.fragment;
         Object.keys(routeParams).forEach(function(v) {
           if (routeParams[v] === false) {
             return r = r.replace('/:' + v, s);
@@ -217,6 +255,9 @@ this.trocha = (function() {
           }
           return r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '');
         });
+        if (fragment) {
+          r += '#' + encodeURIComponent(fragment);
+        }
         return r;
       };
     };
@@ -226,7 +267,7 @@ this.trocha = (function() {
       return (!pas ? '' : pas + '_') + param[NAME];
     };
     newScope = function(param) {
-      var parent, r;
+      var parent;
       if (!param) {
         return console.info('newScope( { name:String } )');
       } else if (!param[NAME]) {
@@ -237,18 +278,37 @@ this.trocha = (function() {
         throw 'Trocha.newScope: require String name';
       } else {
         parent = this;
-        r = {};
-        r[$NAME] = param[NAME];
-        r[PATH] = _preparePath(parent, param);
-        r[AS] = as(parent, param);
-        r[NEW_ROUTE] = newRoute;
-        r[NEW_RESOURCE] = newResource;
-        return parent[r[$NAME]] = r;
+        _basicRouteReturn(parent, param);
+        return delete parent[param[NAME]][NEW_SCOPE];
+      }
+    };
+    newAlias = function(param) {
+      var args, parent;
+      if (!param) {
+        return console.info('Trocha.newAlias( {' + NAME + ':String,' + ALIAS + ':String[,' + METHOD + ':String(Default = GET)] } )');
+      } else if (!param[NAME]) {
+        console.error('Trocha.newAlias given parameters: ', param);
+        throw 'Trocha.newAlias: Missing ' + NAME;
+      } else if (typeof param[NAME] !== 'string') {
+        console.error('Trocha.newAlias given parameters: ', param);
+        throw 'Trocha.newAlias: require String ' + NAME;
+      } else if (param[ALIAS]) {
+        if (typeof param[ALIAS] !== 'string') {
+          console.error('Trocha.newAlias given parameters: ', param);
+          throw 'Trocha.newAlias: require String ' + ALIAS;
+        } else {
+          parent = this;
+          args = {};
+          args[ROUTE] = param[ALIAS];
+          return _basicRouteReturn(parent, param, args);
+        }
+      } else {
+        console.error('Trocha.newAlias given parameters: ', param);
+        throw 'Trocha.newAlias: Missing ' + ALIAS;
       }
     };
     newRoute = function(param) {
-      var parent, r;
-      parent = this;
+      var args, parent;
       if (!param) {
         return console.info('Trocha.newRoute( {' + NAME + ':String, [' + METHOD + ':String(Default = GET),' + ID + ':false|String,' + HIDE + ':Boolean,' + JUST_ID + ':Boolean,' + AFTER_ID + ':Boolean] } )');
       } else if (!param[NAME]) {
@@ -262,29 +322,22 @@ this.trocha = (function() {
           console.error('Trocha.newRoute given parameters: ', param);
           throw 'Trocha.newRoute: require String ' + ALIAS;
         } else {
-          return parent[param[NAME]] = param[ALIAS];
+          return newAlias(param);
         }
       } else {
-        r = {};
-        r[$METHOD] = param[METHOD] || GET;
-        r[$NAME] = param[NAME];
-        r[NEW_ROUTE] = newRoute;
-        r[NEW_RESOURCE] = newResource;
-        r[NEW_SCOPE] = newScope;
-        r[PATH] = _preparePath(parent, param);
-        r[AS] = as(parent, param);
-        if (param[ID]) {
-          r[$ID] = param[ID];
-        }
-        return parent[r[$NAME]] = r;
+        parent = this;
+        args = {};
+        args[METHOD] = true;
+        args[ID] = true;
+        return _basicRouteReturn(parent, param, args);
       }
     };
     newResource = function(param) {
       var newRouteParam, selector;
       if (!param) {
-        return console.info('newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})');
+        return console.info('newResource({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})');
       } else if (typeof param !== 'object') {
-        throw 'Trocha.newRoute: require Object input';
+        throw 'Trocha.newResource: require Object input';
       } else {
         newRouteParam = {};
         if (param[RESOURCE.toLowerCase()] || routes[$resource]) {
@@ -300,18 +353,17 @@ this.trocha = (function() {
     };
     return _constructor(initParams);
   };
-  trochaReturn.OPTIONS = OPTIONS;
-  trochaReturn.GET = GET;
-  trochaReturn.HEAD = HEAD;
-  trochaReturn.POST = POST;
-  trochaReturn.PUT = PUT;
-  trochaReturn.PATCH = PATCH;
-  trochaReturn.DELETE = DELETE;
-  trochaReturn.TRACE = TRACE;
-  trochaReturn.CONNECT = CONNECT;
-  trochaReturn[RESOURCE] = RESOURCE;
-  trochaReturn[ROUTE] = ROUTE;
-  trochaReturn[SCOPE] = SCOPE;
-  trochaReturn[$ + RESOURCE] = JSON.parse(JSON.stringify(_basicResource));
+  [OPTIONS, GET, HEAD, POST, PUT, PATCH, DELETE, TRACE, CONNECT, RESOURCE, ROUTE, SCOPE].forEach(function(attribute) {
+    return Object.defineProperty(trochaReturn, attribute, {
+      get: function() {
+        return attribute;
+      }
+    });
+  });
+  Object.defineProperty(trochaReturn, $ + RESOURCE, {
+    get: function() {
+      return _basicResource;
+    }
+  });
   return trochaReturn;
 })();

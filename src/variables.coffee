@@ -1,10 +1,11 @@
-##START VARIABLES
-	#Utility vars
+## Previous START
+## START VARIABLES
+	# Utility vars
 	_ = '/'
 	s = '' # Force string
 	$ = '$'
 
-	#Request method types
+	# Request method types
 	OPTIONS = 'OPTIONS'
 	GET = 'GET'
 	HEAD = 'HEAD'
@@ -15,7 +16,7 @@
 	TRACE = 'TRACE'
 	CONNECT = 'CONNECT'
 
-	#Route types
+	# Route types
 	ROUTE = 'ROUTE'
 	SCOPE = 'SCOPE'
 	RESOURCE = 'RESOURCE'
@@ -33,14 +34,14 @@
 	METHOD = 'method'
 	DOMAIN = 'domain'
 	ROUTES = 'routes'
-	JUST_ID = 'justId' #FAILS
-	AFTER_ID = 'afterId' #FAILS
+	JUST_ID = 'justId' # FAILS
+	AFTER_ID = 'afterId' # FAILS
 	PARENT_ID = 'parentId'
 	ALWAYS_URL = 'alwaysUrl'
 	ALWAYS_POST = 'alwaysPost'
 	CUSTOM_SELECTOR = 'customSelector'
 
-	#Route return attributes
+	# Route return attributes
 	AS = $+'as'
 	$ID = $+ID
 	PATH = 'path'
@@ -50,8 +51,9 @@
 	NEW_SCOPE = '_newScope'
 	NEW_ROUTE = '_newRoute'
 	NEW_RESOURCE = '_newResource'
+	NEW_ALIAS = '_newAlias'
 
-	#Main object return attributes
+	# Main object return attributes
 	$domain = $+DOMAIN
 	$prefix = $+PREFIX
 	$postfix = $+POSTFIX
@@ -60,9 +62,9 @@
 	$resource = $+RESOURCE.toLowerCase()
 	$customSelector =$+CUSTOM_SELECTOR
 
-	##private
+	## private
 
-	#BASIC RESOURCE
+	# BASIC RESOURCE
 	_show = 'show'
 	_edit = 'edit'
 	_new = 'new'
@@ -77,4 +79,5 @@
 	_basicResource[_new][$+ID] = false
 	_basicResource[_list][$+ID] = false
 	_basicResource[_list][$+HIDE] = true
-##END VARIABLES
+## END VARIABLES
+## Next OBJECT DEFINITION

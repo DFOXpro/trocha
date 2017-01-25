@@ -1,3 +1,5 @@
+## Previous PREPARE PATH
+## START ROUTES ENGINE
 		as = (parent, param) ->
 			pas = parent[AS]
 			`(!pas ? '' : pas + '_')` + param[NAME]
@@ -17,18 +19,46 @@
 				throw 'Trocha.newScope: require String name'
 			else
 				parent = this
-				#console.log 'newScope', parent, param
-				r = {}
-				r[$NAME] = param[NAME]
-				r[PATH] = _preparePath parent, param
-				r[AS] = as parent, param
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
-				parent[r[$NAME]] = r
+				_basicRouteReturn parent, param
+				# r = _basicRouteReturn parent, param
+				delete parent[param[NAME]][NEW_SCOPE] # Prevent consecutive scope, why?
+				# console.log 'newScope', r, parent, param
+
+		newAlias = (param) ->
+			if !param
+				console.info 'Trocha.newAlias(
+					{
+						'+NAME+':String,
+						'+ALIAS+':String[,
+						'+METHOD+':String(Default = GET)]
+					}
+				)'
+			else if !param[NAME]
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + NAME
+			else if typeof param[NAME] != 'string'
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: require String ' + NAME
+			else if param[ALIAS]
+				if typeof param[ALIAS] != 'string'
+					console.error 'Trocha.newAlias given parameters: ', param
+					throw 'Trocha.newAlias: require String ' + ALIAS
+				else
+					parent = this
+					args = {}
+					args[ROUTE] = param[ALIAS] # @TODO If string cant add methods
+					# args[ROUTE] = {}
+					# Object.defineProperty args, ROUTE,
+					# get: -> param[ALIAS]
+					_basicRouteReturn parent, param, args
+					# r = _basicRouteReturn parent, param, args
+					# console.log 'newAlias', r, parent, param
+					
+			else
+				console.error 'Trocha.newAlias given parameters: ', param
+				throw 'Trocha.newAlias: Missing ' + ALIAS
 
 		newRoute = (param) ->
-			parent = this
-			#console.log 'newRoute', parent, param
 			if !param
 				console.info 'Trocha.newRoute(
 					{
@@ -51,25 +81,21 @@
 					console.error 'Trocha.newRoute given parameters: ', param
 					throw 'Trocha.newRoute: require String ' + ALIAS
 				else
-					parent[param[NAME]] = param[ALIAS]
+					newAlias param
 			else
-				r = {}
-				r[$METHOD] = param[METHOD] || GET
-				r[$NAME] = param[NAME]
-				r[NEW_ROUTE] = newRoute
-				r[NEW_RESOURCE] = newResource
-				r[NEW_SCOPE] = newScope
-				r[PATH] = _preparePath parent, param
-				r[AS] = as parent, param
-				if param[ID]
-					r[$ID] = param[ID]
-				parent[r[$NAME]] = r
+				parent = this
+				args = {}
+				args[METHOD] = true
+				args[ID] = true
+				_basicRouteReturn parent, param, args
+				# r = _basicRouteReturn parent, param, args
+				# console.log 'newRoute', r, parent, param
 
 		newResource = (param) ->
 			if !param
-				console.info 'newRoute({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
+				console.info 'newResource({' + NAME + ':String, ' + ID + ':String [, ' + RESOURCE + ':Object]})'
 			else if typeof param != 'object'
-				throw 'Trocha.newRoute: require Object input'
+				throw 'Trocha.newResource: require Object input'
 			else
 				newRouteParam = {}
 				if param[RESOURCE.toLowerCase()] || routes[$resource]
@@ -82,3 +108,5 @@
 				_prepareRoutes this, newRouteParam, selector
 
 		_constructor initParams
+## END ROUTES ENGINE
+## Next RETURN
