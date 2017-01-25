@@ -1,0 +1,27 @@
+{
+  "name": "trocha-js",
+  "description": "Route listing engine",
+  "main": "dist/trocha.js",
+  "authors": [
+    "Daniel Reinaldo Zorro Forero (@DFOXpro)"
+  ],
+  "license": "Mozilla's PL 2.0",
+  "keywords": [
+    "route",
+    "engine",
+    "vanilla",
+    "angular",
+    "XHR",
+    "ajax"
+  ],
+  "homepage": "https://dfoxpro.github.io/trochaJS",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+		"Gruntfile.js",
+		"package.json",
+    "src"
+  ]
+}
