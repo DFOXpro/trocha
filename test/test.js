@@ -5,6 +5,8 @@ testFramework = function(options) {
   results = {
     running: null,
     toTest: [],
+    asserts: 0,
+    badAsserts: 0,
     total: 0,
     bad: 0
   };
@@ -21,7 +23,7 @@ testFramework = function(options) {
       failWarning: function() {
         this.fail = true;
         results.bad++;
-        return console.error(this.title + " failed.");
+        return console.error(this.title + " test failed.");
       }
     };
     if (results.running) {
@@ -31,21 +33,27 @@ testFramework = function(options) {
     return results.total++;
   };
   r.assert = function(result, expected) {
-    var bw;
+    var assertFail, bw;
+    assertFail = false;
+    results.asserts++;
     bw = ", but was:";
     if ('object' === typeof expected) {
       if ('object' !== typeof result) {
-        results.running.fail = true;
-        return console.error("Expected any object" + bw, result);
+        assertFail = true;
+        console.error("Expected any object" + bw, result);
       }
     } else if ('function' === typeof expected) {
       if ('function' !== typeof result) {
-        results.running.fail = true;
-        return console.error("Expected any function" + bw, result);
+        assertFail = true;
+        console.error("Expected any function" + bw, result);
       }
     } else if (result !== expected) {
-      results.running.fail = true;
-      return console.error("Expected ", expected, bw, result);
+      assertFail = true;
+      console.error("Expected ", expected, bw, result);
+    }
+    if (assertFail) {
+      results.badAsserts++;
+      return results.running.fail = true;
     }
   };
   r.run = function() {
@@ -67,7 +75,7 @@ testFramework = function(options) {
         }
       }
     }
-    return console.log("Of " + results.total + " tests, " + results.bad + " failed, " + (results.total - results.bad) + " passed.");
+    return console.log("Of (" + (results.asserts - results.badAsserts) + "/" + results.asserts + ") assert", "(" + (results.total - results.bad) + "/" + results.total + ") tests, " + results.bad + " failed");
   };
   r;
   if (options && options.global) {
@@ -85,6 +93,103 @@ test = testFramework({
 (function() {
   return describe('Trocha JS Routes List engine', function() {
     describe('Route creation', function() {
+      describe('Route creation params', function() {
+        it('should create routes without name printing', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_route_without_name: {
+                $hide: true
+              }
+            }
+          });
+          return assert(r.simple_route_without_name.path(), '');
+        });
+        it('should create routes with method', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_route_with_method: {
+                $method: trocha.POST
+              }
+            }
+          });
+          return assert(r.simple_route_with_method.$method, 'POST');
+        });
+        it('should create routes with id', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_id_route: {
+                $id: 'simple_id'
+              }
+            }
+          });
+          return assert(r.simple_id_route.path(), '/simple_id_route/:simple_id');
+        });
+        it('should create routes with hiden parent id', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_id_route: {
+                $id: 'simple_id',
+                without_parent_id: {
+                  $id: false
+                }
+              }
+            }
+          });
+          return assert(r.simple_id_route.without_parent_id.path(), '/simple_id_route/without_parent_id');
+        });
+        it('should create routes with just id', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_route_with_just_id: {
+                $justId: true,
+                $id: 'simple_id'
+              }
+            }
+          });
+          return assert(r.simple_route_with_just_id.path(), '/:simple_id');
+        });
+        return it('should create routes with hiden parents id and child id', function() {
+          var r;
+          r = trocha({
+            routes: {
+              simple_id_route: {
+                $id: 'simple_id',
+                hide_parent_id: {
+                  $id: 'child_id',
+                  $parentId: false
+                },
+                id_2: {
+                  $id: 'child_id',
+                  $parentId: false,
+                  hide_parents_id: {
+                    child_id: false
+                  },
+                  hide_glitch: {
+                    $id: '$hide',
+                    l: {
+                      $hide: false
+                    }
+                  }
+                }
+              }
+            }
+          });
+          assert(r.simple_id_route.hide_parent_id.path(), '/simple_id_route/hide_parent_id/:child_id');
+          assert(r.simple_id_route.id_2.hide_parents_id.path(), '/simple_id_route/id_2/hide_parents_id');
+          assert(r.simple_id_route.hide_parent_id.path({
+            simple_id: 'asd'
+          }), '/simple_id_route/asd/hide_parent_id/:child_id');
+          assert(r.simple_id_route.id_2.hide_parents_id.path({
+            child_id: 'asd'
+          }), '/simple_id_route/id_2/asd/hide_parents_id');
+          return assert(r.simple_id_route.id_2.hide_glitch.l.path(), '/simple_id_route/id_2/:child_id/hide_glitch/:$hide/l');
+        });
+      });
       it('should create routes via JSON Constructor', function() {
         var r;
         r = trocha({

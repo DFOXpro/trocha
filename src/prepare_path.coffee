@@ -14,9 +14,7 @@
 
 				r += `(parent[PATH] ? parent[PATH]({post:false}) : s)`
 				hide = `(routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE])` # same as parent
-				# REMOVES parent ID if any
-				if parent[$ID] && (param[ID] == false && !routeParams[ID]) || routeParams[PARENT_ID] == false
-					r = r.replace '/:' + parent[$ID], s
+
 				# just ID example: /asd/:asd/:qwe
 				if (routeParams[JUST_ID] != false) && (param[JUST_ID] && param[ID])
 					r += _ + ':' + param[ID]
@@ -41,11 +39,26 @@
 					fragment = routeParams.fragment
 					delete routeParams.fragment
 
-				Object.keys(routeParams).forEach (v) -> # Replace given identifiers if false delete identifier like /(:id)/
+				# REMOVES parent ID if requested
+				r = r.replace '/:' + parent[$ID], s if(
+					parent[$ID] &&
+					!routeParams[parent[$ID]] &&
+					(
+						(param[ID] == false) ||
+						(routeParams[PARENT_ID] == false) ||
+						(param[PARENT_ID] == false)
+					)
+				)
+				# Replace given identifiers if false delete identifier like /(:id)/
+				Object.keys(param).forEach (v) ->
+					r = r.replace '/:' + v, s if param[v] == false && !routeParams[v]
+				Object.keys(routeParams).forEach (v) ->
 					if routeParams[v] == false
 						r = r.replace '/:' + v, s
 					else
 						r = r.replace ':' + v, routeParams[v]
+
+				# console.log param
 
 				Object.keys(query).forEach (key, i, array) -> # Print query values
 					if i == 0
