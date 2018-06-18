@@ -140,7 +140,7 @@ this.trocha = (function() {
       delete routesJSON[_$ + TYPE];
       posibleRoutes = Object.keys(routesJSON);
       return posibleRoutes.forEach(function(name) {
-        var newAliasParam, newResourceParam, newRouteParam, newScopeParam, route;
+        var _defineParam, newAliasParam, newRouteParam, route;
         route = routesJSON[name];
         if (typeof route === 'string') {
           newAliasParam = {};
@@ -148,28 +148,42 @@ this.trocha = (function() {
           newAliasParam[ALIAS] = route;
           return parent[NEW_ALIAS](newAliasParam);
         } else if (typeof route === 'object') {
+          _defineParam = function(_route, _param) {
+            var posibleDisabledParentIds;
+            delete _route[_$ + TYPE];
+            _param = _param || {};
+            _param[NAME] = name;
+            if (_route[_$ + ID] !== void 0) {
+              _param[ID] = _route[_$ + ID];
+              delete _route[_$ + ID];
+            }
+            if (_route[_$ + PARENT_ID] === false) {
+              _param[PARENT_ID] = false;
+              delete _route[_$ + PARENT_ID];
+            }
+            posibleDisabledParentIds = Object.keys(_route);
+            posibleDisabledParentIds.forEach(function(pDPId) {
+              if (_route[pDPId] === false && parent.path && parent.path().includes("/:" + pDPId)) {
+                _param[pDPId] = false;
+                return delete _route[pDPId];
+              } else if (_route[pDPId] === false) {
+                return console.error("Invalid parent Id " + pDPId + " for " + _param[NAME]);
+              }
+            });
+            return _param;
+          };
           if (route[_$ + TYPE] === SCOPE) {
-            newScopeParam = {};
-            newScopeParam[NAME] = name;
-            if (route[_$ + ID] !== void 0) {
-              newScopeParam[ID] = route[_$ + ID];
-              delete route[_$ + ID];
-            }
-            parent[NEW_SCOPE](newScopeParam);
+            parent[NEW_SCOPE](_defineParam(route));
           } else if (route[_$ + TYPE] === RESOURCE) {
-            newResourceParam = {};
-            newResourceParam[NAME] = name;
-            if (route[_$ + ID] !== void 0) {
-              newResourceParam[ID] = route[_$ + ID];
-              delete route[_$ + ID];
-            }
-            parent[NEW_RESOURCE](newResourceParam);
+            parent[NEW_RESOURCE](_defineParam(route));
           } else {
             newRouteParam = {};
-            newRouteParam[NAME] = name;
-            if (route[_$ + ID] !== void 0) {
-              newRouteParam[ID] = route[_$ + ID];
-              delete route[_$ + ID];
+            if (route[_$ + HIDE]) {
+              newRouteParam[HIDE] = route[_$ + HIDE];
+              delete route[_$ + HIDE];
+            }
+            if (route[_$ + HIDE] === false) {
+              delete route[_$ + HIDE];
             }
             if (route[_$ + METHOD]) {
               newRouteParam[METHOD] = route[_$ + METHOD];
@@ -179,24 +193,12 @@ this.trocha = (function() {
               newRouteParam[JUST_ID] = route[_$ + JUST_ID];
               delete route[_$ + JUST_ID];
             }
-            if (route[_$ + AFTER_ID]) {
-              newRouteParam[AFTER_ID] = route[_$ + AFTER_ID];
-              delete route[_$ + AFTER_ID];
-            }
-            if (route[_$ + HIDE]) {
-              newRouteParam[HIDE] = route[_$ + HIDE];
-              delete route[_$ + HIDE];
-            }
-            if (route[_$ + POSTFIX]) {
-              newRouteParam[POSTFIX] = route[_$ + POSTFIX];
-              delete route[_$ + POSTFIX];
-            }
-            parent[NEW_ROUTE](newRouteParam);
+            parent[NEW_ROUTE](_defineParam(route, newRouteParam));
           }
           return _prepareRoutes(parent[name], route);
         } else {
-          console.error('Did you mean', _$ + name, '? Route definition must be Object or String');
-          throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME];
+          console.error('Did you mean', _$ + name, '? Route definition must be Object(to route) or String(to alias) or Boolean(to disable parent Ids)');
+          throw "TrochaJS error: [_prepareRoutes] invalid route definition. " + NAME + " = " + name + " in " + parent[NAME];
         }
       });
     };
@@ -215,9 +217,6 @@ this.trocha = (function() {
         delete routeParams[PREFIX];
         r += (parent[PATH] ? parent[PATH]({post:false}) : s);
         hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : param[HIDE]);
-        if (parent[$ID] && (param[ID] === false && !routeParams[ID]) || routeParams[PARENT_ID] === false) {
-          r = r.replace('/:' + parent[$ID], s);
-        }
         if ((routeParams[JUST_ID] !== false) && (param[JUST_ID] && param[ID])) {
           r += _ + ':' + param[ID];
         } else {
@@ -242,6 +241,14 @@ this.trocha = (function() {
           fragment = routeParams.fragment;
           delete routeParams.fragment;
         }
+        if (parent[$ID] && !routeParams[parent[$ID]] && ((param[ID] === false) || (routeParams[PARENT_ID] === false) || (param[PARENT_ID] === false))) {
+          r = r.replace('/:' + parent[$ID], s);
+        }
+        Object.keys(param).forEach(function(v) {
+          if (param[v] === false && !routeParams[v]) {
+            return r = r.replace('/:' + v, s);
+          }
+        });
         Object.keys(routeParams).forEach(function(v) {
           if (routeParams[v] === false) {
             return r = r.replace('/:' + v, s);
