@@ -68,45 +68,52 @@
 					newAliasParam[ALIAS] = route
 					parent[NEW_ALIAS] newAliasParam
 				else if typeof route == 'object'
+					_defineParam = (_route, _param) ->
+						delete _route[_$+TYPE]
+						_param = _param || {}
+						_param[NAME] = name
+						if _route[_$+ID] != undefined
+							_param[ID] = _route[_$+ID]
+							delete _route[_$+ID]
+						if _route[_$+PARENT_ID] == false
+							_param[PARENT_ID] = false
+							delete _route[_$+PARENT_ID]
+						posibleDisabledParentIds = Object.keys _route
+						posibleDisabledParentIds.forEach (pDPId) -> # posibleDisabledParentId
+							# console.log parent.path(), pDPId if parent.path
+							if _route[pDPId] == false && parent.path && parent.path().includes "/:#{pDPId}"
+								_param[pDPId] = false
+								delete _route[pDPId]
+							else if _route[pDPId] == false
+								console.error "Invalid parent Id #{pDPId} for #{_param[NAME]}"
+						return _param
+
 					if route[_$+TYPE] == SCOPE
-						newScopeParam = {}
-						newScopeParam[NAME] = name
-						if route[_$+ID] != undefined
-							newScopeParam[ID] = route[_$+ID]
-							delete route[_$+ID]
-						parent[NEW_SCOPE] newScopeParam
+						parent[NEW_SCOPE] _defineParam route
 					else if route[_$+TYPE] == RESOURCE
-						newResourceParam = {}
-						newResourceParam[NAME] = name
-						if route[_$+ID] != undefined
-							newResourceParam[ID] = route[_$+ID]
-							delete route[_$+ID]
-						parent[NEW_RESOURCE] newResourceParam
+						parent[NEW_RESOURCE] _defineParam route
 					else # if route[_$+TYPE] == ROUTE || route[_$+TYPE] == undefined
 						newRouteParam = {}
-						newRouteParam[NAME] = name
-						if route[_$+ID] != undefined
-							newRouteParam[ID] = route[_$+ID]
-							delete route[_$+ID]
+						if route[_$+HIDE]
+							newRouteParam[HIDE] = route[_$+HIDE]
+							delete route[_$+HIDE]
+						delete route[_$+HIDE] if route[_$+HIDE] == false
 						if route[_$+METHOD]
 							newRouteParam[METHOD] = route[_$+METHOD]
 							delete route[_$+METHOD]
 						if route[_$+JUST_ID]
 							newRouteParam[JUST_ID] = route[_$+JUST_ID]
 							delete route[_$+JUST_ID]
-						if route[_$+AFTER_ID]
-							newRouteParam[AFTER_ID] = route[_$+AFTER_ID]
-							delete route[_$+AFTER_ID]
-						if route[_$+HIDE]
-							newRouteParam[HIDE] = route[_$+HIDE]
-							delete route[_$+HIDE]
-						if route[_$+POSTFIX]
-							newRouteParam[POSTFIX] = route[_$+POSTFIX]
-							delete route[_$+POSTFIX]
-						parent[NEW_ROUTE] newRouteParam
+						# if route[_$+AFTER_ID] # @TODO: FAILS and Needs docs
+						# 	newRouteParam[AFTER_ID] = route[_$+AFTER_ID]
+						# 	delete route[_$+AFTER_ID]
+						# if route[_$+POSTFIX] # @TODO: FAILS and Needs docs
+						# 	newRouteParam[POSTFIX] = route[_$+POSTFIX]
+						# 	delete route[_$+POSTFIX]
+						parent[NEW_ROUTE] _defineParam route, newRouteParam
 					_prepareRoutes parent[name], route
 				else
-					console.error 'Did you mean', _$+name, '? Route definition must be Object or String'
-					throw 'TrochaJS error: [_prepareRoutes] invalid route definition. ' + NAME + ' = ' + name + ' in ' + parent[NAME]
+					console.error 'Did you mean', _$+name, '? Route definition must be Object(to route) or String(to alias) or Boolean(to disable parent Ids)'
+					throw "TrochaJS error: [_prepareRoutes] invalid route definition. #{NAME} = #{name} in #{parent[NAME]}"
 ## END CONSTRUCTOR
 ## Next PREPARE PATH

@@ -34,8 +34,8 @@
 	METHOD = 'method'
 	DOMAIN = 'domain'
 	ROUTES = 'routes'
-	JUST_ID = 'justId' # FAILS
-	AFTER_ID = 'afterId' # FAILS
+	JUST_ID = 'justId'
+	AFTER_ID = 'afterId' # FAILS & no DOCS
 	PARENT_ID = 'parentId'
 	ALWAYS_URL = 'alwaysUrl'
 	ALWAYS_POST = 'alwaysPost'
