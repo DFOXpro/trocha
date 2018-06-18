@@ -2,6 +2,8 @@ testFramework = (options)->
 	results = {
 		running: null
 		toTest: []
+		asserts: 0
+		badAsserts: 0
 		total: 0
 		bad: 0
 	}
@@ -18,24 +20,29 @@ testFramework = (options)->
 			failWarning: ()->
 				this.fail = true
 				results.bad++
-				console.error this.title + " failed."
+				console.error "#{this.title} test failed."
 		desc.parent = results.running if results.running
 		results.toTest.push desc
 		results.total++
 
 	r.assert = (result, expected)->
+		assertFail = false
+		results.asserts++
 		bw = ", but was:"
 		if 'object' == typeof expected
 			if 'object' != typeof result
-				results.running.fail = true
+				assertFail = true
 				console.error "Expected any object" + bw, result
 		else if 'function' == typeof expected
 			if 'function' != typeof result
-				results.running.fail = true
+				assertFail = true
 				console.error "Expected any function" + bw, result
 		else if result != expected
-			results.running.fail = true
+			assertFail = true
 			console.error "Expected ", expected, bw, result
+		if assertFail
+			results.badAsserts++
+			results.running.fail = true
 
 	r.run = ()->
 		while results.toTest.length > 0
@@ -50,7 +57,10 @@ testFramework = (options)->
 				results.running.failWarning()
 				if results.running.parent && !results.running.parent.fail
 					results.running.parent.failWarning()
-		console.log "Of " + results.total + " tests, " + results.bad + " failed, " + (results.total - results.bad) + " passed."
+		console.log(
+			"Of (#{results.asserts - results.badAsserts}/#{results.asserts}) assert",
+			"(#{(results.total - results.bad)}/#{results.total}) tests, #{results.bad} failed"
+		)
 	r
 
 	if options && options.global
