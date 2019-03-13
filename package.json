@@ -1,22 +1,28 @@
 {
-  "name": "Trocha.js",
-  "version": "0.1.1",
-  "description": "Route listing Web clients",
-  "author": "DFOXpro",
-  "private": true,
-  "license": "Mozilla's PL",
-  "dependencies": {
-    "grunt": "latest",
+  "name": "TrochaJS",
+  "version": "0.2.0",
+  "description": "Route/Path listing for JS",
+  "author": "Daniel Zorro @DFOXpro",
+  "private": false,
+  "license": "MPL-2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "grunt": "^1.0.3",
+    "grunt-babel": "^8.0.0",
     "grunt-cli": "latest",
     "grunt-coffeescript-concat": "^0.2.1",
     "grunt-contrib-clean": "latest",
-    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-coffee": "git@github.com:gruntjs/grunt-contrib-coffee.git",
     "grunt-contrib-concat": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-contrib-uglify": "latest",
-    "grunt-contrib-watch": "latest",
-    "grunt-protractor-runner": "^3.2.0",
-    "load-grunt-tasks": "latest",
-    "protractor": "~3.3.0"
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-exec": "^3.0.0",
+    "grunt-includes": "^1.1.0",
+    "load-grunt-tasks": "latest"
+  },
   }
 }
