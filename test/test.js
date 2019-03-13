@@ -19,7 +19,7 @@ testFramework = function(options) {
       return itFun();
     } catch (error) {
       e = error;
-      console.error("BROKEN EXAMPLE" + doString);
+      console.error("BROKEN EXAMPLE " + doString);
       return console.error("Exception caught", e);
     }
   };
@@ -104,36 +104,42 @@ testFramework = function(options) {
     if (assertFail) {
       results.badAsserts++;
       results.runningDescribe.fail = true;
-      return console.assert(false, {
+      console.assert(false, {
         expected: expected,
         result: result,
         msg: errorMessage
       });
     }
+    return assertFail;
   };
   r.run = function() {
     var _runDescribes;
     _runDescribes = function(describes) {
-      var _currentDescribe, e, results1;
-      results1 = [];
+      var _currentDescribe, e, success;
+      success = true;
       while (describes.length > 0) {
         _currentDescribe = results.runningDescribe = describes.shift();
         console.info("Testing " + results.runningDescribe.title);
         try {
           _currentDescribe.fun();
-          _runDescribes(_currentDescribe.childsDescribes);
+          if (!_runDescribes(_currentDescribe.childsDescribes)) {
+            success = false;
+          }
+          if (!success) {
+            _currentDescribe.fail = true;
+          }
         } catch (error) {
           e = error;
           _currentDescribe.fail = true;
           console.error("Exception caught", e);
         }
         if (_currentDescribe.fail) {
-          results1.push(_currentDescribe.failWarning());
+          _currentDescribe.failWarning();
         } else {
-          results1.push(_currentDescribe.successPromp());
+          _currentDescribe.successPromp();
         }
       }
-      return results1;
+      return success;
     };
     _runDescribes(results.describesToTest);
     return console.log(`Of (${results.asserts - results.badAsserts}/${results.asserts}) assert`, `(${results.total - results.bad}/${results.total}) tests, ${results.bad} failed`);
@@ -158,26 +164,26 @@ _clone = function(object) {
 constants_test = function() {
   describe('Constants returns', function() {
     it('should be no editable', function() {
-      trocha.ROUTE = "Atack!";
-      trocha.OPTIONS = "Atack!";
-      trocha.$RESOURCE = "Atack!";
-      assert(trocha.ROUTE, "ROUTE");
-      assert(trocha.OPTIONS, "OPTIONS");
-      return assert(trocha.$RESOURCE, {});
+      Trocha.ROUTE = "Atack!";
+      Trocha.OPTIONS = "Atack!";
+      Trocha.$RESOURCE = "Atack!";
+      assert(Trocha.ROUTE, "ROUTE");
+      assert(Trocha.OPTIONS, "OPTIONS");
+      return assert(Trocha.$RESOURCE, {});
     });
     it('should return HTTP request methods types', function() {
-      assert(trocha.OPTIONS, "OPTIONS");
-      assert(trocha.GET, "GET");
-      assert(trocha.HEAD, "HEAD");
-      assert(trocha.POST, "POST");
-      assert(trocha.PUT, "PUT");
-      assert(trocha.PATCH, "PATCH");
-      assert(trocha.DELETE, "DELETE");
-      assert(trocha.TRACE, "TRACE");
-      return assert(trocha.CONNECT, "CONNECT");
+      assert(Trocha.OPTIONS, "OPTIONS");
+      assert(Trocha.GET, "GET");
+      assert(Trocha.HEAD, "HEAD");
+      assert(Trocha.POST, "POST");
+      assert(Trocha.PUT, "PUT");
+      assert(Trocha.PATCH, "PATCH");
+      assert(Trocha.DELETE, "DELETE");
+      assert(Trocha.TRACE, "TRACE");
+      return assert(Trocha.CONNECT, "CONNECT");
     });
     it('should return default resource tree', function() {
-      return assert(trocha.$RESOURCE, {
+      return assert(Trocha.$RESOURCE, {
         $id: 'id',
         show: {
           $hide: true
@@ -193,10 +199,10 @@ constants_test = function() {
       });
     });
     return it('should return routes types', function() {
-      assert(trocha.ALIAS, "ALIAS");
-      assert(trocha.SCOPE, "SCOPE");
-      assert(trocha.ROUTE, "ROUTE");
-      return assert(trocha.RESOURCE, "RESOURCE");
+      assert(Trocha.ALIAS, "ALIAS");
+      assert(Trocha.SCOPE, "SCOPE");
+      assert(Trocha.ROUTE, "ROUTE");
+      return assert(Trocha.RESOURCE, "RESOURCE");
     });
   });
   return constants_test = void 0;
@@ -204,10 +210,16 @@ constants_test = function() {
 
 constructor_test = function() {
   describe('Constructor', function() {
+    it('should check trocha is a class object', function() {
+      var r;
+      // https://stackoverflow.com/questions/1249531/how-to-get-a-javascript-objects-class
+      assert(Trocha, function() {});
+      r = new Trocha();
+      return assert(Trocha.name, "Trocha");
+    });
     return it('should create a valid trocha object', function() {
       var r;
-      assert(trocha, function() {});
-      r = trocha();
+      r = new Trocha();
       assert(r, {});
       assert(r._custom, function() {});
       assert(r._newResource, function() {});
@@ -532,10 +544,10 @@ function_path_test = function() {
 (function() {
   describe('Trocha JS Routes List engine', function() {
     constants_test();
-    constructor_test();
-    routes_creation_test();
-    return function_path_test();
+    return constructor_test();
   });
+  // routes_creation_test()
+  // function_path_test()
   return test.run();
 })();
 
