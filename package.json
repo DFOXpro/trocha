@@ -22,7 +22,6 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-includes": "^1.1.0",
     "grunt-jsdoc": "^2.3.0",
-    "grunt-patch": "^0.1.7",
     "jsdoc": "^3.5.5",
     "load-grunt-tasks": "latest"
   },

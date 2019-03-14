@@ -37,18 +37,10 @@ module.exports = (grunt) ->
 				files:
 					'./dist/trocha_module.babeled.js': './dist/trocha_module.es6.js'
 			library:
-				# options:
-					# presets: ["@babel/preset-env", { modules: false }]
+				options:
+					presets: [["@babel/preset-env", { modules: false }]]
 				files:
 					'./dist/trocha_library.babeled.js': './dist/trocha_library.es6.js'
-		patch:
-			fix_babel_this:
-				# diff -u dist/trocha_library.babeled.js dist/trocha_libraryfix.babeled.js > fix_babel_this.patch
-				options:
-					patch: './fix_babel_this.patch'
-				files:
-					'./dist/trocha_library.babeled.js': './dist/trocha_library.babeled.js'
-			# bsdiff dist/trocha2.min.js dist/trocha2.min.js fix_babel_this.bpatch
 
 		# Only works with ES5
 		uglify: prod:
@@ -106,7 +98,6 @@ module.exports = (grunt) ->
 		'includes'
 		'jsdoc'
 		'babel'
-		'patch:fix_babel_this'
 		'uglify'
 	]
 	grunt.registerTask 'dev', [
