@@ -1,80 +1,93 @@
+/*
+ * Why variables are outside the Trocha class?
+ * Because private variables are still not supported
+ * and because Route share a lot of symbols with Trocha
+ */
+
 // Utility vars
-let _ = '/'
-let s = '' // Force string
-let $ = '$'
+const _ = '/'
+const s = '' // Force string
+const DS = '$' // DEFAULT_SELECTOR
 
 // Request method types
-let OPTIONS = 'OPTIONS'
-let GET = 'GET'
-let HEAD = 'HEAD'
-let POST = 'POST'
-let PUT = 'PUT'
-let PATCH = 'PATCH'
-let DELETE = 'DELETE'
-let TRACE = 'TRACE'
-let CONNECT = 'CONNECT'
+const OPTIONS = 'OPTIONS'
+const GET = 'GET'
+const HEAD = 'HEAD'
+const POST = 'POST'
+const PUT = 'PUT'
+const PATCH = 'PATCH'
+const DELETE = 'DELETE'
+const TRACE = 'TRACE'
+const CONNECT = 'CONNECT'
 
 // Route types
-let ROUTE = 'ROUTE'
-let SCOPE = 'SCOPE'
-let RESOURCE = 'RESOURCE'
-let _ALIAS = 'ALIAS'
+const ROUTE = 'ROUTE'
+const SCOPE = 'SCOPE'
+const _RESOURCE = 'RESOURCE'
+const _ALIAS = 'ALIAS'
 
 // Input attributes
-let ID = 'id'
-let NAME = 'name'
-let HIDE = 'hide'
-let URL = 'url'
-let TYPE = 'type'
-let PREFIX = 'pre'
-let ALIAS = 'alias'
-let POSTFIX = 'post'
-let EXTENDED = 'ext'
-let METHOD = 'method'
-let DOMAIN = 'domain'
-let ROUTES = 'routes'
-let JUST_ID = 'justId'
-let AFTER_ID = 'afterId' // FAILS & no DOCS
-let PARENT_ID = 'parentId'
-let ALWAYS_URL = 'alwaysUrl'
-let ALWAYS_POST = 'alwaysPost'
-let CUSTOM_SELECTOR = 'customSelector'
+const ID = 'id'
+const RESOURCE = 'resource'
+const NAME = 'name'
+const HIDE = 'hide'
+const URL = 'url'
+const TYPE = 'type'
+const PREFIX = 'pre'
+const ALIAS = 'alias'
+const QUERY = 'query'
+const FRAGMENT = 'fragment'
+const POSTFIX = 'post'
+const EXTENDED = 'ext'
+const METHOD = 'method'
+const DOMAIN = 'domain'
+const ROUTES = 'routes'
+const JUST_ID = 'justId'
+const AFTER_ID = 'afterId' // FAILS & no DOCS
+const PARENT_ID = 'parentId'
+const ALWAYS_URL = 'alwaysUrl'
+const ALWAYS_POST = 'alwaysPost'
+const CUSTOM_SELECTOR = 'customSelector'
 
 // Route return attributes
-let AS = $+'as'
-let $ID = $+ID
-let PATH = 'path'
-let $NAME = $+NAME
-let $METHOD = $+METHOD
-let CUSTOM = '_custom'
-let NEW_SCOPE = '_newScope'
-let NEW_ROUTE = '_newRoute'
-let NEW_RESOURCE = '_newResource'
-let NEW_ALIAS = '_newAlias'
+const AS = 'as'
+const PATH = 'path'
+// const NEW_SCOPE = '_newScope'
+// const NEW_ROUTE = '_newRoute'
+// const NEW_RESOURCE = '_newResource'
+// const NEW_ALIAS = '_newAlias'
 
 // Main object return attributes
-let $domain = $+DOMAIN
-let $prefix = $+PREFIX
-let $postfix = $+POSTFIX
-let $alwaysUrl = $+ALWAYS_URL
-let $alwaysPost = $+ALWAYS_POST
-let $resource = $+RESOURCE.toLowerCase()
-let $customSelector = $+CUSTOM_SELECTOR
+/**
+ * @TODO deprecate
+ * Reason: all those attributes can have customSelector
+ */
+// const $prefix = DS+PREFIX
+// const $postfix = DS+POSTFIX
+// const $alwaysUrl = DS+ALWAYS_URL
+// const $alwaysPost = DS+ALWAYS_POST
+// const $customSelector = DS+CUSTOM_SELECTOR
 
-//// private
+//// static final
 
 // BASIC RESOURCE
-let _show = 'show'
-let _edit = 'edit'
-let _new = 'new'
-let _list = 'list'
-let _basicResource = {}
-_basicResource[$+ID] = ID
-_basicResource[_show] = {}
-_basicResource[_edit] = {}
-_basicResource[_new] = {}
-_basicResource[_list] = {}
-_basicResource[_show][$+HIDE] = true
-_basicResource[_new][$+ID] = false
-_basicResource[_list][$+ID] = false
-_basicResource[_list][$+HIDE] = true
+const _show = 'show'
+const _edit = 'edit'
+const _new = 'new'
+const _list = 'list'
+const _basicResource = (SS = DS)=>{ // selectedSelector
+	const r = {}
+	r[SS+ID] = ID
+	r[_show] = {}
+	r[_edit] = {}
+	r[_new] = {}
+	r[_list] = {}
+	r[_show][SS+HIDE] = true
+	r[_new][SS+ID] = false
+	r[_list][SS+ID] = false
+	r[_list][SS+HIDE] = true
+	return r
+}
+
+const ERROR_HEADER = 'TrochaJS error: '
+const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
