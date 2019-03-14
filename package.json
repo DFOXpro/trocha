@@ -20,8 +20,8 @@
     "grunt-contrib-copy": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-exec": "^3.0.0",
     "grunt-includes": "^1.1.0",
+    "grunt-patch": "^0.1.7",
     "load-grunt-tasks": "latest"
   },
   }
