@@ -13,6 +13,15 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks 'grunt-coffeescript-concat'
 	grunt.loadNpmTasks 'grunt-includes'
 	grunt.initConfig
+		includes:
+			files:
+				src: ['trocha_*.es6.js']
+				dest: './dist'
+				cwd: './src/v2'
+			options:
+				flatten: true
+				debug: true
+				banner: banner[2]
 		babel:
 			options:
 				sourceMap: true
@@ -32,15 +41,6 @@ module.exports = (grunt) ->
 				bspatch ./dist/trocha2.min.js ./dist/trocha2.min.js ./fix_babel_this.bspatch &&
 				patch ./dist/trocha2.js < ./fix_babel_this.patch
 			'
-		includes:
-			files:
-				src: ['src/v2/index.js']
-				dest: 'dist/trocha.es6'
-				flatten: true,
-				cwd: '.',
-				options:
-					silent: true,
-					banner: banner[2]
 
 		## Only works with ES5
 		# uglify: prod:
