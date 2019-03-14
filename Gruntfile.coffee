@@ -90,6 +90,7 @@ module.exports = (grunt) ->
 					'src/test/main_test.coffee'
 					'src/test/function_path_test.coffee'
 					'src/test/routes_creation_test.coffee'
+					'src/test/base_variables_test.coffee'
 					'src/test/constructor_test.coffee'
 					'src/test/constants_test.coffee'
 					'src/test/test_framework.coffee'

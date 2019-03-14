@@ -1,6 +1,9 @@
 routes_creation_test = ->
 	describe 'Route creation', ->
 		describe 'Route creation params', ->
+			it 'should create trivial route', ->
+				r = new Trocha routes: simple_route: {}
+				assert r.simple_route.path(), '/simple_route'
 			it 'should create routes without name printing', ->
 				r = new Trocha routes: simple_route_without_name: $hide: true
 				assert r.simple_route_without_name.path(), ''
@@ -59,6 +62,13 @@ routes_creation_test = ->
 				# assert r.simple_id_route.id_2.overide_id.path(), '/simple_id_route/asd/id_2/:child_id/overide_id'
 				assert r.simple_id_route.id_2.hide_glitch.l.path(), '/simple_id_route/id_2/:child_id/hide_glitch/:$hide/l'
 
+			it 'should create routes with prefix', ->
+				r = new Trocha
+					pre: '.the_pre.'
+					routes: simple_route_pre: {}
+				assert r.simple_route_pre.path(), '/simple_route_pre'
+				assert r.simple_route_pre.path({pre: true}), '.the_pre./simple_route_pre'
+				assert r.simple_route_pre.path({ext: true}), '.the_pre./simple_route_pre'
 			it 'should create routes with postfix', ->
 				r = new Trocha
 					post: '.the_post'
