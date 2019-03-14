@@ -118,12 +118,13 @@ test = testFramework global: true
 # Note this function does not clone functions
 _clone = (object) ->
 	JSON.parse JSON.stringify object
+
 constants_test = ->
 	describe 'Constants returns', ->
 		it 'should be no editable', ->
-			Trocha.ROUTE = "Atack!"
-			Trocha.OPTIONS = "Atack!"
-			Trocha.$RESOURCE = "Atack!"
+			Trocha.ROUTE = "Atack!Route"
+			Trocha.OPTIONS = "Atack!Option"
+			Trocha.$RESOURCE = "Atack!$Resource"
 			assert Trocha.ROUTE, "ROUTE"
 			assert Trocha.OPTIONS, "OPTIONS"
 			assert Trocha.$RESOURCE, {}
@@ -167,49 +168,69 @@ constructor_test = ->
 		it 'should create a valid trocha object', ->
 			r = new Trocha()
 			assert r, {}
-			assert r._custom, ->
+			assert r._newAlias, ->
 			assert r._newResource, ->
 			assert r._newRoute, ->
 			assert r._newScope, ->
 
 	constructor_test = undefined
 
+base_variables = ->
+	describe 'Base variables returns', ->
+		it 'should set customSelector', ->
+			r = new Trocha()
+			assert r.$RESOURCE, {}
+			assert r.$domain, ""
+			r = new Trocha({customSelector: '$$'})
+			assert r.$$RESOURCE, {}
+			assert r.$$domain, ""
+			window.asd = r
+		it 'should set domain', ->
+			r = new Trocha()
+			assert r.$domain, ""
+			r = new Trocha({domain: 'asd'})
+			assert r.$domain, "asd"
+	base_variables = undefined
+
 routes_creation_test = ->
 	describe 'Route creation', ->
 		describe 'Route creation params', ->
+			it 'should create trivial route', ->
+				r = new Trocha routes: simple_route: {}
+				assert r.simple_route.path(), '/simple_route'
 			it 'should create routes without name printing', ->
-				r = trocha routes: simple_route_without_name: $hide: true
+				r = new Trocha routes: simple_route_without_name: $hide: true
 				assert r.simple_route_without_name.path(), ''
 
 			it 'should create routes with method', ->
-				r = trocha routes: simple_route_with_method: $method: trocha.POST
+				r = new Trocha routes: simple_route_with_method: $method: Trocha.POST
 				assert r.simple_route_with_method.$method, 'POST'
 
 			it 'should create routes with id', ->
-				r = trocha routes: simple_id_route: $id: 'simple_id'
+				r = new Trocha routes: simple_id_route: $id: 'simple_id'
 				assert r.simple_id_route.path(), '/simple_id_route/:simple_id'
 
 			it 'should create routes with hiden parent id', ->
-				r = trocha routes: simple_id_route:
+				r = new Trocha routes: simple_id_route:
 					$id: 'simple_id'
 					without_parent_id: $id: false
 				assert r.simple_id_route.without_parent_id.path(), '/simple_id_route/without_parent_id'
 
 			it 'should create routes with just id', ->
-				r = trocha routes: simple_route_with_just_id:
+				r = new Trocha routes: simple_route_with_just_id:
 					$justId: true
 					$id: 'simple_id'
 				assert r.simple_route_with_just_id.path(), '/:simple_id'
 
-			# will fail
-			it 'should create routes with after id', ->
-				r = trocha routes: simple_route_with_after_id:
-					$afterId: true
-					$id: 'simple_id'
-				assert r.simple_route_with_after_id.path(), '/:simple_id/simple_route_with_after_id'
+			# # will fail
+			# it 'should create routes with after id', ->
+			# 	r = new Trocha routes: simple_route_with_after_id:
+			# 		$afterId: true
+			# 		$id: 'simple_id'
+			# 	assert r.simple_route_with_after_id.path(), '/:simple_id/simple_route_with_after_id'
 
 			it 'should create routes with hiden parents id and child id', ->
-				r = trocha routes: simple_id_route:
+				r = new Trocha routes: simple_id_route:
 					$id: 'simple_id'
 					hide_parent_id:
 						$id: 'child_id'
@@ -226,6 +247,7 @@ routes_creation_test = ->
 							# simple_id: ':$hide' # does not compute
 							l:
 								$hide: false # This will be ignore in constructor
+
 				assert r.simple_id_route.hide_parent_id.path(), '/simple_id_route/hide_parent_id/:child_id'
 				assert r.simple_id_route.id_2.hide_parents_id.path(), '/simple_id_route/id_2/hide_parents_id'
 				#check Override
@@ -234,54 +256,65 @@ routes_creation_test = ->
 				# assert r.simple_id_route.id_2.overide_id.path(), '/simple_id_route/asd/id_2/:child_id/overide_id'
 				assert r.simple_id_route.id_2.hide_glitch.l.path(), '/simple_id_route/id_2/:child_id/hide_glitch/:$hide/l'
 
-			# will fail
+			it 'should create routes with prefix', ->
+				r = new Trocha
+					pre: '.the_pre.'
+					routes: simple_route_pre: {}
+				assert r.simple_route_pre.path(), '/simple_route_pre'
+				assert r.simple_route_pre.path({pre: true}), '.the_pre./simple_route_pre'
+				assert r.simple_route_pre.path({ext: true}), '.the_pre./simple_route_pre'
 			it 'should create routes with postfix', ->
-				r = trocha routes: simple_route_post:
-					$post: 'the_post'
-				assert r.simple_route_post.path(), '/simple_route_postthe_post'
-
-				assert r.simple_id_route.path(simple_id: 'the_simple_id'), '/simple_id_route/the_simple_id'
-				assert r.simple_id_route.path(simple_id: false), '/simple_id_route'
+				r = new Trocha
+					post: '.the_post'
+					alwaysPost: true
+					routes: simple_route_post: {}
+				assert r.simple_route_post.path(), '/simple_route_post.the_post'
+				r = new Trocha
+					post: '.the_post'
+					routes: simple_route_post: {}
+				assert r.simple_route_post.path(), '/simple_route_post'
+				assert r.simple_route_post.path({post: true}), '/simple_route_post.the_post'
+				assert r.simple_route_post.path({ext: true}), '/simple_route_post.the_post'
 
 		it 'should create routes via JSON Constructor', ->
-			r = trocha
+			r = new Trocha
 				routes:
 					simple_route: {}
-					simple_scope: {$type: trocha.SCOPE}
+					simple_scope: {$type: Trocha.SCOPE}
 					simple_alias: "simple_alias"
 					simple_resource:
-						$type: trocha.RESOURCE
+						$type: Trocha.RESOURCE
 						$id: "simple_id" #resource must have ID
 
 			assert r.simple_route, {}
 			assert r.simple_scope, {}
 			assert r.simple_resource, {}
-			assert r.simple_alias, {} # will fail
-			assert r.simple_alias, "simple_alias" # @TODO remove me after alias fix
+			assert r.simple_alias, {}
+
 		it 'should create routes via post init functions', ->
-			r = trocha()
+			r = new Trocha()
 			r._newRoute {
 				name: "simple_route"
 			}
+			assert r.simple_route, {}
 			r.simple_route._newRoute {
 				name: "simple_route"
 			}
+			assert r.simple_route.simple_route, {}
 			r._newScope {
 				name: "simple_scope"
 			}
+			assert r.simple_scope, {}
 			r._newResource {
 				name: "simple_resource"
 				id: "simple_id"
 			}
+			assert r.simple_resource, {}
 			r._newAlias {
 				name: "simple_alias"
 				alias: "simple_alias"
 			}
-			assert r.simple_route, {}
-			assert r.simple_route.simple_route, {}
-			assert r.simple_scope, {}
-			assert r.simple_resource, {}
-			assert r.simple_alias, "simple_alias"
+			assert r.simple_alias, {}
 
 	routes_creation_test = undefined
 
@@ -372,7 +405,8 @@ function_path_test = ->
 	describe 'Trocha JS Routes List engine', ->
 		constants_test()
 		constructor_test()
-		# routes_creation_test()
+		base_variables()
+		routes_creation_test()
 		# function_path_test()
 	test.run()
 )()

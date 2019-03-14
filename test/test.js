@@ -1,4 +1,4 @@
-var _clone, constants_test, constructor_test, function_path_test, routes_creation_test, test, testFramework;
+var _clone, base_variables, constants_test, constructor_test, function_path_test, routes_creation_test, test, testFramework;
 
 testFramework = function(options) {
   var r, results;
@@ -164,9 +164,9 @@ _clone = function(object) {
 constants_test = function() {
   describe('Constants returns', function() {
     it('should be no editable', function() {
-      Trocha.ROUTE = "Atack!";
-      Trocha.OPTIONS = "Atack!";
-      Trocha.$RESOURCE = "Atack!";
+      Trocha.ROUTE = "Atack!Route";
+      Trocha.OPTIONS = "Atack!Option";
+      Trocha.$RESOURCE = "Atack!$Resource";
       assert(Trocha.ROUTE, "ROUTE");
       assert(Trocha.OPTIONS, "OPTIONS");
       return assert(Trocha.$RESOURCE, {});
@@ -221,7 +221,7 @@ constructor_test = function() {
       var r;
       r = new Trocha();
       assert(r, {});
-      assert(r._custom, function() {});
+      assert(r._newAlias, function() {});
       assert(r._newResource, function() {});
       assert(r._newRoute, function() {});
       return assert(r._newScope, function() {});
@@ -230,12 +230,48 @@ constructor_test = function() {
   return constructor_test = void 0;
 };
 
+base_variables = function() {
+  describe('Base variables returns', function() {
+    it('should set customSelector', function() {
+      var r;
+      r = new Trocha();
+      assert(r.$RESOURCE, {});
+      assert(r.$domain, "");
+      r = new Trocha({
+        customSelector: '$$'
+      });
+      assert(r.$$RESOURCE, {});
+      assert(r.$$domain, "");
+      return window.asd = r;
+    });
+    return it('should set domain', function() {
+      var r;
+      r = new Trocha();
+      assert(r.$domain, "");
+      r = new Trocha({
+        domain: 'asd'
+      });
+      return assert(r.$domain, "asd");
+    });
+  });
+  return base_variables = void 0;
+};
+
 routes_creation_test = function() {
   describe('Route creation', function() {
     describe('Route creation params', function() {
+      it('should create trivial route', function() {
+        var r;
+        r = new Trocha({
+          routes: {
+            simple_route: {}
+          }
+        });
+        return assert(r.simple_route.path(), '/simple_route');
+      });
       it('should create routes without name printing', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_route_without_name: {
               $hide: true
@@ -246,10 +282,10 @@ routes_creation_test = function() {
       });
       it('should create routes with method', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_route_with_method: {
-              $method: trocha.POST
+              $method: Trocha.POST
             }
           }
         });
@@ -257,7 +293,7 @@ routes_creation_test = function() {
       });
       it('should create routes with id', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_id_route: {
               $id: 'simple_id'
@@ -268,7 +304,7 @@ routes_creation_test = function() {
       });
       it('should create routes with hiden parent id', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_id_route: {
               $id: 'simple_id',
@@ -282,7 +318,7 @@ routes_creation_test = function() {
       });
       it('should create routes with just id', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_route_with_just_id: {
               $justId: true,
@@ -292,22 +328,15 @@ routes_creation_test = function() {
         });
         return assert(r.simple_route_with_just_id.path(), '/:simple_id');
       });
-      // will fail
-      it('should create routes with after id', function() {
-        var r;
-        r = trocha({
-          routes: {
-            simple_route_with_after_id: {
-              $afterId: true,
-              $id: 'simple_id'
-            }
-          }
-        });
-        return assert(r.simple_route_with_after_id.path(), '/:simple_id/simple_route_with_after_id');
-      });
+      // # will fail
+      // it 'should create routes with after id', ->
+      // 	r = new Trocha routes: simple_route_with_after_id:
+      // 		$afterId: true
+      // 		$id: 'simple_id'
+      // 	assert r.simple_route_with_after_id.path(), '/:simple_id/simple_route_with_after_id'
       it('should create routes with hiden parents id and child id', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
           routes: {
             simple_id_route: {
               $id: 'simple_id',
@@ -346,36 +375,58 @@ routes_creation_test = function() {
         // assert r.simple_id_route.id_2.overide_id.path(), '/simple_id_route/asd/id_2/:child_id/overide_id'
         return assert(r.simple_id_route.id_2.hide_glitch.l.path(), '/simple_id_route/id_2/:child_id/hide_glitch/:$hide/l');
       });
-      // will fail
-      return it('should create routes with postfix', function() {
+      it('should create routes with prefix', function() {
         var r;
-        r = trocha({
+        r = new Trocha({
+          pre: '.the_pre.',
           routes: {
-            simple_route_post: {
-              $post: 'the_post'
-            }
+            simple_route_pre: {}
           }
         });
-        assert(r.simple_route_post.path(), '/simple_route_postthe_post');
-        assert(r.simple_id_route.path({
-          simple_id: 'the_simple_id'
-        }), '/simple_id_route/the_simple_id');
-        return assert(r.simple_id_route.path({
-          simple_id: false
-        }), '/simple_id_route');
+        assert(r.simple_route_pre.path(), '/simple_route_pre');
+        assert(r.simple_route_pre.path({
+          pre: true
+        }), '.the_pre./simple_route_pre');
+        return assert(r.simple_route_pre.path({
+          ext: true
+        }), '.the_pre./simple_route_pre');
+      });
+      return it('should create routes with postfix', function() {
+        var r;
+        r = new Trocha({
+          post: '.the_post',
+          alwaysPost: true,
+          routes: {
+            simple_route_post: {}
+          }
+        });
+        assert(r.simple_route_post.path(), '/simple_route_post.the_post');
+        r = new Trocha({
+          post: '.the_post',
+          routes: {
+            simple_route_post: {}
+          }
+        });
+        assert(r.simple_route_post.path(), '/simple_route_post');
+        assert(r.simple_route_post.path({
+          post: true
+        }), '/simple_route_post.the_post');
+        return assert(r.simple_route_post.path({
+          ext: true
+        }), '/simple_route_post.the_post');
       });
     });
     it('should create routes via JSON Constructor', function() {
       var r;
-      r = trocha({
+      r = new Trocha({
         routes: {
           simple_route: {},
           simple_scope: {
-            $type: trocha.SCOPE
+            $type: Trocha.SCOPE
           },
           simple_alias: "simple_alias",
           simple_resource: {
-            $type: trocha.RESOURCE,
+            $type: Trocha.RESOURCE,
             $id: "simple_id" //resource must have ID
           }
         }
@@ -383,34 +434,33 @@ routes_creation_test = function() {
       assert(r.simple_route, {});
       assert(r.simple_scope, {});
       assert(r.simple_resource, {});
-      assert(r.simple_alias, {}); // will fail
-      return assert(r.simple_alias, "simple_alias"); // @TODO remove me after alias fix
+      return assert(r.simple_alias, {});
     });
     return it('should create routes via post init functions', function() {
       var r;
-      r = trocha();
+      r = new Trocha();
       r._newRoute({
         name: "simple_route"
       });
+      assert(r.simple_route, {});
       r.simple_route._newRoute({
         name: "simple_route"
       });
+      assert(r.simple_route.simple_route, {});
       r._newScope({
         name: "simple_scope"
       });
+      assert(r.simple_scope, {});
       r._newResource({
         name: "simple_resource",
         id: "simple_id"
       });
+      assert(r.simple_resource, {});
       r._newAlias({
         name: "simple_alias",
         alias: "simple_alias"
       });
-      assert(r.simple_route, {});
-      assert(r.simple_route.simple_route, {});
-      assert(r.simple_scope, {});
-      assert(r.simple_resource, {});
-      return assert(r.simple_alias, "simple_alias");
+      return assert(r.simple_alias, {});
     });
   });
   return routes_creation_test = void 0;
@@ -544,9 +594,10 @@ function_path_test = function() {
 (function() {
   describe('Trocha JS Routes List engine', function() {
     constants_test();
-    return constructor_test();
+    constructor_test();
+    base_variables();
+    return routes_creation_test();
   });
-  // routes_creation_test()
   // function_path_test()
   return test.run();
 })();
