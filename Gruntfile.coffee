@@ -50,19 +50,21 @@ module.exports = (grunt) ->
 					'./dist/trocha_library.babeled.js': './dist/trocha_library.babeled.js'
 			# bsdiff dist/trocha2.min.js dist/trocha2.min.js fix_babel_this.bpatch
 
-		## Only works with ES5
-		# uglify: prod:
-		# 	options:
-		# 		banner: banner[2]
-		# 		wrap: ''
-		# 		report: 'gzip'
-		# 		maxLineLen: 0
-		# 		screwIE8: true
-		# 		preserveComments: false
-		# 		compress: drop_console: true
-		# 		beautify: false
-		# 		sourceMap: false
-		# 	files: 'dist/trocha.min.js': 'dist/trocha.js'
+		# Only works with ES5
+		uglify: prod:
+			options:
+				banner: banner[2]
+				wrap: ''
+				report: 'gzip'
+				maxLineLen: 0
+				screwIE8: true
+				preserveComments: false
+				compress: drop_console: true
+				beautify: false
+				sourceMap: false
+			files:
+				'dist/trocha_module.min.js': 'dist/trocha_module.babeled.js'
+				'dist/trocha_library.min.js': 'dist/trocha_library.babeled.js'
 		coffee: dist:
 			options:
 				bare: true
@@ -104,6 +106,7 @@ module.exports = (grunt) ->
 		'jsdoc'
 		'babel'
 		'patch:fix_babel_this'
+		'uglify'
 	]
 	grunt.registerTask 'dev', [
 		'build'
