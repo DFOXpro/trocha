@@ -25,15 +25,18 @@ module.exports = (grunt) ->
 		babel:
 			options:
 				sourceMap: true
-			dist:
+				presets: ["@babel/preset-env"]
+				plugins: ["@babel/plugin-proposal-class-properties"]
+			module:
 				files:
-					'./dist/trocha2.js': './dist/trocha.es6'
-			dist_min:
+					'./dist/trocha_module.babeled.js': './dist/trocha_module.es6.js'
+			library:
+				# options:
+					# presets: ["@babel/preset-env", { modules: false }]
+				files:
+					'./dist/trocha_library.babeled.js': './dist/trocha_library.es6.js'
 				options:
-					minified: true
-					comments: false
 				files:
-					'./dist/trocha2.min.js': './dist/trocha.es6'
 		exec:
 			# bsdiff dist/trocha2.min.js dist/trocha2.min.js fix_babel_this.bpatch
 			# diff -u dist/trocha2.js dist/trocha2fix.js > fix_babel_this.patch
