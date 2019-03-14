@@ -12,6 +12,7 @@ module.exports = (grunt) ->
 	require('load-grunt-tasks') grunt
 	grunt.loadNpmTasks 'grunt-coffeescript-concat'
 	grunt.loadNpmTasks 'grunt-includes'
+	grunt.loadNpmTasks 'grunt-jsdoc'
 	grunt.initConfig
 		includes:
 			files:
@@ -22,6 +23,11 @@ module.exports = (grunt) ->
 				flatten: true
 				debug: true
 				banner: banner[2]
+		jsdoc:
+			dist:
+				src: ['./dist/**/*.es6.js', './README.md']
+				dest: './api_doc'
+
 		babel:
 			options:
 				sourceMap: true
@@ -95,6 +101,7 @@ module.exports = (grunt) ->
 		'coffeescript_concat'
 		'coffee'
 		'includes'
+		'jsdoc'
 		'babel'
 		'patch:fix_babel_this'
 	]
