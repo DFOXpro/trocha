@@ -1,9 +1,9 @@
 constants_test = ->
 	describe 'Constants returns', ->
 		it 'should be no editable', ->
-			Trocha.ROUTE = "Atack!"
-			Trocha.OPTIONS = "Atack!"
-			Trocha.$RESOURCE = "Atack!"
+			Trocha.ROUTE = "Atack!Route"
+			Trocha.OPTIONS = "Atack!Option"
+			Trocha.$RESOURCE = "Atack!$Resource"
 			assert Trocha.ROUTE, "ROUTE"
 			assert Trocha.OPTIONS, "OPTIONS"
 			assert Trocha.$RESOURCE, {}

@@ -8,7 +8,7 @@ constructor_test = ->
 		it 'should create a valid trocha object', ->
 			r = new Trocha()
 			assert r, {}
-			assert r._custom, ->
+			assert r._newAlias, ->
 			assert r._newResource, ->
 			assert r._newRoute, ->
 			assert r._newScope, ->
