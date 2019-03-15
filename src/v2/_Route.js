@@ -40,7 +40,6 @@ class Route {
 		_setAndDisposeAttribute(ALIAS)
 		_setAndDisposeAttribute(ID)
 		_setAndDisposeAttribute(METHOD)
-		_setAndDisposeAttribute(ALIAS)
 		_setAndDisposeAttribute(TYPE)
 		_setAndDisposeAttribute(HIDE)
 		_setAndDisposeAttribute(JUST_ID)
@@ -54,23 +53,27 @@ class Route {
 	}
 
 	#createChildRoute = (mySelf, routeDefinition, name) => {
+		let SS = mySelf.#data.SS
 		if(mySelf.#data.childs[name])
 			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
-		if("string" === typeof routeDefinition){
-			let alias = routeDefinition
-			routeDefinition = {}
-			routeDefinition[mySelf.#data.SS+ALIAS] = alias
-		}
-		
-		routeDefinition[mySelf.#data.SS+NAME] = name
-		let newRoute = new Route(
-			mySelf, routeDefinition, mySelf.#data.SS, mySelf.#data.root
+		if(Alias.isAlias(routeDefinition, SS))
+			routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
+
+		routeDefinition[SS+NAME] = name
+		let routeTypes = {}
+		routeTypes[ROUTE] = Route
+		routeTypes[undefined] = Route
+		routeTypes[_ALIAS] = Alias
+		routeTypes[SCOPE] = Route // Scope
+		routeTypes[_RESOURCE] = Route // Resource
+
+		let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
+			mySelf, routeDefinition, SS, mySelf.#data.root
 		)
 		mySelf.#data.childs[name] = newRoute
 		mySelf.#newGetter(mySelf, name, ()=>(mySelf.#data.childs[name]), true)
 	}
 	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
-		if(skipResource) console.log(argChildRoutes);
 		if(
 			!skipResource &&
 			mySelf.#data[TYPE] === _RESOURCE
@@ -89,7 +92,6 @@ class Route {
 				mySelf.#anyParentHasThisId(mySelf, posibleChild)
 			) mySelf.#data[posibleChild] = false
 			else{
-				// console.log(argChildRoutes[posibleChild], posibleChild);
 				mySelf.#createChildRoute(mySelf, argChildRoutes[posibleChild], posibleChild)
 			}
 		}
@@ -137,6 +139,7 @@ class Route {
 			this.#data[POSTFIX] = argPost || this.#data[POSTFIX]
 			this.#data[PREFIX] = argPre || this.#data[PREFIX]
 			this.#data.root = this.#data
+			delete this[PATH]
 			/**
 			 * @TODO Document
 			 * Trocha({customSelector: 'ASD'}).ASDResource
@@ -165,11 +168,9 @@ class Route {
 	}
 	_newAlias = (args) => {
 		let SS = this.#data.SS
-		let newRoutArgs = {}
-		newRoutArgs[SS+ALIAS] = args[ALIAS]
-		newRoutArgs[SS+TYPE] = _ALIAS
-		newRoutArgs[SS+METHOD] = args[METHOD]
-		this.#createChildRoute(this, newRoutArgs, args[NAME])
+		args[TYPE] = _ALIAS
+		if(!Alias.isAlias(args, '')) return false
+		this.#createChildRoute(this, Alias.diggestAlias(args, SS, ''), args[NAME])
 	}
 	_newResource = (args) => {
 		let SS = this.#data.SS

@@ -1,4 +1,4 @@
-path = (routeParams = {}) => {
+path(routeParams = {}, customNameFun) {
 	let myData = this.#data
 	let parent = myData.parent || {}
 	let rootData = myData.root
@@ -6,14 +6,13 @@ path = (routeParams = {}) => {
 	let r = s
 
 	if(myData[NAME]=== undefined) return ''
-	if(myData[ALIAS]) return myData[ALIAS]
 
 	// 1 print the domain
 	r = (
 		rootData[DOMAIN] &&
-		!parent[PATH] &&
+		// !parent[PATH] &&
 		routeParams[URL] !== false &&
-		(routeParams[URL] || rootData[SS+alwaysUrl])
+		(routeParams[URL] || rootData[ALWAYS_URL])
 	)? rootData[DOMAIN] : s
 	delete routeParams[URL]
 
@@ -29,17 +28,21 @@ path = (routeParams = {}) => {
 	parentPathArg[POSTFIX] = false
 	r += parent[PATH] ? parent[PATH](parentPathArg) : s
 
-	// 4 print name & id(name)
-	let myId = ':' + myData[ID]
+	// 4.A print name & id(name) from customNameFun like Alias
 	let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE])
-	if ( // 4.1 justId case
-		(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
-	) {
-		r += _ + myId
-	} else { // 4.2 hide case
-		let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
-		r += (hide? s : _ + myData[NAME])
-		r += (noIdentifier ? s : _ + myId)
+	if(customNameFun) r += customNameFun(myData)
+	// 4.B print default name & id(name)
+	else {
+		let myId = ':' + myData[ID]
+		if ( // 4.B.1 justId case
+			(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
+		) {
+			r += _ + myId
+		} else { // 4.B.2 hide case
+			let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
+			r += (hide? s : _ + myData[NAME])
+			r += (noIdentifier ? s : _ + myId)
+		}
 	}
 
 	// 5 add the postfix
