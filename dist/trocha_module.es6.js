@@ -1,4 +1,4 @@
-/** @license TrochaJS@0.2.0 - 2019-03-13
+/** @license TrochaJS@0.2.0 - 2019-03-14
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -124,7 +124,7 @@ const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
 /* End: src/v2/_variables.js */
 // Trocha class
 /* Begin: src/v2/_Trocha.js */
-// Route class
+// Route classes
 /* Begin: src/v2/_Route.js */
 class Route {
 	#data = {
@@ -168,7 +168,6 @@ class Route {
 		_setAndDisposeAttribute(ALIAS)
 		_setAndDisposeAttribute(ID)
 		_setAndDisposeAttribute(METHOD)
-		_setAndDisposeAttribute(ALIAS)
 		_setAndDisposeAttribute(TYPE)
 		_setAndDisposeAttribute(HIDE)
 		_setAndDisposeAttribute(JUST_ID)
@@ -182,23 +181,27 @@ class Route {
 	}
 
 	#createChildRoute = (mySelf, routeDefinition, name) => {
+		let SS = mySelf.#data.SS
 		if(mySelf.#data.childs[name])
 			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
-		if("string" === typeof routeDefinition){
-			let alias = routeDefinition
-			routeDefinition = {}
-			routeDefinition[mySelf.#data.SS+ALIAS] = alias
-		}
-		
-		routeDefinition[mySelf.#data.SS+NAME] = name
-		let newRoute = new Route(
-			mySelf, routeDefinition, mySelf.#data.SS, mySelf.#data.root
+		if(Alias.isAlias(routeDefinition, SS))
+			routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
+
+		routeDefinition[SS+NAME] = name
+		let routeTypes = {}
+		routeTypes[ROUTE] = Route
+		routeTypes[undefined] = Route
+		routeTypes[_ALIAS] = Alias
+		routeTypes[SCOPE] = Route // Scope
+		routeTypes[_RESOURCE] = Route // Resource
+
+		let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
+			mySelf, routeDefinition, SS, mySelf.#data.root
 		)
 		mySelf.#data.childs[name] = newRoute
 		mySelf.#newGetter(mySelf, name, ()=>(mySelf.#data.childs[name]), true)
 	}
 	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
-		if(skipResource) console.log(argChildRoutes);
 		if(
 			!skipResource &&
 			mySelf.#data[TYPE] === _RESOURCE
@@ -217,7 +220,6 @@ class Route {
 				mySelf.#anyParentHasThisId(mySelf, posibleChild)
 			) mySelf.#data[posibleChild] = false
 			else{
-				// console.log(argChildRoutes[posibleChild], posibleChild);
 				mySelf.#createChildRoute(mySelf, argChildRoutes[posibleChild], posibleChild)
 			}
 		}
@@ -265,6 +267,7 @@ class Route {
 			this.#data[POSTFIX] = argPost || this.#data[POSTFIX]
 			this.#data[PREFIX] = argPre || this.#data[PREFIX]
 			this.#data.root = this.#data
+			delete this[PATH]
 			/**
 			 * @TODO Document
 			 * Trocha({customSelector: 'ASD'}).ASDResource
@@ -293,11 +296,9 @@ class Route {
 	}
 	_newAlias = (args) => {
 		let SS = this.#data.SS
-		let newRoutArgs = {}
-		newRoutArgs[SS+ALIAS] = args[ALIAS]
-		newRoutArgs[SS+TYPE] = _ALIAS
-		newRoutArgs[SS+METHOD] = args[METHOD]
-		this.#createChildRoute(this, newRoutArgs, args[NAME])
+		args[TYPE] = _ALIAS
+		if(!Alias.isAlias(args, '')) return false
+		this.#createChildRoute(this, Alias.diggestAlias(args, SS, ''), args[NAME])
 	}
 	_newResource = (args) => {
 		let SS = this.#data.SS
@@ -309,7 +310,7 @@ class Route {
 	}
 
 /* Begin: src/v2/_Route_path.js */
-	path = (routeParams = {}) => {
+	path(routeParams = {}, customNameFun) {
 		let myData = this.#data
 		let parent = myData.parent || {}
 		let rootData = myData.root
@@ -317,14 +318,13 @@ class Route {
 		let r = s
 
 		if(myData[NAME]=== undefined) return ''
-		if(myData[ALIAS]) return myData[ALIAS]
 
 		// 1 print the domain
 		r = (
 			rootData[DOMAIN] &&
-			!parent[PATH] &&
+			// !parent[PATH] &&
 			routeParams[URL] !== false &&
-			(routeParams[URL] || rootData[SS+alwaysUrl])
+			(routeParams[URL] || rootData[ALWAYS_URL])
 		)? rootData[DOMAIN] : s
 		delete routeParams[URL]
 
@@ -340,17 +340,21 @@ class Route {
 		parentPathArg[POSTFIX] = false
 		r += parent[PATH] ? parent[PATH](parentPathArg) : s
 
-		// 4 print name & id(name)
-		let myId = ':' + myData[ID]
+		// 4.A print name & id(name) from customNameFun like Alias
 		let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE])
-		if ( // 4.1 justId case
-			(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
-		) {
-			r += _ + myId
-		} else { // 4.2 hide case
-			let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
-			r += (hide? s : _ + myData[NAME])
-			r += (noIdentifier ? s : _ + myId)
+		if(customNameFun) r += customNameFun(myData)
+		// 4.B print default name & id(name)
+		else {
+			let myId = ':' + myData[ID]
+			if ( // 4.B.1 justId case
+				(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
+			) {
+				r += _ + myId
+			} else { // 4.B.2 hide case
+				let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
+				r += (hide? s : _ + myData[NAME])
+				r += (noIdentifier ? s : _ + myId)
+			}
 		}
 
 		// 5 add the postfix
@@ -408,19 +412,74 @@ class Route {
 		// 7 Now add the query
 		Object.keys(query).forEach(function(key, i, array) {
 			if (i === 0) r += '?'
-			r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '')
+			if(Array.isArray(query[key]))
+				query[key].forEach((value, _i)=>(
+					r += encodeURIComponent(key) + '[]=' + encodeURIComponent(value) + ((
+						(query[key].length - 1 !== _i) ||
+						(array.length - 1 !== i)
+					)? '&' : '')
+				))
+			else
+				r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '')
 		})
 
-		// 7 Now add the fragment
+		// 8 Now add the fragment
 		if (fragment) r += '#' + encodeURIComponent(fragment)
 
-		// console.log('path', r);
 		return r
-	}/* End: src/v2/_Route_path.js */
+	}
+/* End: src/v2/_Route_path.js */
 
 	toString = () => (this.#as(this))
 }
 /* End: src/v2/_Route.js */
+/* Begin: src/v2/_Alias.js */
+class Alias extends Route {
+	constructor(...args) {
+		super(...args)
+	}
+	static diggestAlias(routeDefinition, SS, IS) {
+		let r = {}
+		r[SS+TYPE] = _ALIAS
+		r[SS+ALIAS] = routeDefinition[IS+ALIAS] || routeDefinition
+		r[SS+METHOD] = routeDefinition[IS+METHOD]
+		r[SS+ID] = routeDefinition[IS+ID]
+		return r
+	}
+	static isAlias(routeDefinition, SS) {
+		return (
+			("string" === typeof routeDefinition) ||
+			(
+				routeDefinition[SS+TYPE] === _ALIAS &&
+				routeDefinition[SS+ALIAS]
+			)
+		)
+	}
+
+	/**
+	 * @override
+	 */
+	path(routeParams = {}){
+		return super.path(routeParams, function (myData) {
+			// Note Alias dnt support hide nor justId in creation
+			let r = s
+			let myId = _ + ':' + myData[ID]
+			let parent = myData.parent || {}
+			let rootData = myData.root
+
+			if (myData[ID] && routeParams[JUST_ID]) {
+				r += myId
+			} else {
+				let useID = (!!myData[ID] && routeParams[myData[ID]] !== false)
+				r += parent.constructor.name === "Trocha" ? s : _
+				r += (routeParams[HIDE]? s : myData[ALIAS])
+				r += (useID ? myId : s)
+			}
+			return r
+		})
+	}
+}
+/* End: src/v2/_Alias.js */
 
 class Trocha extends Route{
 	constructor(args = {}) {

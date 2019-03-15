@@ -1,4 +1,4 @@
-var _clone, base_variables, constants_test, constructor_test, function_path_test, routes_creation_test, test, testFramework;
+var _clone, base_variables, constants_test, constructor_test, function_path_test, route_types_test, routes_creation_test, test, testFramework;
 
 testFramework = function(options) {
   var r, results;
@@ -224,7 +224,9 @@ constructor_test = function() {
       assert(r._newAlias, function() {});
       assert(r._newResource, function() {});
       assert(r._newRoute, function() {});
-      return assert(r._newScope, function() {});
+      assert(r._newScope, function() {});
+      assert(r.$RESOURCE, {});
+      return assertFunctionError(r.path);
     });
   });
   return constructor_test = void 0;
@@ -241,8 +243,7 @@ base_variables = function() {
         customSelector: '$$'
       });
       assert(r.$$RESOURCE, {});
-      assert(r.$$domain, "");
-      return window.asd = r;
+      return assert(r.$$domain, "");
     });
     return it('should set domain', function() {
       var r;
@@ -466,6 +467,153 @@ routes_creation_test = function() {
   return routes_creation_test = void 0;
 };
 
+route_types_test = function() {
+  describe('Route types', function() {
+    it('should create a route(type route)', function() {
+      var r;
+      r = new Trocha({
+        routes: {
+          simple_route: {
+            $type: Trocha.ROUTE
+          },
+          simple_route_with_id: {
+            $id: 'my_id',
+            $type: Trocha.ROUTE
+          },
+          simple_route_with_method: {
+            $method: Trocha.POST
+          },
+          The: {
+            quick: {
+              brown: {
+                fox: {
+                  jumps: {
+                    over: {
+                      the: {
+                        lazy: {
+                          dog: {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+      assert(r.simple_route, {});
+      assert(r.simple_route.constructor.name, "Route");
+      assert(r.simple_route.path(), '/simple_route');
+      assert(r.simple_route_with_id.path(), '/simple_route_with_id/:my_id');
+      assert(r.simple_route_with_method.$method, 'POST');
+      assert(r.The.quick.brown.path(), '/The/quick/brown');
+      assert(r.The.quick.brown.fox.jumps.over.the.lazy.dog.path(), '/The/quick/brown/fox/jumps/over/the/lazy/dog');
+      assert(r.The.quick.brown.fox.jumps.over.the.lazy.dog.$as, 'The_quick_brown_fox_jumps_over_the_lazy_dog');
+      return r._newRoute({
+        name: 'route_from_method'
+      });
+    });
+    it('should create an alias(route type alias)', function() {
+      var r;
+      r = new Trocha({
+        routes: {
+          quick_alias: 'a.flash/alias',
+          simple_alias: {
+            $type: Trocha.ALIAS,
+            $alias: 'the.simple.alias'
+          },
+          simple_alias_with_id: {
+            $type: Trocha.ALIAS,
+            $alias: 'the.simple.alias/with/id',
+            $id: 'my_id'
+          },
+          simple_alias_with_method: {
+            $type: Trocha.ALIAS,
+            $alias: 'the.simple.alias/with?method',
+            $method: Trocha.POST
+          },
+          The: {
+            quick: {
+              brown: {
+                fox: {
+                  jumps: {
+                    over: {
+                      the: {
+                        lazy: {
+                          dog: 'cat'
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      });
+      assert(r.simple_alias, {});
+      assert(r.simple_alias.constructor.name, "Alias");
+      assert(r.quick_alias.path(), 'a.flash/alias');
+      assert(r.simple_alias.path(), 'the.simple.alias');
+      assert(r.simple_alias_with_id.path(), 'the.simple.alias/with/id/:my_id');
+      assert(r.simple_alias_with_method.path(), 'the.simple.alias/with?method');
+      assert(r.simple_alias_with_method.$method, 'POST');
+      assert(r.The.quick.brown.fox.jumps.over.the.lazy.dog.path(), '/The/quick/brown/fox/jumps/over/the/lazy/cat');
+      assert(r.The.quick.brown.fox.jumps.over.the.lazy.dog.$as, 'The_quick_brown_fox_jumps_over_the_lazy_dog');
+      r._newAlias({
+        name: 'method_alias',
+        alias: 'asd',
+        id: 'qwe',
+        method: Trocha.PATCH
+      });
+      r.The.quick.brown.fox.jumps.over.the.lazy._newAlias({
+        name: 'cat',
+        alias: 'tigger'
+      });
+      assert(r.The.quick.brown.fox.jumps.over.the.lazy.cat.path(), '/The/quick/brown/fox/jumps/over/the/lazy/tigger');
+      assert(r.method_alias.path(), 'asd/:qwe');
+      return assert(r.method_alias.$method, 'PATCH');
+    });
+    it('should create an resource', function() {
+      var r;
+      r = new Trocha({
+        routes: {
+          products: {
+            $type: Trocha.RESOURCE,
+            $id: "product_id"
+          }
+        }
+      });
+      assert(r.products.list.path(), '/products');
+      assert(r.products.new.path(), '/products/new');
+      assert(r.products.show.path(), '/products/:product_id');
+      assert(r.products.edit.path(), '/products/:product_id/edit');
+      r._newResource({
+        name: "services",
+        id: "service_id"
+      });
+      assert(r.services.list.path(), '/services');
+      assert(r.services.new.path(), '/services/new');
+      assert(r.services.show.path(), '/services/:service_id');
+      assert(r.services.edit.path(), '/services/:service_id/edit');
+      return window.asd = r;
+    });
+    return it('should create an scope(route type scope)', function() {});
+  });
+  // window.asd = r
+  // it 'should create a valid trocha object', ->
+  // 	r = new Trocha()
+  // 	assert r, {}
+  // 	assert r._newAlias, ->
+  // 	assert r._newResource, ->
+  // 	assert r._newRoute, ->
+  // 	assert r._newScope, ->
+  // 	assert r.$RESOURCE, {}
+  // 	assertFunctionError r.path
+  return route_types_test = void 0;
+};
+
 function_path_test = function() {
   describe('function path', function() {
     var myRoutes, myRoutesParams;
@@ -482,7 +630,7 @@ function_path_test = function() {
         }
       }
     };
-    myRoutes = trocha(_clone(myRoutesParams));
+    myRoutes = new Trocha(_clone(myRoutesParams));
     return describe('path() diferent params', function() {
       it('no params', function() {
         assertFunctionError(myRoutes.path);
@@ -499,11 +647,11 @@ function_path_test = function() {
         // false dnt print domain if alwaysUrl is set.
         _myRoutesParams = _clone(myRoutesParams);
         _myRoutesParams.alwaysUrl = true;
-        _myRoutes = trocha(_myRoutesParams);
+        _myRoutes = new Trocha(_myRoutesParams);
         assert(_myRoutes.town.path(), 'https://mydomain.net.co/town/:town_name');
         return assert(_myRoutes.town.path({
           url: false
-        }), '/town/:town_name'); // will fail
+        }), '/town/:town_name');
       });
       it('pre', function() {
         // true print prefix.
@@ -521,7 +669,7 @@ function_path_test = function() {
         }), '/town/:town_name-myH45H.html');
         _myRoutesParams = _clone(myRoutesParams);
         _myRoutesParams.alwaysPost = true;
-        _myRoutes = trocha(_myRoutesParams);
+        _myRoutes = new Trocha(_myRoutesParams);
         assert(_myRoutes.town.path(), '/town/:town_name-myH45H.html');
         return assert(_myRoutes.town.path({
           post: false
@@ -535,10 +683,15 @@ function_path_test = function() {
         }), '/templates/town/:town_name-myH45H.html');
       });
       it('hide', function() {
+        var _myRoutes, _myRoutesParams;
         // true Hide the last name of the path, if an id is setted it will appears anyway.
-        return assert(myRoutes.town.path({
+        assert(myRoutes.town.path({
           hide: true
         }), '/:town_name');
+        _myRoutesParams = _clone(myRoutesParams);
+        _myRoutesParams.routes.town.$hide = true;
+        _myRoutes = new Trocha(_myRoutesParams);
+        return assert(_myRoutes.town.path(), '/:town_name');
       });
       it('parentId', function() {
         // false Hide the parent route id.
@@ -546,7 +699,7 @@ function_path_test = function() {
           parentId: false
         }), '/town/house/:address');
       });
-      it('id', function() {
+      it('id: false', function() {
         // false Hide the route id.
         assert(myRoutes.town.path({
           id: false
@@ -573,12 +726,33 @@ function_path_test = function() {
       });
       it('query', function() {
         // {<attribute>:<value>} Print a define query ?<attribute>=<value>&....
-        return assert(myRoutes.town.path({
+        assert(myRoutes.town.path({ // test trivial case
+          query: {
+            description: true
+          }
+        }), '/town/:town_name?description=true');
+        assert(myRoutes.town.path({ // test multiple value case
           query: {
             description: true,
             pictures: 4
           }
         }), '/town/:town_name?description=true&pictures=4');
+        assert(myRoutes.town.path({ // test array values case
+          query: {
+            an_array: ['qwe', 'asd', 'zxc']
+          }
+        }), '/town/:town_name?an_array[]=qwe&an_array[]=asd&an_array[]=zxc');
+        assert(myRoutes.town.path({ // test array values case
+          query: {
+            an_array: ['qwe', 'asd', 'zxc'],
+            ert: 1
+          }
+        }), '/town/:town_name?an_array[]=qwe&an_array[]=asd&an_array[]=zxc&ert=1');
+        return assert(myRoutes.town.path({ // test posible breaking point
+          query: {
+            "ata?&ck": `&?=;:/\\ \t`
+          }
+        }), '/town/:town_name?ata%3F%26ck=%26%3F%3D%3B%3A%2F%5C%20%09');
       });
       return it('fragment', function() {
         // String Print the fragment #<value>.
@@ -596,9 +770,10 @@ function_path_test = function() {
     constants_test();
     constructor_test();
     base_variables();
-    return routes_creation_test();
+    routes_creation_test();
+    route_types_test();
+    return function_path_test();
   });
-  // function_path_test()
   return test.run();
 })();
 
