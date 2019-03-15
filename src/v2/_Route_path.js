@@ -97,12 +97,19 @@ path = (routeParams = {}) => {
 	// 7 Now add the query
 	Object.keys(query).forEach(function(key, i, array) {
 		if (i === 0) r += '?'
-		r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '')
+		if(Array.isArray(query[key]))
+			query[key].forEach((value, _i)=>(
+				r += encodeURIComponent(key) + '[]=' + encodeURIComponent(value) + ((
+					(query[key].length - 1 !== _i) ||
+					(array.length - 1 !== i)
+				)? '&' : '')
+			))
+		else
+			r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '')
 	})
 
-	// 7 Now add the fragment
+	// 8 Now add the fragment
 	if (fragment) r += '#' + encodeURIComponent(fragment)
 
-	// console.log('path', r);
 	return r
 }
