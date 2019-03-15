@@ -4,6 +4,7 @@
 		constructor_test()
 		base_variables()
 		routes_creation_test()
+		route_types_test()
 		function_path_test()
 	test.run()
 )()
