@@ -7,7 +7,6 @@ base_variables = ->
 			r = new Trocha({customSelector: '$$'})
 			assert r.$$RESOURCE, {}
 			assert r.$$domain, ""
-			window.asd = r
 		it 'should set domain', ->
 			r = new Trocha()
 			assert r.$domain, ""

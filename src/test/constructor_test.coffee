@@ -12,5 +12,7 @@ constructor_test = ->
 			assert r._newResource, ->
 			assert r._newRoute, ->
 			assert r._newScope, ->
+			assert r.$RESOURCE, {}
+			assertFunctionError r.path
 
 	constructor_test = undefined
