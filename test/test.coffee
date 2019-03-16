@@ -350,6 +350,7 @@ route_types_test = ->
 			assert r.The.quick.brown.fox.jumps.over.the.lazy.dog.$as, 'The_quick_brown_fox_jumps_over_the_lazy_dog'
 			r._newRoute
 				name: 'route_from_method'
+
 		it 'should create an alias(route type alias)', ->
 			r = new Trocha
 				routes:
@@ -396,12 +397,15 @@ route_types_test = ->
 			assert r.The.quick.brown.fox.jumps.over.the.lazy.cat.path(), '/The/quick/brown/fox/jumps/over/the/lazy/tigger'
 			assert r.method_alias.path(), 'asd/:qwe'
 			assert r.method_alias.$method, 'PATCH'
-		it 'should create an resource', ->
+
+		it 'should create an resource(routes tree resource)', ->
 			r = new Trocha
 				routes:
 					products:
 						$type: Trocha.RESOURCE
 						$id: "product_id"
+			assert r.products.constructor.name, "Resource"
+			assert r.products.list.constructor.name, "Route"
 			assert r.products.list.path(), '/products'
 			assert r.products.new.path(), '/products/new'
 			assert r.products.show.path(), '/products/:product_id'
@@ -413,7 +417,42 @@ route_types_test = ->
 			assert r.services.new.path(), '/services/new'
 			assert r.services.show.path(), '/services/:service_id'
 			assert r.services.edit.path(), '/services/:service_id/edit'
-			window.asd = r
+
+			it 'should create a custom resource', ->
+				r = new Trocha
+					routes:
+						products:
+							$type: Trocha.RESOURCE
+							$id: "product_id"
+							$resource:
+								create:
+									$method: Trocha.POST
+									$parentId: false
+									$hide: true
+								read: $hide: true
+								update:
+									$method: Trocha.PATCH
+									$hide: true
+								delete:
+									$method: Trocha.DELETE
+									$hide: true
+				assert r.products.constructor.name, "Resource"
+				assert r.products.create.constructor.name, "Route"
+				assert r.products.create.path(), '/products'
+				assert r.products.create.$method, 'POST'
+				assert r.products.read.path(), '/products/:product_id'
+				assert r.products.read.$method, 'GET'
+				assert r.products.update.path(), '/products/:product_id'
+				assert r.products.update.$method, 'PATCH'
+				assert r.products.delete.path(), '/products/:product_id'
+				assert r.products.delete.$method, 'DELETE'
+				r._newResource
+					name: "services"
+					id: "service_id"
+				assert r.services.list.path(), '/services'
+				assert r.services.new.path(), '/services/new'
+				assert r.services.show.path(), '/services/:service_id'
+				assert r.services.edit.path(), '/services/:service_id/edit'
 
 		it 'should create an scope(route type scope)', ->
 			# window.asd = r

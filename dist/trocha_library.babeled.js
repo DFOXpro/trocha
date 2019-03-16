@@ -34,7 +34,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license TrochaJS@0.2.0 - 2019-03-14
+/** @license TrochaJS@0.2.0 - 2019-03-16
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -74,6 +74,10 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
     }(_wrapNativeSuper(Error));
 
     throw new TrochaError(scope, error_text, value);
+  };
+
+  var _throwWarning = function _throwWarning(scope, warning_text, value) {
+    console.warn(WARNING_HEADER + warning_text, value || s, scope || s);
   };
   /* End: src/v2/_utils.js */
   // Const used abroad the library
@@ -173,7 +177,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   };
 
   var ERROR_HEADER = 'TrochaJS error: ';
+  var WARNING_HEADER = 'TrochaJS warning: ';
   var ERROR_ROUTE_ALREADY_DEFINE = 'route already declare';
+  var WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route';
   /* End: src/v2/_variables.js */
   // Trocha class
 
@@ -251,13 +257,15 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
           _setAndDisposeAttribute(NAME);
 
-          _setAndDisposeAttribute(ALIAS);
-
           _setAndDisposeAttribute(ID);
+
+          _setAndDisposeAttribute(TYPE);
 
           _setAndDisposeAttribute(METHOD);
 
-          _setAndDisposeAttribute(TYPE);
+          _setAndDisposeAttribute(ALIAS);
+
+          _setAndDisposeAttribute(RESOURCE);
 
           _setAndDisposeAttribute(HIDE);
 
@@ -287,6 +295,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
           if (_classPrivateFieldGet(mySelf, _data).childs[name]) _throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name);
           if (Alias.isAlias(routeDefinition, SS)) routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS);
+          if (Resource.isResource(routeDefinition, SS)) routeDefinition = Resource.diggestResource(routeDefinition, SS, SS);
           routeDefinition[SS + NAME] = name;
           var routeTypes = {};
           routeTypes[ROUTE] = Route;
@@ -294,8 +303,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
           routeTypes[_ALIAS] = Alias;
           routeTypes[SCOPE] = Route; // Scope
 
-          routeTypes[_RESOURCE] = Route; // Resource
-
+          routeTypes[_RESOURCE] = Resource;
           var newRoute = new routeTypes[routeDefinition[SS + TYPE]](mySelf, routeDefinition, SS, _classPrivateFieldGet(mySelf, _data).root);
           _classPrivateFieldGet(mySelf, _data).childs[name] = newRoute;
 
@@ -311,20 +319,18 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
           if (!skipResource && _classPrivateFieldGet(mySelf, _data)[TYPE] === _RESOURCE) {
             var SS = _classPrivateFieldGet(mySelf, _data).SS;
 
-            var resourceChilds = argChildRoutes[SS + RESOURCE] || _basicResource(SS);
+            var resourceChilds = _classPrivateFieldGet(mySelf, _data)[RESOURCE];
 
             delete resourceChilds[SS + ID];
 
             _classPrivateFieldGet(mySelf, _diggestChildRoutes).call(mySelf, mySelf, resourceChilds, true);
-
-            delete argChildRoutes[SS + RESOURCE];
           }
 
           var posibleChildRoutesNames = Object.keys(argChildRoutes);
 
           while (posibleChildRoutesNames.length) {
             var posibleChild = posibleChildRoutesNames.pop();
-            if ( // This case is disable any párentId by
+            if ( // This case disable any parentId
             argChildRoutes[posibleChild] === false && _classPrivateFieldGet(mySelf, _anyParentHasThisId).call(mySelf, mySelf, posibleChild)) _classPrivateFieldGet(mySelf, _data)[posibleChild] = false;else {
               _classPrivateFieldGet(mySelf, _createChildRoute).call(mySelf, mySelf, argChildRoutes[posibleChild], posibleChild);
             }
@@ -376,12 +382,10 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       _defineProperty(this, "_newResource", function (args) {
         var SS = _classPrivateFieldGet(_this2, _data).SS;
 
-        var newRoutArgs = {};
-        newRoutArgs[SS + RESOURCE] = args[RESOURCE];
-        newRoutArgs[SS + TYPE] = _RESOURCE;
-        newRoutArgs[SS + ID] = args[ID];
+        args[TYPE] = _RESOURCE;
+        if (!Resource.isResource(args, '')) return false;
 
-        _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, newRoutArgs, args[NAME]);
+        _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Resource.diggestResource(args, SS, ''), args[NAME]);
       });
 
       _defineProperty(this, "toString", function () {
@@ -455,23 +459,27 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
         var parentPathArg = {};
         parentPathArg[POSTFIX] = false;
-        r += parent[PATH] ? parent[PATH](parentPathArg) : s; // 4.A print name & id(name) from customNameFun like Alias
+        r += parent[PATH] ? parent[PATH](parentPathArg, function () {
+          return true;
+        }) : s; // 4.A print name & id(name) from customNameFun like Alias
 
         var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE];
-        if (customNameFun) r += customNameFun(myData); // 4.B print default name & id(name)
-        else {
-            var myId = ':' + myData[ID];
+        var customNameFromInhered;
+        if ("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData);
+        if ("string" === typeof customNameFromInhered) r += customNameFromInhered;else {
+          // 4.B print default name & id(name)
+          var myId = ':' + myData[ID];
 
-            if ( // 4.B.1 justId case
-            routeParams[JUST_ID] !== false && myData[JUST_ID] && myData[ID]) {
-              r += _ + myId;
-            } else {
-              // 4.B.2 hide case
-              var noIdentifier = !myData[ID] ? true : routeParams[ID] === false ? true : false;
-              r += hide ? s : _ + myData[NAME];
-              r += noIdentifier ? s : _ + myId;
-            }
-          } // 5 add the postfix
+          if ( // 4.B.1 justId case
+          routeParams[JUST_ID] !== false && myData[JUST_ID] && myData[ID]) {
+            r += _ + myId;
+          } else {
+            // 4.B.2 hide case
+            var noIdentifier = !myData[ID] ? true : routeParams[ID] === false ? true : false;
+            r += hide ? s : _ + myData[NAME];
+            r += noIdentifier ? s : _ + myId;
+          }
+        } // 5 add the postfix
 
         /**
          * @TODO Document hide also remove postfix
@@ -611,11 +619,68 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   }(Route);
   /* End: src/v2/_Alias.js */
 
+  /* Begin: src/v2/_Resource.js */
+
+
+  var Resource =
+  /*#__PURE__*/
+  function (_Route2) {
+    _inherits(Resource, _Route2);
+
+    function Resource() {
+      var _getPrototypeOf3;
+
+      _classCallCheck(this, Resource);
+
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return _possibleConstructorReturn(this, (_getPrototypeOf3 = _getPrototypeOf(Resource)).call.apply(_getPrototypeOf3, [this].concat(args)));
+    }
+
+    _createClass(Resource, [{
+      key: "path",
+
+      /**
+       * @override
+       */
+      value: function path() {
+        var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var force = arguments.length > 1 ? arguments[1] : undefined;
+        return _get(_getPrototypeOf(Resource.prototype), "path", this).call(this, routeParams, function (myData) {
+          if ("function" === typeof force && force() !== true) _throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE);
+          return false;
+        });
+      }
+    }], [{
+      key: "diggestResource",
+      value: function diggestResource(routeDefinition, SS, IS) {
+        var r = {};
+        r[SS + TYPE] = _RESOURCE;
+        r[SS + RESOURCE] = routeDefinition[IS + RESOURCE] || _basicResource(SS);
+        r[SS + METHOD] = routeDefinition[IS + METHOD];
+        r[SS + ID] = routeDefinition[IS + ID];
+        return r;
+      }
+    }, {
+      key: "isResource",
+      value: function isResource(routeDefinition, SS) {
+        return routeDefinition[SS + TYPE] === _RESOURCE && routeDefinition[SS + ID] // &&
+        // routeDefinition[SS+RESOURCE]
+        ;
+      }
+    }]);
+
+    return Resource;
+  }(Route);
+  /* End: src/v2/_Resource.js */
+
 
   var Trocha =
   /*#__PURE__*/
-  function (_Route2) {
-    _inherits(Trocha, _Route2);
+  function (_Route3) {
+    _inherits(Trocha, _Route3);
 
     function Trocha() {
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};

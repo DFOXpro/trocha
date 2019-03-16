@@ -1,4 +1,4 @@
-/** @license TrochaJS@0.2.0 - 2019-03-14
+/** @license TrochaJS@0.2.0 - 2019-03-16
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -25,6 +25,10 @@
 			}
 		}
 		throw new TrochaError(scope, error_text, value)
+	}
+
+	let _throwWarning = (scope, warning_text, value) => {
+		console.warn(WARNING_HEADER+warning_text, value||s, scope||s)
 	}
 /* End: src/v2/_utils.js */
 	// Const used abroad the library
@@ -121,7 +125,9 @@
 	}
 
 	const ERROR_HEADER = 'TrochaJS error: '
+	const WARNING_HEADER = 'TrochaJS warning: '
 	const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
+	const WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route'
 /* End: src/v2/_variables.js */
 	// Trocha class
 /* Begin: src/v2/_Trocha.js */
@@ -166,10 +172,13 @@
 			}
 
 			_setAndDisposeAttribute(NAME)
-			_setAndDisposeAttribute(ALIAS)
 			_setAndDisposeAttribute(ID)
-			_setAndDisposeAttribute(METHOD)
 			_setAndDisposeAttribute(TYPE)
+			_setAndDisposeAttribute(METHOD)
+
+			_setAndDisposeAttribute(ALIAS)
+			_setAndDisposeAttribute(RESOURCE)
+
 			_setAndDisposeAttribute(HIDE)
 			_setAndDisposeAttribute(JUST_ID)
 			_setAndDisposeAttribute(PARENT_ID)
@@ -187,6 +196,8 @@
 				_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
 			if(Alias.isAlias(routeDefinition, SS))
 				routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
+			if(Resource.isResource(routeDefinition, SS))
+				routeDefinition = Resource.diggestResource(routeDefinition, SS, SS)
 
 			routeDefinition[SS+NAME] = name
 			let routeTypes = {}
@@ -194,7 +205,7 @@
 			routeTypes[undefined] = Route
 			routeTypes[_ALIAS] = Alias
 			routeTypes[SCOPE] = Route // Scope
-			routeTypes[_RESOURCE] = Route // Resource
+			routeTypes[_RESOURCE] = Resource
 
 			let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
 				mySelf, routeDefinition, SS, mySelf.#data.root
@@ -208,15 +219,14 @@
 				mySelf.#data[TYPE] === _RESOURCE
 			){
 				let SS = mySelf.#data.SS
-				let resourceChilds = argChildRoutes[SS+RESOURCE] || _basicResource(SS)
+				let resourceChilds = mySelf.#data[RESOURCE]
 				delete resourceChilds[SS+ID]
 				mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
-				delete argChildRoutes[SS+RESOURCE]
 			}
 			let posibleChildRoutesNames = Object.keys(argChildRoutes)
 			while(posibleChildRoutesNames.length){
 				let posibleChild = posibleChildRoutesNames.pop()
-				if( // This case is disable any párentId by
+				if( // This case disable any parentId
 					(argChildRoutes[posibleChild] ===  false) &&
 					mySelf.#anyParentHasThisId(mySelf, posibleChild)
 				) mySelf.#data[posibleChild] = false
@@ -303,11 +313,9 @@
 		}
 		_newResource = (args) => {
 			let SS = this.#data.SS
-			let newRoutArgs = {}
-			newRoutArgs[SS+RESOURCE] = args[RESOURCE]
-			newRoutArgs[SS+TYPE] = _RESOURCE
-			newRoutArgs[SS+ID] = args[ID]
-			this.#createChildRoute(this, newRoutArgs, args[NAME])
+			args[TYPE] = _RESOURCE
+			if(!Resource.isResource(args, '')) return false
+			this.#createChildRoute(this, Resource.diggestResource(args, SS, ''), args[NAME])
 		}
 
 /* Begin: src/v2/_Route_path.js */
@@ -339,13 +347,14 @@
 			// 3 print parent paths
 			let parentPathArg = {}
 			parentPathArg[POSTFIX] = false
-			r += parent[PATH] ? parent[PATH](parentPathArg) : s
+			r += parent[PATH] ? parent[PATH](parentPathArg, ()=>(true)) : s
 
 			// 4.A print name & id(name) from customNameFun like Alias
 			let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE])
-			if(customNameFun) r += customNameFun(myData)
-			// 4.B print default name & id(name)
-			else {
+			let customNameFromInhered
+			if("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData)
+			if("string" === typeof customNameFromInhered) r += customNameFromInhered
+			else { // 4.B print default name & id(name)
 				let myId = ':' + myData[ID]
 				if ( // 4.B.1 justId case
 					(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
@@ -481,6 +490,43 @@
 		}
 	}
 /* End: src/v2/_Alias.js */
+/* Begin: src/v2/_Resource.js */
+	class Resource extends Route {
+		constructor(...args) {
+			super(...args)
+		}
+
+		static diggestResource(routeDefinition, SS, IS) {
+			let r = {}
+			r[SS+TYPE] = _RESOURCE
+			r[SS+RESOURCE] = routeDefinition[IS+RESOURCE] || _basicResource(SS)
+			r[SS+METHOD] = routeDefinition[IS+METHOD]
+			r[SS+ID] = routeDefinition[IS+ID]
+			return r
+		}
+
+		static isResource(routeDefinition, SS) {
+			return (
+					routeDefinition[SS+TYPE] === _RESOURCE &&
+					routeDefinition[SS+ID] // &&
+					// routeDefinition[SS+RESOURCE]
+			)
+		}
+
+		/**
+		 * @override
+		 */
+		path(routeParams = {}, force){
+			return super.path(routeParams, function (myData) {
+				if(
+					("function" === typeof force) &&
+					(force() !== true)
+				) _throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE)
+				return false
+			})
+		}
+	}
+/* End: src/v2/_Resource.js */
 
 	class Trocha extends Route{
 		constructor(args = {}) {

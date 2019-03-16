@@ -575,7 +575,7 @@ route_types_test = function() {
       assert(r.method_alias.path(), 'asd/:qwe');
       return assert(r.method_alias.$method, 'PATCH');
     });
-    it('should create an resource', function() {
+    it('should create an resource(routes tree resource)', function() {
       var r;
       r = new Trocha({
         routes: {
@@ -585,6 +585,8 @@ route_types_test = function() {
           }
         }
       });
+      assert(r.products.constructor.name, "Resource");
+      assert(r.products.list.constructor.name, "Route");
       assert(r.products.list.path(), '/products');
       assert(r.products.new.path(), '/products/new');
       assert(r.products.show.path(), '/products/:product_id');
@@ -597,7 +599,52 @@ route_types_test = function() {
       assert(r.services.new.path(), '/services/new');
       assert(r.services.show.path(), '/services/:service_id');
       assert(r.services.edit.path(), '/services/:service_id/edit');
-      return window.asd = r;
+      return it('should create a custom resource', function() {
+        r = new Trocha({
+          routes: {
+            products: {
+              $type: Trocha.RESOURCE,
+              $id: "product_id",
+              $resource: {
+                create: {
+                  $method: Trocha.POST,
+                  $parentId: false,
+                  $hide: true
+                },
+                read: {
+                  $hide: true
+                },
+                update: {
+                  $method: Trocha.PATCH,
+                  $hide: true
+                },
+                delete: {
+                  $method: Trocha.DELETE,
+                  $hide: true
+                }
+              }
+            }
+          }
+        });
+        assert(r.products.constructor.name, "Resource");
+        assert(r.products.create.constructor.name, "Route");
+        assert(r.products.create.path(), '/products');
+        assert(r.products.create.$method, 'POST');
+        assert(r.products.read.path(), '/products/:product_id');
+        assert(r.products.read.$method, 'GET');
+        assert(r.products.update.path(), '/products/:product_id');
+        assert(r.products.update.$method, 'PATCH');
+        assert(r.products.delete.path(), '/products/:product_id');
+        assert(r.products.delete.$method, 'DELETE');
+        r._newResource({
+          name: "services",
+          id: "service_id"
+        });
+        assert(r.services.list.path(), '/services');
+        assert(r.services.new.path(), '/services/new');
+        assert(r.services.show.path(), '/services/:service_id');
+        return assert(r.services.edit.path(), '/services/:service_id/edit');
+      });
     });
     return it('should create an scope(route type scope)', function() {});
   });
