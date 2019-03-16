@@ -90,4 +90,6 @@ const _basicResource = (SS = DS)=>{ // selectedSelector
 }
 
 const ERROR_HEADER = 'TrochaJS error: '
+const WARNING_HEADER = 'TrochaJS warning: '
 const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
+const WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route'

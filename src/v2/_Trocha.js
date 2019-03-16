@@ -1,6 +1,7 @@
 // Route classes
 include "_Route.js"
 include "_Alias.js"
+include "_Resource.js"
 
 class Trocha extends Route{
 	constructor(args = {}) {

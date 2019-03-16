@@ -11,3 +11,7 @@ let _throwError = (scope, error_text, value) => {
 	}
 	throw new TrochaError(scope, error_text, value)
 }
+
+let _throwWarning = (scope, warning_text, value) => {
+	console.warn(WARNING_HEADER+warning_text, value||s, scope||s)
+}

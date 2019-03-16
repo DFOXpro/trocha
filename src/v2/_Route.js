@@ -37,10 +37,13 @@ class Route {
 		}
 
 		_setAndDisposeAttribute(NAME)
-		_setAndDisposeAttribute(ALIAS)
 		_setAndDisposeAttribute(ID)
-		_setAndDisposeAttribute(METHOD)
 		_setAndDisposeAttribute(TYPE)
+		_setAndDisposeAttribute(METHOD)
+
+		_setAndDisposeAttribute(ALIAS)
+		_setAndDisposeAttribute(RESOURCE)
+
 		_setAndDisposeAttribute(HIDE)
 		_setAndDisposeAttribute(JUST_ID)
 		_setAndDisposeAttribute(PARENT_ID)
@@ -58,6 +61,8 @@ class Route {
 			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
 		if(Alias.isAlias(routeDefinition, SS))
 			routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
+		if(Resource.isResource(routeDefinition, SS))
+			routeDefinition = Resource.diggestResource(routeDefinition, SS, SS)
 
 		routeDefinition[SS+NAME] = name
 		let routeTypes = {}
@@ -65,7 +70,7 @@ class Route {
 		routeTypes[undefined] = Route
 		routeTypes[_ALIAS] = Alias
 		routeTypes[SCOPE] = Route // Scope
-		routeTypes[_RESOURCE] = Route // Resource
+		routeTypes[_RESOURCE] = Resource
 
 		let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
 			mySelf, routeDefinition, SS, mySelf.#data.root
@@ -79,15 +84,14 @@ class Route {
 			mySelf.#data[TYPE] === _RESOURCE
 		){
 			let SS = mySelf.#data.SS
-			let resourceChilds = argChildRoutes[SS+RESOURCE] || _basicResource(SS)
+			let resourceChilds = mySelf.#data[RESOURCE]
 			delete resourceChilds[SS+ID]
 			mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
-			delete argChildRoutes[SS+RESOURCE]
 		}
 		let posibleChildRoutesNames = Object.keys(argChildRoutes)
 		while(posibleChildRoutesNames.length){
 			let posibleChild = posibleChildRoutesNames.pop()
-			if( // This case is disable any párentId by
+			if( // This case disable any parentId
 				(argChildRoutes[posibleChild] ===  false) &&
 				mySelf.#anyParentHasThisId(mySelf, posibleChild)
 			) mySelf.#data[posibleChild] = false
@@ -174,11 +178,9 @@ class Route {
 	}
 	_newResource = (args) => {
 		let SS = this.#data.SS
-		let newRoutArgs = {}
-		newRoutArgs[SS+RESOURCE] = args[RESOURCE]
-		newRoutArgs[SS+TYPE] = _RESOURCE
-		newRoutArgs[SS+ID] = args[ID]
-		this.#createChildRoute(this, newRoutArgs, args[NAME])
+		args[TYPE] = _RESOURCE
+		if(!Resource.isResource(args, '')) return false
+		this.#createChildRoute(this, Resource.diggestResource(args, SS, ''), args[NAME])
 	}
 
 	include "_Route_path.js"
