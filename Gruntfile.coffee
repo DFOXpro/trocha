@@ -18,14 +18,31 @@ module.exports = (grunt) ->
 			dist: ['./dist/trocha*']
 			test: ['./test/test*']
 		includes:
-			files:
-				src: ['trocha_*.es6.js']
-				dest: './dist'
-				cwd: './src/v2'
-			options:
-				flatten: true
-				debug: true
-				banner: banner[2]
+			dist:
+				files: [
+					cwd: './src/v2/',
+					src: 'trocha_*.es6.js'
+					dest: './dist'
+				]
+				options:
+					flatten: true
+					debug: true
+					banner: banner[2]
+			test:
+				files: [
+					'./test/test.coffee': './src/test/main_test.coffee'
+				]
+				options:
+					flatten: true
+				# files: [
+				# 	cwd: './src/test/',
+				# 	src: 'main_test.coffee'
+				# 	dest: './test'
+				# ]
+				# options:
+				# 	wrapper: 'test.coffee'
+				# 	flatten: true
+				# 	debug: true
 		jsdoc:
 			dist:
 				src: ['./dist/**/*.es6.js', './README.md']
@@ -60,7 +77,7 @@ module.exports = (grunt) ->
 			files:
 				'dist/trocha_module.min.js': 'dist/trocha_module.babeled.js'
 				'dist/trocha_library.min.js': 'dist/trocha_library.babeled.js'
-		coffee: dist:
+		coffee: test:
 			options:
 				bare: true
 				sourceMap: true
@@ -68,40 +85,34 @@ module.exports = (grunt) ->
 				# 'dist/trocha.deprecated.js': 'dist/trocha.deprecated.coffee'
 				'test/test.js': 'test/test.coffee'
 
-		coffeescript_concat: compile:
-			options: {}
-			files:
-				# 'dist/trocha.deprecated.coffee': [
-				# 	'src/deprecated/end.coffee'
-				# 	'src/deprecated/return.coffee'
-				# 	'src/deprecated/routes_engine.coffee'
-				# 	'src/deprecated/prepare_path.coffee'
-				# 	'src/deprecated/constructor.coffee'
-				# 	'src/deprecated/object_definition.coffee'
-				# 	'src/deprecated/variables.coffee'
-				# 	'src/deprecated/start.coffee'
-				# ]
-				'test/test.coffee': [
-					'src/test/main_test.coffee'
-					'src/test/issues_test.coffee'
-					'src/test/function_path_test.coffee'
-					'src/test/route_types_test.coffee'
-					'src/test/routes_creation_test.coffee'
-					'src/test/base_variables_test.coffee'
-					'src/test/constructor_test.coffee'
-					'src/test/constants_test.coffee'
-					'src/test/test_framework.coffee'
-				]
-		watch: js:
-			files: [ 'src/**/*.*' ]
-			tasks: [ 'build' ]
+		# coffeescript_concat: compile:
+		# 	options: {}
+		# 	files:
+		# 		'dist/trocha.deprecated.coffee': [
+		# 			'src/deprecated/end.coffee'
+		# 			'src/deprecated/return.coffee'
+		# 			'src/deprecated/routes_engine.coffee'
+		# 			'src/deprecated/prepare_path.coffee'
+		# 			'src/deprecated/constructor.coffee'
+		# 			'src/deprecated/object_definition.coffee'
+		# 			'src/deprecated/variables.coffee'
+		# 			'src/deprecated/start.coffee'
+		# 		]
+		watch:
 			options: livereload: true
+			js:
+				files: [ 'src/**/*.*' ]
+				tasks: [ 'build' ]
+			grunt:
+				files: ['Gruntfile.*']
+				tasks: [ 'build' ]
+				options:
+					reload: true
 
 	grunt.registerTask 'build', [
 		'clean'
-		'coffeescript_concat'
-		'coffee'
 		'includes'
+		'coffee'
 		'jsdoc'
 		'babel'
 		'uglify'
