@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.$RESOURCE = exports.ALIAS = exports.RESOURCE = exports.SCOPE = exports.ROUTE = exports.CONNECT = exports.TRACE = exports.DELETE = exports.PATCH = exports.PUT = exports.POST = exports.HEAD = exports.GET = exports.OPTIONS = exports.Route = exports.Trocha = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -58,6 +58,15 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 // Utility methods
 
 /* Begin: src/v2/_utils.js */
+
+/**
+ * Intended to declare any (class)method to be override from an instance
+ * @throws {not_implemented_method} The method was not override
+ */
+function _IntanceMethodHelper() {
+  throw new Error('not implemented');
+}
+
 var _throwError = function _throwError(scope, error_text, value) {
   var TrochaError =
   /*#__PURE__*/
@@ -133,25 +142,25 @@ var _ALIAS = 'ALIAS'; // Input attributes
 
 exports.ALIAS = _ALIAS;
 var ID = 'id';
-var RESOURCE = 'resource';
-exports.RESOURCE = RESOURCE;
+var URL = 'url';
 var NAME = 'name';
 var HIDE = 'hide';
-var URL = 'url';
 var TYPE = 'type';
 var PREFIX = 'pre';
 var ALIAS = 'alias';
 var QUERY = 'query';
-var FRAGMENT = 'fragment';
 var POSTFIX = 'post';
 var EXTENDED = 'ext';
 var METHOD = 'method';
 var DOMAIN = 'domain';
 var ROUTES = 'routes';
-var JUST_ID = 'justId';
-var AFTER_ID = 'afterId'; // FAILS & no DOCS
+var JUST_ID = 'justId'; // const AFTER_ID = 'afterId' // FAILS & no DOCS
 
+var FRAGMENT = 'fragment';
+var RESOURCE = 'resource';
+exports.RESOURCE = RESOURCE;
 var PARENT_ID = 'parentId';
+var DEFAULT_ID = "defaultId";
 var ALWAYS_URL = 'alwaysUrl';
 var ALWAYS_POST = 'alwaysPost';
 var CUSTOM_SELECTOR = 'customSelector'; // Route return attributes
@@ -199,8 +208,10 @@ var _basicResource = function _basicResource() {
 exports.$RESOURCE = _basicResource;
 var ERROR_HEADER = 'TrochaJS error: ';
 var WARNING_HEADER = 'TrochaJS warning: ';
-var ERROR_ROUTE_ALREADY_DEFINE = 'route already declare';
+var ERROR_ROUTE_ALREADY_DEFINE = 'Route already declare';
+var ERROR_SCOPE_AS_A_ROUTE = 'Scope is not printable a route';
 var WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route';
+var WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED = 'Attribute not supported, skiped';
 /* End: src/v2/_variables.js */
 // Trocha class
 
@@ -280,6 +291,8 @@ function () {
 
         _setAndDisposeAttribute(ID);
 
+        _setAndDisposeAttribute(DEFAULT_ID);
+
         _setAndDisposeAttribute(TYPE);
 
         _setAndDisposeAttribute(METHOD);
@@ -289,6 +302,8 @@ function () {
         _setAndDisposeAttribute(RESOURCE);
 
         _setAndDisposeAttribute(HIDE);
+
+        _setAndDisposeAttribute(POSTFIX);
 
         _setAndDisposeAttribute(JUST_ID);
 
@@ -315,15 +330,16 @@ function () {
         var SS = _classPrivateFieldGet(mySelf, _data).SS;
 
         if (_classPrivateFieldGet(mySelf, _data).childs[name]) _throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name);
-        if (Alias.isAlias(routeDefinition, SS)) routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS);
-        if (Resource.isResource(routeDefinition, SS)) routeDefinition = Resource.diggestResource(routeDefinition, SS, SS);
+        var routeSubclasses = [Route, Alias, Resource, Scope];
+        routeSubclasses.forEach(function (routeSubclass) {
+          if (routeSubclass.is(routeDefinition, SS)) routeDefinition = routeSubclass.diggest(routeDefinition, SS, SS);
+        });
         routeDefinition[SS + NAME] = name;
         var routeTypes = {};
         routeTypes[ROUTE] = Route;
         routeTypes[undefined] = Route;
         routeTypes[_ALIAS] = Alias;
-        routeTypes[SCOPE] = Route; // Scope
-
+        routeTypes[SCOPE] = Scope;
         routeTypes[_RESOURCE] = Resource;
         var newRoute = new routeTypes[routeDefinition[SS + TYPE]](mySelf, routeDefinition, SS, _classPrivateFieldGet(mySelf, _data).root);
         _classPrivateFieldGet(mySelf, _data).childs[name] = newRoute;
@@ -337,9 +353,9 @@ function () {
     _diggestChildRoutes.set(this, {
       writable: true,
       value: function value(mySelf, argChildRoutes, skipResource) {
-        if (!skipResource && _classPrivateFieldGet(mySelf, _data)[TYPE] === _RESOURCE) {
-          var SS = _classPrivateFieldGet(mySelf, _data).SS;
+        var SS = _classPrivateFieldGet(mySelf, _data).SS;
 
+        if (!skipResource && _classPrivateFieldGet(mySelf, _data)[TYPE] === _RESOURCE) {
           var resourceChilds = _classPrivateFieldGet(mySelf, _data)[RESOURCE];
 
           delete resourceChilds[SS + ID];
@@ -351,9 +367,17 @@ function () {
 
         while (posibleChildRoutesNames.length) {
           var posibleChild = posibleChildRoutesNames.pop();
-          if ( // This case disable any parentId
+          if ( // This case disable any <id>=false
           argChildRoutes[posibleChild] === false && _classPrivateFieldGet(mySelf, _anyParentHasThisId).call(mySelf, mySelf, posibleChild)) _classPrivateFieldGet(mySelf, _data)[posibleChild] = false;else {
             _classPrivateFieldGet(mySelf, _createChildRoute).call(mySelf, mySelf, argChildRoutes[posibleChild], posibleChild);
+
+            if (_classPrivateFieldGet(mySelf, _data)[TYPE] === SCOPE) {
+              var scopedChild = _objectSpread({}, argChildRoutes[posibleChild]);
+
+              scopedChild[SS + PARENT_ID] = false;
+
+              _classPrivateFieldGet(mySelf, _createChildRoute).call(mySelf, _classPrivateFieldGet(mySelf, _data).parent, scopedChild, posibleChild);
+            }
           }
         }
       }
@@ -369,44 +393,31 @@ function () {
     });
 
     _defineProperty(this, "_newRoute", function (args) {
-      var SS = _classPrivateFieldGet(_this2, _data).SS;
+      args[TYPE] = ROUTE;
+      if (!Route.is(args, '')) return false;
 
-      var newRoutArgs = {};
-      newRoutArgs[SS + TYPE] = ROUTE;
-      newRoutArgs[SS + METHOD] = args[METHOD];
-      newRoutArgs[SS + ID] = args[ID];
-      newRoutArgs[SS + HIDE] = args[HIDE];
-      newRoutArgs[SS + JUST_ID] = args[JUST_ID];
-
-      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, newRoutArgs, args[NAME]);
+      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Route.diggest(args, _classPrivateFieldGet(_this2, _data).SS, ''), args[NAME]);
     });
 
     _defineProperty(this, "_newScope", function (args) {
-      var SS = _classPrivateFieldGet(_this2, _data).SS;
+      args[TYPE] = SCOPE;
+      if (!Scope.is(args, '')) return false;
 
-      var newRoutArgs = {};
-      newRoutArgs[SS + TYPE] = SCOPE;
-      newRoutArgs[SS + ID] = args[ID];
-
-      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, newRoutArgs, args[NAME]);
+      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Scope.diggest(args, _classPrivateFieldGet(_this2, _data).SS, ''), args[NAME]);
     });
 
     _defineProperty(this, "_newAlias", function (args) {
-      var SS = _classPrivateFieldGet(_this2, _data).SS;
-
       args[TYPE] = _ALIAS;
-      if (!Alias.isAlias(args, '')) return false;
+      if (!Alias.is(args, '')) return false;
 
-      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Alias.diggestAlias(args, SS, ''), args[NAME]);
+      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Alias.diggest(args, _classPrivateFieldGet(_this2, _data).SS, ''), args[NAME]);
     });
 
     _defineProperty(this, "_newResource", function (args) {
-      var SS = _classPrivateFieldGet(_this2, _data).SS;
-
       args[TYPE] = _RESOURCE;
-      if (!Resource.isResource(args, '')) return false;
+      if (!Resource.is(args, '')) return false;
 
-      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Resource.diggestResource(args, SS, ''), args[NAME]);
+      _classPrivateFieldGet(_this2, _createChildRoute).call(_this2, _this2, Resource.diggest(args, _classPrivateFieldGet(_this2, _data).SS, ''), args[NAME]);
     });
 
     _defineProperty(this, "toString", function () {
@@ -416,20 +427,14 @@ function () {
     var _SS = _classPrivateFieldGet(this, _data).SS = argCustomSelector || DS; // selectedSelector
 
 
-    var DEFAULT_ROUTE_DEF = {};
-    DEFAULT_ROUTE_DEF[_SS + METHOD] = GET;
-    DEFAULT_ROUTE_DEF[_SS + TYPE] = ROUTE;
-
-    var _posibleRouteDef = _objectSpread({}, DEFAULT_ROUTE_DEF, argRouteDef);
-
-    if (myParent || _posibleRouteDef[_SS + NAME] && _posibleRouteDef[_SS + METHOD] && _posibleRouteDef[_SS + TYPE]) {
+    if (myParent || argRouteDef && argRouteDef[_SS + NAME] && argRouteDef[_SS + TYPE]) {
       // It's a normal route
       _classPrivateFieldGet(this, _data).parent = myParent;
       _classPrivateFieldGet(this, _data).root = argRoot;
 
-      _classPrivateFieldGet(this, _defineMyAttributes).call(this, this, _posibleRouteDef);
+      _classPrivateFieldGet(this, _defineMyAttributes).call(this, this, argRouteDef);
 
-      _classPrivateFieldGet(this, _diggestChildRoutes).call(this, this, _posibleRouteDef);
+      _classPrivateFieldGet(this, _diggestChildRoutes).call(this, this, argRouteDef);
     } else {
       // It's the root route
       _classPrivateFieldGet(this, _data)[DOMAIN] = argDomain || _classPrivateFieldGet(this, _data)[DOMAIN];
@@ -484,7 +489,7 @@ function () {
         return true;
       }) : s; // 4.A print name & id(name) from customNameFun like Alias
 
-      var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE];
+      var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE] || myData[JUST_ID] && myData[DEFAULT_ID] === false;
       var customNameFromInhered;
       if ("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData);
       if ("string" === typeof customNameFromInhered) r += customNameFromInhered;else {
@@ -492,11 +497,11 @@ function () {
         var myId = ':' + myData[ID];
 
         if ( // 4.B.1 justId case
-        routeParams[JUST_ID] !== false && myData[JUST_ID] && myData[ID]) {
+        routeParams[JUST_ID] !== false && myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false) {
           r += _ + myId;
         } else {
           // 4.B.2 hide case
-          var noIdentifier = !myData[ID] ? true : routeParams[ID] === false ? true : false;
+          var noIdentifier = myData[ID] ? routeParams[ID] === false : true;
           r += hide ? s : _ + myData[NAME];
           r += noIdentifier ? s : _ + myId;
         }
@@ -552,6 +557,24 @@ function () {
     }
     /* End: src/v2/_Route_path.js */
 
+  }], [{
+    key: "is",
+
+    /**
+     * @TOBE_OVERRIDE
+     * @param {object} routeDefinition -
+     * @param {string} SS -
+     */
+    value: function is(routeDefinition, SS) {
+      return routeDefinition[SS + TYPE] === ROUTE || "object" === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === undefined;
+    }
+    /**
+     * @TOBE_OVERRIDE
+     * @param {} routeDefinition -
+     * @param {} SS - selector to be return
+     * @param {} IS - selector to be find
+     */
+
   }]);
 
   return Route;
@@ -577,6 +600,29 @@ var _diggestChildRoutes = new WeakMap();
 
 var _as = new WeakMap();
 
+_defineProperty(Route, "DEFAULT_METHOD", GET);
+
+_defineProperty(Route, "diggest", function (routeDefinition, SS, IS, dest, attributes) {
+  if (dest && attributes) attributes.forEach(function (attribute) {
+    dest[SS + attribute] = routeDefinition[IS + attribute];
+  });else {
+    var r = {};
+    r[SS + TYPE] = ROUTE;
+    r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD;
+    Route.diggest(routeDefinition, SS, IS, r, [ID, HIDE, JUST_ID, POSTFIX, PARENT_ID]);
+
+    Route._trimSelector(IS, routeDefinition, r);
+
+    return r;
+  }
+});
+
+_defineProperty(Route, "_trimSelector", function (SS, src, dest) {
+  Object.keys(src).forEach(function (attribute) {
+    if (attribute.slice(0, 2) !== SS) dest[attribute] = src[attribute];else _throwWarning(Route, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute);
+  });
+});
+
 var Alias =
 /*#__PURE__*/
 function (_Route) {
@@ -593,6 +639,10 @@ function (_Route) {
 
     return _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Alias)).call.apply(_getPrototypeOf2, [this].concat(args)));
   }
+  /**
+   * @override
+   */
+
 
   _createClass(Alias, [{
     key: "path",
@@ -622,18 +672,23 @@ function (_Route) {
       });
     }
   }], [{
-    key: "diggestAlias",
-    value: function diggestAlias(routeDefinition, SS, IS) {
+    key: "diggest",
+    value: function diggest(routeDefinition, SS, IS) {
       var r = {};
       r[SS + TYPE] = _ALIAS;
       r[SS + ALIAS] = routeDefinition[IS + ALIAS] || routeDefinition;
-      r[SS + METHOD] = routeDefinition[IS + METHOD];
-      r[SS + ID] = routeDefinition[IS + ID];
+      r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD;
+      Route.diggest(routeDefinition, SS, IS, r, [ID, POSTFIX, PARENT_ID]);
+      if ("string" !== typeof routeDefinition) Route._trimSelector(IS, routeDefinition, r);
       return r;
     }
+    /**
+     * @override
+     */
+
   }, {
-    key: "isAlias",
-    value: function isAlias(routeDefinition, SS) {
+    key: "is",
+    value: function is(routeDefinition, SS) {
       return "string" === typeof routeDefinition || routeDefinition[SS + TYPE] === _ALIAS && routeDefinition[SS + ALIAS];
     }
   }]);
@@ -661,6 +716,10 @@ function (_Route2) {
 
     return _possibleConstructorReturn(this, (_getPrototypeOf3 = _getPrototypeOf(Resource)).call.apply(_getPrototypeOf3, [this].concat(args)));
   }
+  /**
+   * @override
+   */
+
 
   _createClass(Resource, [{
     key: "path",
@@ -677,18 +736,24 @@ function (_Route2) {
       });
     }
   }], [{
-    key: "diggestResource",
-    value: function diggestResource(routeDefinition, SS, IS) {
+    key: "diggest",
+    value: function diggest(routeDefinition, SS, IS) {
       var r = {};
       r[SS + TYPE] = _RESOURCE;
       r[SS + RESOURCE] = routeDefinition[IS + RESOURCE] || _basicResource(SS);
-      r[SS + METHOD] = routeDefinition[IS + METHOD];
-      r[SS + ID] = routeDefinition[IS + ID];
+      Route.diggest(routeDefinition, SS, IS, r, [ID]);
+
+      Route._trimSelector(IS, routeDefinition, r);
+
       return r;
     }
+    /**
+     * @override
+     */
+
   }, {
-    key: "isResource",
-    value: function isResource(routeDefinition, SS) {
+    key: "is",
+    value: function is(routeDefinition, SS) {
       return routeDefinition[SS + TYPE] === _RESOURCE && routeDefinition[SS + ID] // &&
       // routeDefinition[SS+RESOURCE]
       ;
@@ -699,11 +764,78 @@ function (_Route2) {
 }(Route);
 /* End: src/v2/_Resource.js */
 
+/* Begin: src/v2/_Scope.js */
+
+
+var Scope =
+/*#__PURE__*/
+function (_Route3) {
+  _inherits(Scope, _Route3);
+
+  function Scope() {
+    var _getPrototypeOf4;
+
+    _classCallCheck(this, Scope);
+
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+
+    return _possibleConstructorReturn(this, (_getPrototypeOf4 = _getPrototypeOf(Scope)).call.apply(_getPrototypeOf4, [this].concat(args)));
+  }
+  /**
+   * @override
+   */
+
+
+  _createClass(Scope, [{
+    key: "path",
+
+    /**
+     * @override
+     */
+    value: function path() {
+      var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var force = arguments.length > 1 ? arguments[1] : undefined;
+      return _get(_getPrototypeOf(Scope.prototype), "path", this).call(this, routeParams, function (myData) {
+        if ("function" === typeof force && force() !== true) _throwError(undefined, ERROR_SCOPE_AS_A_ROUTE);
+        return false;
+      });
+    }
+  }], [{
+    key: "diggest",
+    value: function diggest(routeDefinition, SS, IS) {
+      var r = {};
+      r[SS + TYPE] = SCOPE;
+      r[SS + JUST_ID] = true;
+      r[SS + DEFAULT_ID] = routeDefinition[IS + DEFAULT_ID] || false;
+      Route.diggest(routeDefinition, SS, IS, r, [ID, HIDE]);
+
+      Route._trimSelector(IS, routeDefinition, r);
+
+      return r;
+    }
+    /**
+     * @override
+     */
+
+  }, {
+    key: "is",
+    value: function is(routeDefinition, SS) {
+      return "object" === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === SCOPE && routeDefinition[SS + ID] // Should scope always have id????
+      ;
+    }
+  }]);
+
+  return Scope;
+}(Route);
+/* End: src/v2/_Scope.js */
+
 
 var Trocha =
 /*#__PURE__*/
-function (_Route3) {
-  _inherits(Trocha, _Route3);
+function (_Route4) {
+  _inherits(Trocha, _Route4);
 
   function Trocha() {
     var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};

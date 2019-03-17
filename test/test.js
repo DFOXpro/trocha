@@ -83,7 +83,7 @@ testFramework = function(options) {
   };
   // console.log 'Spected error was an error', e
   r.assert = function(result, expected) {
-    var assertFail, errorMessage;
+    var assertFail, e, errorMessage;
     assertFail = false;
     results.asserts++;
     errorMessage = '';
@@ -104,11 +104,17 @@ testFramework = function(options) {
     if (assertFail) {
       results.badAsserts++;
       results.runningDescribe.fail = true;
-      console.assert(false, {
-        expected: expected,
-        result: result,
-        msg: errorMessage
-      });
+      try {
+        throw new Error('Assert fail');
+      } catch (error) {
+        e = error;
+        console.assert(false, {
+          expected: expected,
+          result: result,
+          msg: errorMessage
+        });
+        console.warn(e);
+      }
     }
     return assertFail;
   };
@@ -646,18 +652,42 @@ route_types_test = function() {
         return assert(r.services.edit.path(), '/services/:service_id/edit');
       });
     });
-    return it('should create an scope(route type scope)', function() {});
+    return it('should create an scope(route type scope)', function() {
+      var r;
+      r = new Trocha({
+        routes: {
+          language: {
+            $type: Trocha.SCOPE,
+            $id: 'language_id',
+            products: {
+              $type: Trocha.RESOURCE,
+              $id: "product_id"
+            }
+          }
+        }
+      });
+      window.asd = r;
+      assert(r.language.constructor.name, "Scope");
+      assertFunctionError(r.language.path);
+      assert(r.language.products.list.path(), '/:language_id/products');
+      assert(r.language.products.list.path({
+        language_id: false
+      }), '/products');
+      assert(r.products.list.path(), '/products');
+      assert(r.language.products.list.path({
+        language_id: 'es'
+      }), '/es/products');
+      r._newScope({
+        name: "lingua",
+        id: "lingua_id",
+        hide: false
+      });
+      return r.lingua._newResource({
+        name: "services",
+        id: "service_id"
+      });
+    });
   });
-  // window.asd = r
-  // it 'should create a valid trocha object', ->
-  // 	r = new Trocha()
-  // 	assert r, {}
-  // 	assert r._newAlias, ->
-  // 	assert r._newResource, ->
-  // 	assert r._newRoute, ->
-  // 	assert r._newScope, ->
-  // 	assert r.$RESOURCE, {}
-  // 	assertFunctionError r.path
   return route_types_test = void 0;
 };
 

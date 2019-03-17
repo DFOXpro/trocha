@@ -13,15 +13,23 @@
 /* Begin: src/v2/_core.js */
 	// Utility methods
 /* Begin: src/v2/_utils.js */
+	/**
+	 * Intended to declare any (class)method to be override from an instance
+	 * @throws {not_implemented_method} The method was not override
+	 */
+	function _IntanceMethodHelper (){
+		throw new Error('not implemented')
+	}
+
 	let _throwError = (scope, error_text, value) => {
 		class TrochaError extends Error {
 			constructor(scope, error_text, value) {
 				// Pass remaining arguments (including vendor specific ones) to parent constructor
-				super(ERROR_HEADER+error_text);
+				super(ERROR_HEADER+error_text)
 				
 				// Custom debugging information
-				this.scope = scope;
-				this.value = value;
+				this.scope = scope
+				this.value = value
 			}
 		}
 		throw new TrochaError(scope, error_text, value)
@@ -63,23 +71,24 @@
 
 	// Input attributes
 	const ID = 'id'
-	const RESOURCE = 'resource'
+	const URL = 'url'
 	const NAME = 'name'
 	const HIDE = 'hide'
-	const URL = 'url'
 	const TYPE = 'type'
 	const PREFIX = 'pre'
 	const ALIAS = 'alias'
 	const QUERY = 'query'
-	const FRAGMENT = 'fragment'
 	const POSTFIX = 'post'
 	const EXTENDED = 'ext'
 	const METHOD = 'method'
 	const DOMAIN = 'domain'
 	const ROUTES = 'routes'
 	const JUST_ID = 'justId'
-	const AFTER_ID = 'afterId' // FAILS & no DOCS
+	// const AFTER_ID = 'afterId' // FAILS & no DOCS
+	const FRAGMENT = 'fragment'
+	const RESOURCE = 'resource'
 	const PARENT_ID = 'parentId'
+	const DEFAULT_ID = `defaultId`
 	const ALWAYS_URL = 'alwaysUrl'
 	const ALWAYS_POST = 'alwaysPost'
 	const CUSTOM_SELECTOR = 'customSelector'
@@ -126,8 +135,10 @@
 
 	const ERROR_HEADER = 'TrochaJS error: '
 	const WARNING_HEADER = 'TrochaJS warning: '
-	const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
+	const ERROR_ROUTE_ALREADY_DEFINE = 'Route already declare'
+	const ERROR_SCOPE_AS_A_ROUTE = 'Scope is not printable a route'
 	const WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route'
+	const WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED = 'Attribute not supported, skiped'
 /* End: src/v2/_variables.js */
 	// Trocha class
 /* Begin: src/v2/_Trocha.js */
@@ -173,6 +184,7 @@
 
 			_setAndDisposeAttribute(NAME)
 			_setAndDisposeAttribute(ID)
+			_setAndDisposeAttribute(DEFAULT_ID)
 			_setAndDisposeAttribute(TYPE)
 			_setAndDisposeAttribute(METHOD)
 
@@ -180,6 +192,7 @@
 			_setAndDisposeAttribute(RESOURCE)
 
 			_setAndDisposeAttribute(HIDE)
+			_setAndDisposeAttribute(POSTFIX)
 			_setAndDisposeAttribute(JUST_ID)
 			_setAndDisposeAttribute(PARENT_ID)
 			if(false === posibleRouteDef[mySelf.#data.parent[SS+ID]])
@@ -194,17 +207,17 @@
 			let SS = mySelf.#data.SS
 			if(mySelf.#data.childs[name])
 				_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
-			if(Alias.isAlias(routeDefinition, SS))
-				routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
-			if(Resource.isResource(routeDefinition, SS))
-				routeDefinition = Resource.diggestResource(routeDefinition, SS, SS)
-
+			let routeSubclasses = [Route, Alias, Resource, Scope]
+			routeSubclasses.forEach((routeSubclass) => {
+				if(routeSubclass.is(routeDefinition, SS))
+					routeDefinition = routeSubclass.diggest(routeDefinition, SS, SS)
+			})
 			routeDefinition[SS+NAME] = name
 			let routeTypes = {}
 			routeTypes[ROUTE] = Route
 			routeTypes[undefined] = Route
 			routeTypes[_ALIAS] = Alias
-			routeTypes[SCOPE] = Route // Scope
+			routeTypes[SCOPE] = Scope
 			routeTypes[_RESOURCE] = Resource
 
 			let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
@@ -214,24 +227,30 @@
 			mySelf.#newGetter(mySelf, name, ()=>(mySelf.#data.childs[name]), true)
 		}
 		#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
+			let SS = mySelf.#data.SS
 			if(
 				!skipResource &&
 				mySelf.#data[TYPE] === _RESOURCE
 			){
-				let SS = mySelf.#data.SS
 				let resourceChilds = mySelf.#data[RESOURCE]
 				delete resourceChilds[SS+ID]
 				mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
 			}
+
 			let posibleChildRoutesNames = Object.keys(argChildRoutes)
 			while(posibleChildRoutesNames.length){
 				let posibleChild = posibleChildRoutesNames.pop()
-				if( // This case disable any parentId
+				if( // This case disable any <id>=false
 					(argChildRoutes[posibleChild] ===  false) &&
 					mySelf.#anyParentHasThisId(mySelf, posibleChild)
 				) mySelf.#data[posibleChild] = false
 				else{
 					mySelf.#createChildRoute(mySelf, argChildRoutes[posibleChild], posibleChild)
+					if(mySelf.#data[TYPE] === SCOPE) {
+						let scopedChild = {...argChildRoutes[posibleChild]}
+						scopedChild[SS+PARENT_ID] = false
+						mySelf.#createChildRoute(mySelf.#data.parent, scopedChild, posibleChild)
+					}
 				}
 			}
 		}
@@ -256,20 +275,16 @@
 			//argAlwaysPre,// @TODO
 		) {
 			let SS = this.#data.SS = argCustomSelector || DS // selectedSelector
-			const DEFAULT_ROUTE_DEF = {}
-			DEFAULT_ROUTE_DEF[SS+METHOD] = GET
-			DEFAULT_ROUTE_DEF[SS+TYPE] = ROUTE
-			let posibleRouteDef = {...DEFAULT_ROUTE_DEF, ...argRouteDef}
 			if(
 				myParent ||
-				posibleRouteDef[SS+NAME] &&
-				posibleRouteDef[SS+METHOD] &&
-				posibleRouteDef[SS+TYPE]
+				argRouteDef &&
+				argRouteDef[SS+NAME] &&
+				argRouteDef[SS+TYPE]
 			){ // It's a normal route
 				this.#data.parent = myParent
 				this.#data.root = argRoot
-				this.#defineMyAttributes(this, posibleRouteDef)
-				this.#diggestChildRoutes(this, posibleRouteDef)
+				this.#defineMyAttributes(this, argRouteDef)
+				this.#diggestChildRoutes(this, argRouteDef)
 			} else { // It's the root route
 				this.#data[DOMAIN] = argDomain || this.#data[DOMAIN]
 				this.#newGetter(this, DOMAIN)
@@ -289,33 +304,24 @@
 		}
 
 		_newRoute = (args) => {
-			let SS = this.#data.SS
-			let newRoutArgs = {}
-			newRoutArgs[SS+TYPE] = ROUTE
-			newRoutArgs[SS+METHOD] = args[METHOD]
-			newRoutArgs[SS+ID] = args[ID]
-			newRoutArgs[SS+HIDE] = args[HIDE]
-			newRoutArgs[SS+JUST_ID] = args[JUST_ID]
-			this.#createChildRoute(this, newRoutArgs, args[NAME])
+			args[TYPE] = ROUTE
+			if(!Route.is(args, '')) return false
+			this.#createChildRoute(this, Route.diggest(args,this.#data.SS, ''), args[NAME])
 		}
 		_newScope = (args) => {
-			let SS = this.#data.SS
-			let newRoutArgs = {}
-			newRoutArgs[SS+TYPE] = SCOPE
-			newRoutArgs[SS+ID] = args[ID]
-			this.#createChildRoute(this, newRoutArgs, args[NAME])
+			args[TYPE] = SCOPE
+			if(!Scope.is(args, '')) return false
+			this.#createChildRoute(this, Scope.diggest(args,this.#data.SS, ''), args[NAME])
 		}
 		_newAlias = (args) => {
-			let SS = this.#data.SS
 			args[TYPE] = _ALIAS
-			if(!Alias.isAlias(args, '')) return false
-			this.#createChildRoute(this, Alias.diggestAlias(args, SS, ''), args[NAME])
+			if(!Alias.is(args, '')) return false
+			this.#createChildRoute(this, Alias.diggest(args,this.#data.SS, ''), args[NAME])
 		}
 		_newResource = (args) => {
-			let SS = this.#data.SS
 			args[TYPE] = _RESOURCE
-			if(!Resource.isResource(args, '')) return false
-			this.#createChildRoute(this, Resource.diggestResource(args, SS, ''), args[NAME])
+			if(!Resource.is(args, '')) return false
+			this.#createChildRoute(this, Resource.diggest(args,this.#data.SS, ''), args[NAME])
 		}
 
 /* Begin: src/v2/_Route_path.js */
@@ -350,18 +356,22 @@
 			r += parent[PATH] ? parent[PATH](parentPathArg, ()=>(true)) : s
 
 			// 4.A print name & id(name) from customNameFun like Alias
-			let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE])
+			let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : (
+				myData[HIDE] ||
+				(myData[JUST_ID] && myData[DEFAULT_ID] === false)
+			))
 			let customNameFromInhered
 			if("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData)
 			if("string" === typeof customNameFromInhered) r += customNameFromInhered
 			else { // 4.B print default name & id(name)
 				let myId = ':' + myData[ID]
 				if ( // 4.B.1 justId case
-					(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
+					(routeParams[JUST_ID] !== false) &&
+					(myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false)
 				) {
 					r += _ + myId
 				} else { // 4.B.2 hide case
-					let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
+					let noIdentifier = (myData[ID] ? (routeParams[ID] === false) : true)
 					r += (hide? s : _ + myData[NAME])
 					r += (noIdentifier ? s : _ + myId)
 				}
@@ -441,6 +451,53 @@
 /* End: src/v2/_Route_path.js */
 
 		toString = () => (this.#as(this))
+
+		static DEFAULT_METHOD = GET
+		/**
+		 * @TOBE_OVERRIDE
+		 * @param {object} routeDefinition -
+		 * @param {string} SS -
+		 */
+		static is(routeDefinition, SS) {
+			return (
+				routeDefinition[SS+TYPE] === ROUTE ||
+				(
+					("object" === typeof(routeDefinition)) &&
+					routeDefinition[SS+TYPE] === undefined
+				)
+			)
+		}
+
+		/**
+		 * @TOBE_OVERRIDE
+		 * @param {} routeDefinition -
+		 * @param {} SS - selector to be return
+		 * @param {} IS - selector to be find
+		 */
+		static diggest = (routeDefinition, SS, IS, dest, attributes) => {
+			if(dest && attributes)
+				attributes.forEach((attribute) => {
+					dest[SS+attribute] = routeDefinition[IS+attribute]
+				})
+			else {
+				let r = {}
+				r[SS+TYPE] = ROUTE
+				r[SS+METHOD] = routeDefinition[IS+METHOD] || Route.DEFAULT_METHOD
+				Route.diggest(routeDefinition, SS, IS, r, [
+					ID, HIDE, JUST_ID, POSTFIX, PARENT_ID
+				])
+				Route._trimSelector(IS, routeDefinition, r)
+				return r
+			}
+		}
+
+		static _trimSelector = (SS, src, dest) => {
+			Object.keys(src).forEach((attribute) => {
+				if(attribute.slice(0,2) !== SS)
+					dest[attribute] = src[attribute]
+				else _throwWarning(this, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute)
+			})
+		}
 	}
 /* End: src/v2/_Route.js */
 /* Begin: src/v2/_Alias.js */
@@ -448,15 +505,27 @@
 		constructor(...args) {
 			super(...args)
 		}
-		static diggestAlias(routeDefinition, SS, IS) {
+
+		/**
+		 * @override
+		 */
+		static diggest(routeDefinition, SS, IS) {
 			let r = {}
 			r[SS+TYPE] = _ALIAS
 			r[SS+ALIAS] = routeDefinition[IS+ALIAS] || routeDefinition
-			r[SS+METHOD] = routeDefinition[IS+METHOD]
-			r[SS+ID] = routeDefinition[IS+ID]
+			r[SS+METHOD] = routeDefinition[IS+METHOD] || Route.DEFAULT_METHOD
+			Route.diggest(routeDefinition, SS, IS, r, [
+				ID, POSTFIX, PARENT_ID
+			])
+			if("string" !== typeof routeDefinition)
+				Route._trimSelector(IS, routeDefinition, r)
 			return r
 		}
-		static isAlias(routeDefinition, SS) {
+
+		/**
+		 * @override
+		 */
+		static is(routeDefinition, SS) {
 			return (
 				("string" === typeof routeDefinition) ||
 				(
@@ -496,16 +565,22 @@
 			super(...args)
 		}
 
-		static diggestResource(routeDefinition, SS, IS) {
+		/**
+		 * @override
+		 */
+		static diggest(routeDefinition, SS, IS) {
 			let r = {}
 			r[SS+TYPE] = _RESOURCE
 			r[SS+RESOURCE] = routeDefinition[IS+RESOURCE] || _basicResource(SS)
-			r[SS+METHOD] = routeDefinition[IS+METHOD]
-			r[SS+ID] = routeDefinition[IS+ID]
+			Route.diggest(routeDefinition, SS, IS, r, [ID])
+			Route._trimSelector(IS, routeDefinition, r)
 			return r
 		}
 
-		static isResource(routeDefinition, SS) {
+		/**
+		 * @override
+		 */
+		static is(routeDefinition, SS) {
 			return (
 					routeDefinition[SS+TYPE] === _RESOURCE &&
 					routeDefinition[SS+ID] // &&
@@ -527,6 +602,50 @@
 		}
 	}
 /* End: src/v2/_Resource.js */
+/* Begin: src/v2/_Scope.js */
+	class Scope extends Route {
+		constructor(...args) {
+			super(...args)
+		}
+
+		/**
+		 * @override
+		 */
+		static diggest(routeDefinition, SS, IS) {
+			let r = {}
+			r[SS+TYPE] = SCOPE
+			r[SS+JUST_ID] = true
+			r[SS+DEFAULT_ID] = routeDefinition[IS+DEFAULT_ID] || false
+			Route.diggest(routeDefinition, SS, IS, r, [ID, HIDE])
+			Route._trimSelector(IS, routeDefinition, r)
+			return r
+		}
+
+		/**
+		 * @override
+		 */
+		static is(routeDefinition, SS) {
+			return (
+				("object" === typeof(routeDefinition)) &&
+				routeDefinition[SS+TYPE] === SCOPE &&
+				routeDefinition[SS+ID] // Should scope always have id????
+			)
+		}
+
+		/**
+		 * @override
+		 */
+		path(routeParams = {}, force){
+			return super.path(routeParams, function (myData) {
+				if(
+					("function" === typeof force) &&
+					(force() !== true)
+				) _throwError(undefined, ERROR_SCOPE_AS_A_ROUTE)
+				return false
+			})
+		}
+	}
+/* End: src/v2/_Scope.js */
 
 	class Trocha extends Route{
 		constructor(args = {}) {
