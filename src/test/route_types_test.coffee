@@ -134,15 +134,27 @@ route_types_test = ->
 				assert r.services.edit.path(), '/services/:service_id/edit'
 
 		it 'should create an scope(route type scope)', ->
-			# window.asd = r
-		# it 'should create a valid trocha object', ->
-		# 	r = new Trocha()
-		# 	assert r, {}
-		# 	assert r._newAlias, ->
-		# 	assert r._newResource, ->
-		# 	assert r._newRoute, ->
-		# 	assert r._newScope, ->
-		# 	assert r.$RESOURCE, {}
-		# 	assertFunctionError r.path
+			r = new Trocha
+				routes:
+					language:
+						$type: Trocha.SCOPE
+						$id: 'language_id'
+						products:
+							$type: Trocha.RESOURCE
+							$id: "product_id"
+			window.asd = r
+			assert r.language.constructor.name, "Scope"
+			assertFunctionError r.language.path
+			assert r.language.products.list.path(), '/:language_id/products'
+			assert r.language.products.list.path({language_id: false}), '/products'
+			assert r.products.list.path(), '/products'
+			assert r.language.products.list.path({language_id: 'es'}), '/es/products'
+			r._newScope
+				name: "lingua"
+				id: "lingua_id"
+				hide: false
+			r.lingua._newResource
+				name: "services"
+				id: "service_id"
 
 	route_types_test = undefined

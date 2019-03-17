@@ -79,7 +79,11 @@ testFramework = (options) ->
 		if assertFail
 			results.badAsserts++
 			results.runningDescribe.fail = true
-			console.assert false, {expected: expected, result: result, msg: errorMessage}
+			try
+				throw new Error 'Assert fail'
+			catch e
+				console.assert false, {expected: expected, result: result, msg: errorMessage}
+				console.warn e
 		return assertFail
 
 	r.run = ->
