@@ -65,21 +65,21 @@ module.exports = (grunt) ->
 				bare: true
 				sourceMap: true
 			files:
-				# 'dist/trocha.js': 'dist/trocha.coffee'
+				# 'dist/trocha.deprecated.js': 'dist/trocha.deprecated.coffee'
 				'test/test.js': 'test/test.coffee'
 
 		coffeescript_concat: compile:
 			options: {}
 			files:
-				# 'dist/trocha.coffee': [
-				# 	'src/end.coffee'
-				# 	'src/return.coffee'
-				# 	'src/routes_engine.coffee'
-				# 	'src/prepare_path.coffee'
-				# 	'src/constructor.coffee'
-				# 	'src/object_definition.coffee'
-				# 	'src/variables.coffee'
-				# 	'src/start.coffee'
+				# 'dist/trocha.deprecated.coffee': [
+				# 	'src/deprecated/end.coffee'
+				# 	'src/deprecated/return.coffee'
+				# 	'src/deprecated/routes_engine.coffee'
+				# 	'src/deprecated/prepare_path.coffee'
+				# 	'src/deprecated/constructor.coffee'
+				# 	'src/deprecated/object_definition.coffee'
+				# 	'src/deprecated/variables.coffee'
+				# 	'src/deprecated/start.coffee'
 				# ]
 				'test/test.coffee': [
 					'src/test/main_test.coffee'
