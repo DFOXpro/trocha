@@ -83,6 +83,7 @@ module.exports = (grunt) ->
 				# ]
 				'test/test.coffee': [
 					'src/test/main_test.coffee'
+					'src/test/issues_test.coffee'
 					'src/test/function_path_test.coffee'
 					'src/test/route_types_test.coffee'
 					'src/test/routes_creation_test.coffee'

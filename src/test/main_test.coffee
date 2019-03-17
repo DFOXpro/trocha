@@ -6,5 +6,6 @@
 		routes_creation_test()
 		route_types_test()
 		function_path_test()
+		issues_test()
 	test.run()
 )()
