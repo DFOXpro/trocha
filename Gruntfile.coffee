@@ -71,9 +71,19 @@ module.exports = (grunt) ->
 				maxLineLen: 0
 				screwIE8: true
 				preserveComments: false
-				compress: drop_console: true
+				compress:
+					passes: 3
+					warnings: true
 				beautify: false
 				sourceMap: false
+				mangle: # false
+					reserved: [
+						'Trocha'
+						'Route'
+						'Alias'
+						'Resource'
+						'Scope'
+					]
 			files:
 				'dist/trocha_module.min.js': 'dist/trocha_module.babeled.js'
 				'dist/trocha_library.min.js': 'dist/trocha_library.babeled.js'
