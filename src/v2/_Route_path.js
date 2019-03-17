@@ -29,18 +29,22 @@ path(routeParams = {}, customNameFun) {
 	r += parent[PATH] ? parent[PATH](parentPathArg, ()=>(true)) : s
 
 	// 4.A print name & id(name) from customNameFun like Alias
-	let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE])
+	let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : (
+		myData[HIDE] ||
+		(myData[JUST_ID] && myData[DEFAULT_ID] === false)
+	))
 	let customNameFromInhered
 	if("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData)
 	if("string" === typeof customNameFromInhered) r += customNameFromInhered
 	else { // 4.B print default name & id(name)
 		let myId = ':' + myData[ID]
 		if ( // 4.B.1 justId case
-			(routeParams[JUST_ID] !== false) && (myData[JUST_ID] && myData[ID])
+			(routeParams[JUST_ID] !== false) &&
+			(myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false)
 		) {
 			r += _ + myId
 		} else { // 4.B.2 hide case
-			let noIdentifier = (!myData[ID] ? true : routeParams[ID] === false ? true : false)
+			let noIdentifier = (myData[ID] ? (routeParams[ID] === false) : true)
 			r += (hide? s : _ + myData[NAME])
 			r += (noIdentifier ? s : _ + myId)
 		}

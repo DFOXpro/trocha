@@ -28,23 +28,24 @@ const _ALIAS = 'ALIAS'
 
 // Input attributes
 const ID = 'id'
-const RESOURCE = 'resource'
+const URL = 'url'
 const NAME = 'name'
 const HIDE = 'hide'
-const URL = 'url'
 const TYPE = 'type'
 const PREFIX = 'pre'
 const ALIAS = 'alias'
 const QUERY = 'query'
-const FRAGMENT = 'fragment'
 const POSTFIX = 'post'
 const EXTENDED = 'ext'
 const METHOD = 'method'
 const DOMAIN = 'domain'
 const ROUTES = 'routes'
 const JUST_ID = 'justId'
-const AFTER_ID = 'afterId' // FAILS & no DOCS
+// const AFTER_ID = 'afterId' // FAILS & no DOCS
+const FRAGMENT = 'fragment'
+const RESOURCE = 'resource'
 const PARENT_ID = 'parentId'
+const DEFAULT_ID = `defaultId`
 const ALWAYS_URL = 'alwaysUrl'
 const ALWAYS_POST = 'alwaysPost'
 const CUSTOM_SELECTOR = 'customSelector'
@@ -91,5 +92,7 @@ const _basicResource = (SS = DS)=>{ // selectedSelector
 
 const ERROR_HEADER = 'TrochaJS error: '
 const WARNING_HEADER = 'TrochaJS warning: '
-const ERROR_ROUTE_ALREADY_DEFINE = 'route already declare'
+const ERROR_ROUTE_ALREADY_DEFINE = 'Route already declare'
+const ERROR_SCOPE_AS_A_ROUTE = 'Scope is not printable a route'
 const WARNING_RESOURCE_AS_A_ROUTE = 'Resource should not be used as a route'
+const WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED = 'Attribute not supported, skiped'

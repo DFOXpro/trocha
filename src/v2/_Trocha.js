@@ -2,6 +2,7 @@
 include "_Route.js"
 include "_Alias.js"
 include "_Resource.js"
+include "_Scope.js"
 
 class Trocha extends Route{
 	constructor(args = {}) {

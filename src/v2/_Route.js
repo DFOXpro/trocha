@@ -38,6 +38,7 @@ class Route {
 
 		_setAndDisposeAttribute(NAME)
 		_setAndDisposeAttribute(ID)
+		_setAndDisposeAttribute(DEFAULT_ID)
 		_setAndDisposeAttribute(TYPE)
 		_setAndDisposeAttribute(METHOD)
 
@@ -45,6 +46,7 @@ class Route {
 		_setAndDisposeAttribute(RESOURCE)
 
 		_setAndDisposeAttribute(HIDE)
+		_setAndDisposeAttribute(POSTFIX)
 		_setAndDisposeAttribute(JUST_ID)
 		_setAndDisposeAttribute(PARENT_ID)
 		if(false === posibleRouteDef[mySelf.#data.parent[SS+ID]])
@@ -69,7 +71,7 @@ class Route {
 		routeTypes[ROUTE] = Route
 		routeTypes[undefined] = Route
 		routeTypes[_ALIAS] = Alias
-		routeTypes[SCOPE] = Route // Scope
+		routeTypes[SCOPE] = Scope
 		routeTypes[_RESOURCE] = Resource
 
 		let newRoute = new routeTypes[routeDefinition[SS+TYPE]](
@@ -79,11 +81,11 @@ class Route {
 		mySelf.#newGetter(mySelf, name, ()=>(mySelf.#data.childs[name]), true)
 	}
 	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
+		let SS = mySelf.#data.SS
 		if(
 			!skipResource &&
 			mySelf.#data[TYPE] === _RESOURCE
 		){
-			let SS = mySelf.#data.SS
 			let resourceChilds = mySelf.#data[RESOURCE]
 			delete resourceChilds[SS+ID]
 			mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
@@ -98,6 +100,11 @@ class Route {
 			) mySelf.#data[posibleChild] = false
 			else{
 				mySelf.#createChildRoute(mySelf, argChildRoutes[posibleChild], posibleChild)
+				if(mySelf.#data[TYPE] === SCOPE) {
+					let scopedChild = {...argChildRoutes[posibleChild]}
+					scopedChild[SS+PARENT_ID] = false
+					mySelf.#createChildRoute(mySelf.#data.parent, scopedChild, posibleChild)
+				}
 			}
 		}
 	}
