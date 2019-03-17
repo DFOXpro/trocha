@@ -26,11 +26,8 @@
     "load-grunt-tasks": "latest"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rm ./www -Rv; parcel build --out-dir www --global _debug_ --no-minify src/v2/entry_point.js",
-    "dev:hmr": "rm ./www -Rv; parcel serve --out-dir www --global _debug_ src/v2/entry_point.js",
-    "build": "NODE_ENV=production parcel build --no-source-maps src/v2/entry_point.js",
-    "build:wp": "NODE_ENV=production webpack --mode production --no-source-maps src/v2/entry_point.js dist/trochaWp.js",
-    "build:hmr": "NODE_ENV=production parcel serve src/v2/entry_point.js"
+    "test": "echo \"Open ./test/index.html in your favorite browser with dev tools enabled\"",
+    "dev": "grunt dev",
+    "build": "NODE_ENV=production grunt build"
   }
 }

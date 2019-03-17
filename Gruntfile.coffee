@@ -14,6 +14,9 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks 'grunt-includes'
 	grunt.loadNpmTasks 'grunt-jsdoc'
 	grunt.initConfig
+		clean:
+			dist: ['./dist/trocha*']
+			test: ['./test/*']
 		includes:
 			files:
 				src: ['trocha_*.es6.js']
@@ -94,6 +97,7 @@ module.exports = (grunt) ->
 			options: livereload: true
 
 	grunt.registerTask 'build', [
+		'clean'
 		'coffeescript_concat'
 		'coffee'
 		'includes'
