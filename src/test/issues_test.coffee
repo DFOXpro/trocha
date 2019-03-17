@@ -19,6 +19,15 @@ issues_test = ->
 			assert myRoutes.hello.myCountry.path(), 'hi/Colombia/:department'
 			assert myRoutes.hello.myCountry.path({department: 'Santander'}), 'hi/Colombia/Santander'
 
+		# it '2: Support custom pre & post in path()', ->
+		# 	templateRoutes = new Trocha
+		# 		pre: 'templates'
+		# 		post: '-myH45H.html'
+		# 		routes:
+		# 			home: {}
+		# 	assert templateRoutes.home.path(ext: true), 'templates/home-myH45H.html'
+		# 	assert templateRoutes.home.path(pre: 'gato', post: 'perro', ext: true), 'gato/homeperro'
+
 		it '4: customSelector must works with routes attributes', ->
 			myRoutes = new Trocha
 				customSelector: 'TRCH'
