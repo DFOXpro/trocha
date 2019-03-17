@@ -16,7 +16,7 @@ module.exports = (grunt) ->
 	grunt.initConfig
 		clean:
 			dist: ['./dist/trocha*']
-			test: ['./test/*']
+			test: ['./test/test*']
 		includes:
 			files:
 				src: ['trocha_*.es6.js']
