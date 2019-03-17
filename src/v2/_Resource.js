@@ -3,16 +3,22 @@ class Resource extends Route {
 		super(...args)
 	}
 
-	static diggestResource(routeDefinition, SS, IS) {
+	/**
+	 * @override
+	 */
+	static diggest(routeDefinition, SS, IS) {
 		let r = {}
 		r[SS+TYPE] = _RESOURCE
 		r[SS+RESOURCE] = routeDefinition[IS+RESOURCE] || _basicResource(SS)
-		r[SS+METHOD] = routeDefinition[IS+METHOD]
-		r[SS+ID] = routeDefinition[IS+ID]
+		Route.diggest(routeDefinition, SS, IS, r, [ID])
+		Route._trimSelector(IS, routeDefinition, r)
 		return r
 	}
 
-	static isResource(routeDefinition, SS) {
+	/**
+	 * @override
+	 */
+	static is(routeDefinition, SS) {
 		return (
 				routeDefinition[SS+TYPE] === _RESOURCE &&
 				routeDefinition[SS+ID] // &&

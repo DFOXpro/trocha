@@ -59,11 +59,11 @@ class Route {
 		let SS = mySelf.#data.SS
 		if(mySelf.#data.childs[name])
 			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
-		if(Alias.isAlias(routeDefinition, SS))
-			routeDefinition = Alias.diggestAlias(routeDefinition, SS, SS)
-		if(Resource.isResource(routeDefinition, SS))
-			routeDefinition = Resource.diggestResource(routeDefinition, SS, SS)
-
+		let routeSubclasses = [Route, Alias, Resource, Scope]
+		routeSubclasses.forEach((routeSubclass) => {
+			if(routeSubclass.is(routeDefinition, SS))
+				routeDefinition = routeSubclass.diggest(routeDefinition, SS, SS)
+		})
 		routeDefinition[SS+NAME] = name
 		let routeTypes = {}
 		routeTypes[ROUTE] = Route
@@ -88,10 +88,11 @@ class Route {
 			delete resourceChilds[SS+ID]
 			mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
 		}
+
 		let posibleChildRoutesNames = Object.keys(argChildRoutes)
 		while(posibleChildRoutesNames.length){
 			let posibleChild = posibleChildRoutesNames.pop()
-			if( // This case disable any parentId
+			if( // This case disable any <id>=false
 				(argChildRoutes[posibleChild] ===  false) &&
 				mySelf.#anyParentHasThisId(mySelf, posibleChild)
 			) mySelf.#data[posibleChild] = false
@@ -121,20 +122,16 @@ class Route {
 		//argAlwaysPre,// @TODO
 	) {
 		let SS = this.#data.SS = argCustomSelector || DS // selectedSelector
-		const DEFAULT_ROUTE_DEF = {}
-		DEFAULT_ROUTE_DEF[SS+METHOD] = GET
-		DEFAULT_ROUTE_DEF[SS+TYPE] = ROUTE
-		let posibleRouteDef = {...DEFAULT_ROUTE_DEF, ...argRouteDef}
 		if(
 			myParent ||
-			posibleRouteDef[SS+NAME] &&
-			posibleRouteDef[SS+METHOD] &&
-			posibleRouteDef[SS+TYPE]
+			argRouteDef &&
+			argRouteDef[SS+NAME] &&
+			argRouteDef[SS+TYPE]
 		){ // It's a normal route
 			this.#data.parent = myParent
 			this.#data.root = argRoot
-			this.#defineMyAttributes(this, posibleRouteDef)
-			this.#diggestChildRoutes(this, posibleRouteDef)
+			this.#defineMyAttributes(this, argRouteDef)
+			this.#diggestChildRoutes(this, argRouteDef)
 		} else { // It's the root route
 			this.#data[DOMAIN] = argDomain || this.#data[DOMAIN]
 			this.#newGetter(this, DOMAIN)
@@ -154,36 +151,74 @@ class Route {
 	}
 
 	_newRoute = (args) => {
-		let SS = this.#data.SS
-		let newRoutArgs = {}
-		newRoutArgs[SS+TYPE] = ROUTE
-		newRoutArgs[SS+METHOD] = args[METHOD]
-		newRoutArgs[SS+ID] = args[ID]
-		newRoutArgs[SS+HIDE] = args[HIDE]
-		newRoutArgs[SS+JUST_ID] = args[JUST_ID]
-		this.#createChildRoute(this, newRoutArgs, args[NAME])
+		args[TYPE] = ROUTE
+		if(!Route.is(args, '')) return false
+		this.#createChildRoute(this, Route.diggest(args,this.#data.SS, ''), args[NAME])
 	}
 	_newScope = (args) => {
-		let SS = this.#data.SS
-		let newRoutArgs = {}
-		newRoutArgs[SS+TYPE] = SCOPE
-		newRoutArgs[SS+ID] = args[ID]
-		this.#createChildRoute(this, newRoutArgs, args[NAME])
+		args[TYPE] = SCOPE
+		if(!Scope.is(args, '')) return false
+		this.#createChildRoute(this, Scope.diggest(args,this.#data.SS, ''), args[NAME])
 	}
 	_newAlias = (args) => {
-		let SS = this.#data.SS
 		args[TYPE] = _ALIAS
-		if(!Alias.isAlias(args, '')) return false
-		this.#createChildRoute(this, Alias.diggestAlias(args, SS, ''), args[NAME])
+		if(!Alias.is(args, '')) return false
+		this.#createChildRoute(this, Alias.diggest(args,this.#data.SS, ''), args[NAME])
 	}
 	_newResource = (args) => {
-		let SS = this.#data.SS
 		args[TYPE] = _RESOURCE
-		if(!Resource.isResource(args, '')) return false
-		this.#createChildRoute(this, Resource.diggestResource(args, SS, ''), args[NAME])
+		if(!Resource.is(args, '')) return false
+		this.#createChildRoute(this, Resource.diggest(args,this.#data.SS, ''), args[NAME])
 	}
 
 	include "_Route_path.js"
 
 	toString = () => (this.#as(this))
+
+	static DEFAULT_METHOD = GET
+	/**
+	 * @TOBE_OVERRIDE
+	 * @param {object} routeDefinition -
+	 * @param {string} SS -
+	 */
+	static is(routeDefinition, SS) {
+		return (
+			routeDefinition[SS+TYPE] === ROUTE ||
+			(
+				("object" === typeof(routeDefinition)) &&
+				routeDefinition[SS+TYPE] === undefined
+			)
+		)
+	}
+
+	/**
+	 * @TOBE_OVERRIDE
+	 * @param {} routeDefinition -
+	 * @param {} SS - selector to be return
+	 * @param {} IS - selector to be find
+	 */
+	static diggest = (routeDefinition, SS, IS, dest, attributes) => {
+		if(dest && attributes)
+			attributes.forEach((attribute) => {
+				dest[SS+attribute] = routeDefinition[IS+attribute]
+			})
+		else {
+			let r = {}
+			r[SS+TYPE] = ROUTE
+			r[SS+METHOD] = routeDefinition[IS+METHOD] || Route.DEFAULT_METHOD
+			Route.diggest(routeDefinition, SS, IS, r, [
+				ID, HIDE, JUST_ID, POSTFIX, PARENT_ID
+			])
+			Route._trimSelector(IS, routeDefinition, r)
+			return r
+		}
+	}
+
+	static _trimSelector = (SS, src, dest) => {
+		Object.keys(src).forEach((attribute) => {
+			if(attribute.slice(0,2) !== SS)
+				dest[attribute] = src[attribute]
+			else _throwWarning(this, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute)
+		})
+	}
 }

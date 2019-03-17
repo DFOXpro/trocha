@@ -2,15 +2,27 @@ class Alias extends Route {
 	constructor(...args) {
 		super(...args)
 	}
-	static diggestAlias(routeDefinition, SS, IS) {
+
+	/**
+	 * @override
+	 */
+	static diggest(routeDefinition, SS, IS) {
 		let r = {}
 		r[SS+TYPE] = _ALIAS
 		r[SS+ALIAS] = routeDefinition[IS+ALIAS] || routeDefinition
-		r[SS+METHOD] = routeDefinition[IS+METHOD]
-		r[SS+ID] = routeDefinition[IS+ID]
+		r[SS+METHOD] = routeDefinition[IS+METHOD] || Route.DEFAULT_METHOD
+		Route.diggest(routeDefinition, SS, IS, r, [
+			ID, POSTFIX, PARENT_ID
+		])
+		if("string" !== typeof routeDefinition)
+			Route._trimSelector(IS, routeDefinition, r)
 		return r
 	}
-	static isAlias(routeDefinition, SS) {
+
+	/**
+	 * @override
+	 */
+	static is(routeDefinition, SS) {
 		return (
 			("string" === typeof routeDefinition) ||
 			(
