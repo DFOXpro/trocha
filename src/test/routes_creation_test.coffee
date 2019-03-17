@@ -1,5 +1,46 @@
 routes_creation_test = ->
 	describe 'Route creation', ->
+		it 'should create routes via JSON Constructor', ->
+			r = new Trocha
+				routes:
+					simple_route: {}
+					simple_scope: {$type: Trocha.SCOPE}
+					simple_alias: "simple_alias"
+					simple_resource:
+						$type: Trocha.RESOURCE
+						$id: "simple_id" #resource must have ID
+
+			assert r.simple_route, {}
+			assert r.simple_scope, {}
+			assert r.simple_resource, {}
+			assert r.simple_alias, {}
+
+		it 'should create routes via post init functions', ->
+			r = new Trocha()
+			r._newRoute {
+				name: "simple_route"
+			}
+			assert r.simple_route, {}
+			r.simple_route._newRoute {
+				name: "simple_route"
+			}
+			assert r.simple_route.simple_route, {}
+			r._newScope {
+				name: "simple_scope"
+				id: "my_id"
+			}
+			assert r.simple_scope, {}
+			r._newResource {
+				name: "simple_resource"
+				id: "simple_id"
+			}
+			assert r.simple_resource, {}
+			r._newAlias {
+				name: "simple_alias"
+				alias: "simple_alias"
+			}
+			assert r.simple_alias, {}
+
 		describe 'Route creation params', ->
 			it 'should create trivial route', ->
 				r = new Trocha routes: simple_route: {}
@@ -81,45 +122,5 @@ routes_creation_test = ->
 				assert r.simple_route_post.path(), '/simple_route_post'
 				assert r.simple_route_post.path({post: true}), '/simple_route_post.the_post'
 				assert r.simple_route_post.path({ext: true}), '/simple_route_post.the_post'
-
-		it 'should create routes via JSON Constructor', ->
-			r = new Trocha
-				routes:
-					simple_route: {}
-					simple_scope: {$type: Trocha.SCOPE}
-					simple_alias: "simple_alias"
-					simple_resource:
-						$type: Trocha.RESOURCE
-						$id: "simple_id" #resource must have ID
-
-			assert r.simple_route, {}
-			assert r.simple_scope, {}
-			assert r.simple_resource, {}
-			assert r.simple_alias, {}
-
-		it 'should create routes via post init functions', ->
-			r = new Trocha()
-			r._newRoute {
-				name: "simple_route"
-			}
-			assert r.simple_route, {}
-			r.simple_route._newRoute {
-				name: "simple_route"
-			}
-			assert r.simple_route.simple_route, {}
-			r._newScope {
-				name: "simple_scope"
-			}
-			assert r.simple_scope, {}
-			r._newResource {
-				name: "simple_resource"
-				id: "simple_id"
-			}
-			assert r.simple_resource, {}
-			r._newAlias {
-				name: "simple_alias"
-				alias: "simple_alias"
-			}
-			assert r.simple_alias, {}
 
 	routes_creation_test = undefined

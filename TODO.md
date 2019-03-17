@@ -1,5 +1,6 @@
 # TO DOs in TrochaJS
 * 1.0 version
+* Error for missing params
 * More useful Scope
 	* namespace
 	* Shallow somethig
