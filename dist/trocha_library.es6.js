@@ -13,14 +13,6 @@
 /* Begin: src/v2/_core.js */
 	// Utility methods
 /* Begin: src/v2/_utils.js */
-	/**
-	 * Intended to declare any (class)method to be override from an instance
-	 * @throws {not_implemented_method} The method was not override
-	 */
-	function _IntanceMethodHelper (){
-		throw new Error('not implemented')
-	}
-
 	let _throwError = (scope, error_text, value) => {
 		class TrochaError extends Error {
 			constructor(scope, error_text, value) {
@@ -695,6 +687,5 @@
 	}
 /* End: src/v2/_Trocha.js */
 /* End: src/v2/_core.js */
-	self.Trocha = Trocha//fucking babel
 	parent.Trocha = Trocha
 })(this)
