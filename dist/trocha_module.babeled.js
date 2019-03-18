@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.$RESOURCE = exports.ALIAS = exports.RESOURCE = exports.SCOPE = exports.ROUTE = exports.CONNECT = exports.TRACE = exports.DELETE = exports.PATCH = exports.PUT = exports.POST = exports.HEAD = exports.GET = exports.OPTIONS = exports.Route = exports.Trocha = void 0;
+exports.$RESOURCE = exports.ALIAS = exports.RESOURCE = exports.SCOPE = exports.ROUTE = exports.CONNECT = exports.TRACE = exports.DELETE = exports.PATCH = exports.PUT = exports.POST = exports.HEAD = exports.GET = exports.OPTIONS = exports.Scope = exports.Resource = exports.Alias = exports.Route = exports.Trocha = void 0;
 
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
@@ -41,7 +41,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license TrochaJS@0.2.0 - 2019-03-16
+/** @license trocha@0.2.0 - 2019-03-17
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -138,6 +138,7 @@ exports.ROUTE = ROUTE;
 var SCOPE = 'SCOPE';
 exports.SCOPE = SCOPE;
 var _RESOURCE = 'RESOURCE';
+exports.RESOURCE = _RESOURCE;
 var _ALIAS = 'ALIAS'; // Input attributes
 
 exports.ALIAS = _ALIAS;
@@ -158,7 +159,6 @@ var JUST_ID = 'justId'; // const AFTER_ID = 'afterId' // FAILS & no DOCS
 
 var FRAGMENT = 'fragment';
 var RESOURCE = 'resource';
-exports.RESOURCE = RESOURCE;
 var PARENT_ID = 'parentId';
 var DEFAULT_ID = "defaultId";
 var ALWAYS_URL = 'alwaysUrl';
@@ -700,6 +700,8 @@ function (_Route) {
 /* Begin: src/v2/_Resource.js */
 
 
+exports.Alias = Alias;
+
 var Resource =
 /*#__PURE__*/
 function (_Route2) {
@@ -767,6 +769,8 @@ function (_Route2) {
 /* Begin: src/v2/_Scope.js */
 
 
+exports.Resource = Resource;
+
 var Scope =
 /*#__PURE__*/
 function (_Route3) {
@@ -831,6 +835,8 @@ function (_Route3) {
 }(Route);
 /* End: src/v2/_Scope.js */
 
+
+exports.Scope = Scope;
 
 var Trocha =
 /*#__PURE__*/

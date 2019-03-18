@@ -34,7 +34,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license TrochaJS@0.2.0 - 2019-03-16
+/** @license trocha@0.2.0 - 2019-03-17
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 

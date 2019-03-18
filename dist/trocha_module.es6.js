@@ -1,4 +1,4 @@
-/** @license TrochaJS@0.2.0 - 2019-03-16
+/** @license trocha@0.2.0 - 2019-03-17
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -697,6 +697,9 @@ class Trocha extends Route{
 export {
 	Trocha,
 	Route,
+	Alias,
+	Resource,
+	Scope,
 
 	// Request method types
 	OPTIONS,
@@ -712,7 +715,9 @@ export {
 	// Route types
 	ROUTE,
 	SCOPE,
-	RESOURCE,
+	_RESOURCE as RESOURCE,
 	_ALIAS as ALIAS,
+
+	// Resource fun
 	_basicResource as $RESOURCE,
 }
