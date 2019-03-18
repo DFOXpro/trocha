@@ -14,7 +14,7 @@ testFramework = (options) ->
 		try
 			itFun()
 		catch e
-			console.error "BROKEN EXAMPLE" + doString
+			console.error "BROKEN EXAMPLE " + doString
 			console.error "Exception caught", e
 		
 	r.describe = (title, describeFun) ->
@@ -79,16 +79,23 @@ testFramework = (options) ->
 		if assertFail
 			results.badAsserts++
 			results.runningDescribe.fail = true
-			console.assert false, {expected: expected, result: result, msg: errorMessage}
+			try
+				throw new Error 'Assert fail'
+			catch e
+				console.assert false, {expected: expected, result: result, msg: errorMessage}
+				console.warn e
+		return assertFail
 
 	r.run = ->
 		_runDescribes = (describes) ->
+			success = true
 			while describes.length > 0
 				_currentDescribe = results.runningDescribe = describes.shift()
 				console.info "Testing " + results.runningDescribe.title
 				try
 					_currentDescribe.fun()
-					_runDescribes _currentDescribe.childsDescribes
+					success = false if !_runDescribes _currentDescribe.childsDescribes
+					_currentDescribe.fail = true if !success
 				catch e
 					_currentDescribe.fail = true
 					console.error "Exception caught", e
@@ -96,6 +103,7 @@ testFramework = (options) ->
 					_currentDescribe.failWarning()
 				else
 					_currentDescribe.successPromp()
+			return success
 		_runDescribes results.describesToTest
 
 		console.log(

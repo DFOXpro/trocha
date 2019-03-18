@@ -1,24 +1,24 @@
 constants_test = ->
 	describe 'Constants returns', ->
 		it 'should be no editable', ->
-			trocha.ROUTE = "Atack!"
-			trocha.OPTIONS = "Atack!"
-			trocha.$RESOURCE = "Atack!"
-			assert trocha.ROUTE, "ROUTE"
-			assert trocha.OPTIONS, "OPTIONS"
-			assert trocha.$RESOURCE, {}
+			Trocha.ROUTE = "Atack!Route"
+			Trocha.OPTIONS = "Atack!Option"
+			Trocha.$RESOURCE = "Atack!$Resource"
+			assert Trocha.ROUTE, "ROUTE"
+			assert Trocha.OPTIONS, "OPTIONS"
+			assert Trocha.$RESOURCE, {}
 		it 'should return HTTP request methods types', ->
-			assert trocha.OPTIONS, "OPTIONS"
-			assert trocha.GET, "GET"
-			assert trocha.HEAD, "HEAD"
-			assert trocha.POST, "POST"
-			assert trocha.PUT, "PUT"
-			assert trocha.PATCH, "PATCH"
-			assert trocha.DELETE, "DELETE"
-			assert trocha.TRACE, "TRACE"
-			assert trocha.CONNECT, "CONNECT"
+			assert Trocha.OPTIONS, "OPTIONS"
+			assert Trocha.GET, "GET"
+			assert Trocha.HEAD, "HEAD"
+			assert Trocha.POST, "POST"
+			assert Trocha.PUT, "PUT"
+			assert Trocha.PATCH, "PATCH"
+			assert Trocha.DELETE, "DELETE"
+			assert Trocha.TRACE, "TRACE"
+			assert Trocha.CONNECT, "CONNECT"
 		it 'should return default resource tree', ->
-			assert trocha.$RESOURCE, {
+			assert Trocha.$RESOURCE, {
 				$id: 'id'
 				show:
 					$hide: true
@@ -30,9 +30,9 @@ constants_test = ->
 					$id: false
 			}
 		it 'should return routes types', ->
-			assert trocha.ALIAS, "ALIAS"
-			assert trocha.SCOPE, "SCOPE"
-			assert trocha.ROUTE, "ROUTE"
-			assert trocha.RESOURCE, "RESOURCE"
+			assert Trocha.ALIAS, "ALIAS"
+			assert Trocha.SCOPE, "SCOPE"
+			assert Trocha.ROUTE, "ROUTE"
+			assert Trocha.RESOURCE, "RESOURCE"
 
 	constants_test = undefined
