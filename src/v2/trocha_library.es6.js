@@ -5,6 +5,5 @@
  */
 ((parent) => {
 	include "_core.js"
-	self.Trocha = Trocha//fucking babel
 	parent.Trocha = Trocha
 })(this)
