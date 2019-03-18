@@ -1,6 +1,6 @@
 # 0.2.0 Big refactor
 
-Trocha was rewritten with ECMA SCRIPT(6/7/8/Next) in mind. Now Trocha is a class, a module
+Trocha was rewritten with ECMAScript (6/7/8/Next) in mind. Now Trocha is a class, a module
 
 ## New Features
 
@@ -10,8 +10,8 @@ Trocha was rewritten with ECMA SCRIPT(6/7/8/Next) in mind. Now Trocha is a class
 * Custom selector now apply across the trocha object
 
 ### Solved issues
-* #1 alias routes must provide a path funtion
-* #4 customSelector must works with routes attributes
+* #1 alias routes must provide a path function
+* #4 customSelector must work with routes attributes
 
 ## Breaking Changes
 * Now Trocha is a class and it create objects so:
@@ -44,4 +44,4 @@ console.log(myRoute.myAlias.path()) //  "anAlias"
 ## Removed Deprecations
 
 * Now we are in `npm`; we will be still supporting `bower` build but not recommended
-* Any base resource path calling now pop a warning of deprecation, in future releases the base resource route will not offer path... like a scope
+* Any base resource path calling now pop a warning of depreciation, in future releases the base resource route will not offer path... like a scope
