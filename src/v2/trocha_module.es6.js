@@ -7,6 +7,9 @@ include "_core.js"
 export {
 	Trocha,
 	Route,
+	Alias,
+	Resource,
+	Scope,
 
 	// Request method types
 	OPTIONS,
@@ -22,7 +25,9 @@ export {
 	// Route types
 	ROUTE,
 	SCOPE,
-	RESOURCE,
+	_RESOURCE as RESOURCE,
 	_ALIAS as ALIAS,
+
+	// Resource fun
 	_basicResource as $RESOURCE,
 }
