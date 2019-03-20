@@ -87,6 +87,11 @@ module.exports = (grunt) ->
 			files:
 				'dist/trocha_module.min.js': 'dist/trocha_module.babeled.js'
 				'dist/trocha_library.min.js': 'dist/trocha_library.babeled.js'
+		copy:
+			hashed:
+				files:
+					"dist/trocha_library#{pkg.version}.min.js": 'dist/trocha_library.min.js'
+		
 		coffee: test:
 			options:
 				bare: true
@@ -126,6 +131,7 @@ module.exports = (grunt) ->
 		'jsdoc'
 		'babel'
 		'uglify'
+		'copy'
 	]
 	grunt.registerTask 'dev', [
 		'build'

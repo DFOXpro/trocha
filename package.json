@@ -1,6 +1,6 @@
 {
   "name": "trocha",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Route/Path listing for JS",
   "author": "Daniel Reinaldo Zorro Forero (@DFOXpro)",
   "private": false,
@@ -25,11 +25,11 @@
   ],
   "files": [
     "dist",
-		"index.require.js"
+    "index.require.js"
   ],
   "main": "index.require.js",
   "module": "./dist/trocha_module.min.js",
-	"sideEffects": false,
+  "sideEffects": false,
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.3.4",
