@@ -32,6 +32,7 @@ module.exports = (grunt) ->
 				files: [
 					'./test/test.coffee': './src/test/main_test.coffee'
 					'./test/v2/librarySpec.js': './src/test/v2/librarySpec.js'
+					'./test/v2/nodeSpec.js': './src/test/v2/nodeSpec.js'
 				]
 				options:
 					flatten: true
@@ -123,6 +124,13 @@ module.exports = (grunt) ->
 			browsersTest:
 				configFile: 'karma.conf.js'
 
+		## grunt-mocha only supports browsers
+		## simplemocha have dependencies warnings
+		## so node mocha test is defined in package.json
+		# simplemocha:
+		# 	npmTest:
+		# 		src: ['./test/v2/nodeSpec.js']
+
 	grunt.registerTask 'build', [
 		'clean'
 		'includes'
@@ -141,5 +149,6 @@ module.exports = (grunt) ->
 	grunt.registerTask 'test', [
 		'build'
 		'karma'
+		# 'simplemocha'
 	]
 	grunt.registerTask 'default', 'build'
