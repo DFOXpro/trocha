@@ -9,14 +9,14 @@ module.exports = (grunt) ->
 \n*/\n"
 	]
 	banner[2] = "#{banner[0]}#{pkg.name}@#{pkg.version} - #{grunt.template.today("yyyy-mm-dd")}#{banner[1]}"
+
 	require('load-grunt-tasks') grunt
-	grunt.loadNpmTasks 'grunt-coffeescript-concat'
-	grunt.loadNpmTasks 'grunt-includes'
-	grunt.loadNpmTasks 'grunt-jsdoc'
+
 	grunt.initConfig
 		clean:
 			dist: ['./dist/trocha*']
 			test: ['./test/test*']
+			testv2: ['./test/v2/*.js']
 		includes:
 			dist:
 				files: [
@@ -31,18 +31,10 @@ module.exports = (grunt) ->
 			test:
 				files: [
 					'./test/test.coffee': './src/test/main_test.coffee'
+					'./test/v2/librarySpec.js': './src/test/v2/librarySpec.js'
 				]
 				options:
 					flatten: true
-				# files: [
-				# 	cwd: './src/test/',
-				# 	src: 'main_test.coffee'
-				# 	dest: './test'
-				# ]
-				# options:
-				# 	wrapper: 'test.coffee'
-				# 	flatten: true
-				# 	debug: true
 		jsdoc:
 			dist:
 				src: ['./dist/**/*.es6.js', './README.md']
@@ -56,6 +48,7 @@ module.exports = (grunt) ->
 			module:
 				files:
 					'./dist/trocha_module.babeled.js': './dist/trocha_module.es6.js'
+					'./test/v2/librarySpec.babeled.js': './test/v2/librarySpec.js' # for IE testing
 			library:
 				options:
 					presets: [["@babel/preset-env", { modules: false }]]
@@ -91,14 +84,15 @@ module.exports = (grunt) ->
 			hashed:
 				files:
 					"dist/trocha_library#{pkg.version}.min.js": 'dist/trocha_library.min.js'
-		
-		coffee: test:
-			options:
-				bare: true
-				sourceMap: true
-			files:
-				# 'dist/trocha.deprecated.js': 'dist/trocha.deprecated.coffee'
-				'test/test.js': 'test/test.coffee'
+		## I'm deprecating CS because the author refuse to be ahead of ESNext proposals
+		## ... and the geters implementation lol
+		# coffee: test:
+		# 	options:
+		# 		bare: true
+		# 		sourceMap: true
+		# 	files:
+		# 		# 'dist/trocha.deprecated.js': 'dist/trocha.deprecated.coffee'
+		# 		'test/test.js': 'test/test.coffee'
 
 		# coffeescript_concat: compile:
 		# 	options: {}
@@ -113,6 +107,7 @@ module.exports = (grunt) ->
 		# 			'src/deprecated/variables.coffee'
 		# 			'src/deprecated/start.coffee'
 		# 		]
+
 		watch:
 			options: livereload: true
 			js:
@@ -124,11 +119,13 @@ module.exports = (grunt) ->
 				options:
 					reload: true
 
+		karma:
+			browsersTest:
+				configFile: 'karma.conf.js'
+
 	grunt.registerTask 'build', [
 		'clean'
 		'includes'
-		'coffee'
-		'jsdoc'
 		'babel'
 		'uglify'
 		'copy'
@@ -136,5 +133,13 @@ module.exports = (grunt) ->
 	grunt.registerTask 'dev', [
 		'build'
 		'watch'
+	]
+	grunt.registerTask 'doc', [
+		'build'
+		'jsdoc'
+	]
+	grunt.registerTask 'test', [
+		'build'
+		'karma'
 	]
 	grunt.registerTask 'default', 'build'

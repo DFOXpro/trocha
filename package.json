@@ -47,8 +47,11 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-includes": "^1.1.0",
     "grunt-jsdoc": "^2.3.0",
+    "grunt-karma": "^3.0.1",
     "jsdoc": "^3.5.5",
-    "load-grunt-tasks": "latest"
+    "karma": "^4.0.1",
+    "load-grunt-tasks": "latest",
+    "mocha": "^6.0.2"
   },
   "scripts": {
     "test": "echo \"Open ./test/index.html in your favorite browser with dev tools enabled\"",
