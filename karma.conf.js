@@ -1,6 +1,16 @@
 // Karma configuration
 // Generated on Wed Mar 20 2019 19:27:25 GMT-0500 (GMT-05:00)
 
+let extraBrowsers =
+	{
+		win32: [
+			'Edge',
+			'IE'
+			// 'IE9', Fails because Mocha and Chai dnt support IE10-
+		],
+		darwin: ['Safari']
+	}[process.platform] || []
+
 module.exports = function(config) {
 	config.set({
 		// base path that will be used to resolve all patterns (eg. files, exclude)
@@ -44,7 +54,17 @@ module.exports = function(config) {
 		// enable / disable watching file and executing tests whenever any file changes
 		autoWatch: false,
 
-		browsers: ['Chromium', 'Firefox'],
+		browsers: ['Chromium', 'Firefox', ...extraBrowsers],
+		// customLaunchers: {
+		// 	IE9: {
+		// 		base: 'IE',
+		// 		'x-ua-compatible': 'IE=EmulateIE9'
+		// 	},
+		// 	IE8: {
+		// 		base: 'IE',
+		// 		'x-ua-compatible': 'IE=EmulateIE8'
+		// 	}
+		// },
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits

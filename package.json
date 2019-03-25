@@ -52,7 +52,11 @@
     "jsdoc": "^3.5.5",
     "karma": "^4.0.1",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^2.0.0",
+    "karma-edge-launcher": "^0.4.2",
     "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0",
     "load-grunt-tasks": "latest",
     "mocha": "^6.0.2"
   },
