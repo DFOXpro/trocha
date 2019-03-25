@@ -35,6 +35,7 @@
     "@babel/core": "^7.3.4",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "chai": "^4.2.0",
     "grunt": "^1.0.3",
     "grunt-babel": "^8.0.0",
     "grunt-cli": "^1.3.2",
@@ -47,11 +48,22 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-includes": "^1.1.0",
     "grunt-jsdoc": "^2.3.0",
+    "grunt-karma": "^3.0.1",
     "jsdoc": "^3.5.5",
-    "load-grunt-tasks": "latest"
+    "karma": "^4.0.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^2.0.0",
+    "karma-edge-launcher": "^0.4.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-safari-launcher": "^1.0.0",
+    "load-grunt-tasks": "latest",
+    "mocha": "^6.0.2"
   },
   "scripts": {
-    "test": "echo \"Open ./test/index.html in your favorite browser with dev tools enabled\"",
+    "test": "export NODE_ENV=production; grunt test && mocha ./test/v2/nodeSpec.js",
+    "test:dev": "grunt test && mocha ./test/v2/nodeSpec.js",
     "dev": "grunt dev",
     "build": "NODE_ENV=production grunt build"
   }

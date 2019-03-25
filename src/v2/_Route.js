@@ -200,12 +200,14 @@ class Route {
 
 	/**
 	 * @TOBE_OVERRIDE
-	 * @param {} routeDefinition -
-	 * @param {} SS - selector to be return
-	 * @param {} IS - selector to be find
+	 * @param {object} routeDefinition -
+	 * @param {string} SS - selector to be return
+	 * @param {string} IS - selector to be find
+	 * @param {object} dest
+	 * @param {array<string>} attributes
 	 */
 	static diggest = (routeDefinition, SS, IS, dest, attributes) => {
-		if(dest && attributes)
+		if(dest && attributes) // is used from subroutes
 			attributes.forEach((attribute) => {
 				dest[SS+attribute] = routeDefinition[IS+attribute]
 			})
@@ -221,9 +223,21 @@ class Route {
 		}
 	}
 
-	static _trimSelector = (SS, src, dest) => {
+	/**
+	 * Add the routes defined (those without the current selector) to the
+	 * diggested routeDefinition(dest), note this only works with a selectorl else maybe
+	 * it's from function creation route like _newScope
+	 * @static
+	 * @pure false
+	 * @side_effect dest
+	 * @param {string} SS selectedSelector
+	 * @param {object} src routeDefinition in
+	 * @param {object} dest routeDefinition out
+	 */
+	static _trimSelector = (IS, src, dest) => {
+		if(IS === '') return
 		Object.keys(src).forEach((attribute) => {
-			if(attribute.slice(0,2) !== SS)
+			if(attribute.slice(0,2) !== IS)
 				dest[attribute] = src[attribute]
 			else _throwWarning(this, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute)
 		})
