@@ -42,35 +42,34 @@ module.exports = (grunt) ->
 				dest: './api_doc'
 
 		babel:
-			options:
-				sourceMap: true
-				presets: ["@babel/preset-env"]
-				plugins: ["@babel/plugin-proposal-class-properties"]
+			# options: @see .babelrc
 			module:
 				files:
 					'./dist/trocha_module.babeled.js': './dist/trocha_module.es6.js'
 					'./test/v2/librarySpec.babeled.js': './test/v2/librarySpec.js' # for IE testing
 			library:
 				options:
-					presets: [["@babel/preset-env", { modules: false }]]
+					presets: [["@babel/preset-env", { modules: false }]] # keep `this` untouched
 				files:
 					'./dist/trocha_library.babeled.js': './dist/trocha_library.es6.js'
 
 		# Only works with ES5
+		# in a side note the Trocha side inside a module bundle like parcel or webpack
+		# is arround 10KB :D
 		uglify: prod:
 			options:
 				banner: banner[2]
 				wrap: ''
 				report: 'gzip'
 				maxLineLen: 0
-				screwIE8: true
+				screwIE8: true # yeah by default we dont support any less than IE11
 				preserveComments: false
 				compress:
 					passes: 3
 					warnings: true
 				beautify: false
 				sourceMap: false
-				mangle: # false
+				mangle:
 					reserved: [
 						'Trocha'
 						'Route'
