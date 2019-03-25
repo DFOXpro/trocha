@@ -12,6 +12,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
+			'./node_modules/chai/chai.js',
 			`./dist/trocha_library.${
 				process.env.NODE_ENV === 'production' ? 'min' : 'babeled'
 			}.js`,
