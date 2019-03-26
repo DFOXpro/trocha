@@ -32,6 +32,7 @@ module.exports = (grunt) ->
 				files: [
 					'./test/test.coffee': './src/test/main_test.coffee'
 					'./test/v2/librarySpec.js': './src/test/v2/librarySpec.js'
+					'./test/v2/moduleSpec.js': './src/test/v2/moduleSpec.js'
 					'./test/v2/nodeSpec.js': './src/test/v2/nodeSpec.js'
 				]
 				options:
