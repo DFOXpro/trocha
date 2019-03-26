@@ -76,17 +76,18 @@ const _show = 'show'
 const _edit = 'edit'
 const _new = 'new'
 const _list = 'list'
-const _basicResource = (SS = DS)=>{ // selectedSelector
+const _basicResource = (SS = DS) => {
+	// selectedSelector
 	const r = {}
-	r[SS+ID] = ID
+	r[SS + ID] = ID
 	r[_show] = {}
 	r[_edit] = {}
 	r[_new] = {}
 	r[_list] = {}
-	r[_show][SS+HIDE] = true
-	r[_new][SS+ID] = false
-	r[_list][SS+ID] = false
-	r[_list][SS+HIDE] = true
+	r[_show][SS + HIDE] = true
+	r[_new][SS + ID] = false
+	r[_list][SS + ID] = false
+	r[_list][SS + HIDE] = true
 	return r
 }
 

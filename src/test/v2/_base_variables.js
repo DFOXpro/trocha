@@ -5,7 +5,7 @@ describe('Base variables returns', function() {
 		assert.isObject(r.$RESOURCE)
 		assert.equal(r.$domain, '')
 		r = new Trocha({
-			customSelector: '$$',
+			customSelector: '$$'
 		})
 		assert.isObject(r.$$RESOURCE)
 		return assert.equal(r.$$domain, '')
@@ -15,7 +15,7 @@ describe('Base variables returns', function() {
 		r = new Trocha()
 		assert.equal(r.$domain, '')
 		r = new Trocha({
-			domain: 'asd',
+			domain: 'asd'
 		})
 		return assert.equal(r.$domain, 'asd')
 	})

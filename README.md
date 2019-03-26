@@ -9,20 +9,23 @@ This library take inspiration from Ruby routing system, where you describe the r
 > Ugly code example
 
 ```javascript
-theRoute = "https://my.domain.com.co/product/" +
-myProduct.id +
-"/buy" +
-"?quantity=" +
-sell.quantity;
+theRoute =
+	'https://my.domain.com.co/product/' +
+	myProduct.id +
+	'/buy' +
+	'?quantity=' +
+	sell.quantity;
 ```
+
 > Objective code example
 
 ```javascript
-theRoute = myRoutes.product.buy.path( {
+theRoute = myRoutes.product.buy.path({
 	product_id: myProduct.id,
-	query: {quantity: sell.quantity}
+	query: { quantity: sell.quantity },
 });
 ```
+
 > This will print
 
 ```bash

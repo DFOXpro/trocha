@@ -5,48 +5,53 @@ path(routeParams = {}, customNameFun) {
 	let SS = myData.SS
 	let r = s
 
-	if(myData[NAME]=== undefined) return ''
+	if (myData[NAME] === undefined) return ''
 
 	// 1 print the domain
-	r = (
+	r =
 		rootData[DOMAIN] &&
 		// !parent[PATH] &&
 		routeParams[URL] !== false &&
 		(routeParams[URL] || rootData[ALWAYS_URL])
-	)? rootData[DOMAIN] : s
+			? rootData[DOMAIN]
+			: s
 	delete routeParams[URL]
 
 	// 2 add the prefix
-	r += (
-		rootData[PREFIX] &&
-		(routeParams[PREFIX] || routeParams[EXTENDED])
-	) ? rootData[PREFIX] : s
+	r +=
+		rootData[PREFIX] && (routeParams[PREFIX] || routeParams[EXTENDED])
+			? rootData[PREFIX]
+			: s
 	delete routeParams[PREFIX]
 
 	// 3 print parent paths
 	let parentPathArg = {}
 	parentPathArg[POSTFIX] = false
-	r += parent[PATH] ? parent[PATH](parentPathArg, ()=>(true)) : s
+	r += parent[PATH] ? parent[PATH](parentPathArg, () => true) : s
 
 	// 4.A print name & id(name) from customNameFun like Alias
-	let hide = (routeParams[HIDE] !== undefined ? routeParams[HIDE] : (
-		myData[HIDE] ||
-		(myData[JUST_ID] && myData[DEFAULT_ID] === false)
-	))
+	let hide =
+		routeParams[HIDE] !== undefined
+			? routeParams[HIDE]
+			: myData[HIDE] || (myData[JUST_ID] && myData[DEFAULT_ID] === false)
 	let customNameFromInhered
-	if("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData)
-	if("string" === typeof customNameFromInhered) r += customNameFromInhered
-	else { // 4.B print default name & id(name)
+	if ('function' === typeof customNameFun)
+		customNameFromInhered = customNameFun(myData)
+	if ('string' === typeof customNameFromInhered) r += customNameFromInhered
+	else {
+		// 4.B print default name & id(name)
 		let myId = ':' + myData[ID]
-		if ( // 4.B.1 justId case
-			(routeParams[JUST_ID] !== false) &&
+		if (
+			// 4.B.1 justId case
+			routeParams[JUST_ID] !== false &&
 			(myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false)
 		) {
 			r += _ + myId
-		} else { // 4.B.2 hide case
-			let noIdentifier = (myData[ID] ? (routeParams[ID] === false) : true)
-			r += (hide? s : _ + myData[NAME])
-			r += (noIdentifier ? s : _ + myId)
+		} else {
+			// 4.B.2 hide case
+			let noIdentifier = myData[ID] ? routeParams[ID] === false : true
+			r += hide ? s : _ + myData[NAME]
+			r += noIdentifier ? s : _ + myId
 		}
 	}
 
@@ -54,12 +59,16 @@ path(routeParams = {}, customNameFun) {
 	/**
 	 * @TODO Document hide also remove postfix
 	 */
-	r += (
+	r +=
 		rootData[POSTFIX] &&
 		!hide &&
 		routeParams[POSTFIX] !== false &&
-		(rootData[ALWAYS_POST] || myData[POSTFIX] || routeParams[POSTFIX] || routeParams[EXTENDED])
-	)	? rootData[POSTFIX] : s
+		(rootData[ALWAYS_POST] ||
+			myData[POSTFIX] ||
+			routeParams[POSTFIX] ||
+			routeParams[EXTENDED])
+			? rootData[POSTFIX]
+			: s
 	delete routeParams[POSTFIX]
 
 	// Note next 2 step first clear the routeParams then later on print the colected data
@@ -82,38 +91,47 @@ path(routeParams = {}, customNameFun) {
 	// 6.1 RoR parentId
 	let preId = '/:'
 	if (
-		parent[SS+ID] &&
-		!routeParams[parent[SS+ID]] &&
-		((myData[ID] === false) || (routeParams[PARENT_ID] === false) ||
-		(myData[PARENT_ID] === false))
-	) r = r.replace(preId + parent[SS+ID], s)
+		parent[SS + ID] &&
+		!routeParams[parent[SS + ID]] &&
+		(myData[ID] === false ||
+			routeParams[PARENT_ID] === false ||
+			myData[PARENT_ID] === false)
+	)
+		r = r.replace(preId + parent[SS + ID], s)
 
 	// 6.2 Remove parents Ids designed in constructor
-	Object.keys(myData).forEach((idName) => {
+	Object.keys(myData).forEach(idName => {
 		if (myData[idName] === false && !routeParams[idName])
-			return r = r.replace(preId + idName, s)
+			return (r = r.replace(preId + idName, s))
 	})
 
 	// 6.2 RoR selected Ids in path params
-	Object.keys(routeParams).forEach((idName) => {
-		if (routeParams[idName] === false) // Remove
+	Object.keys(routeParams).forEach(idName => {
+		if (routeParams[idName] === false)
+			// Remove
 			r = r.replace(preId + idName, s)
-		else // Replace
-			r = r.replace(':' + idName, routeParams[idName])
+		// Replace
+		else r = r.replace(':' + idName, routeParams[idName])
 	})
 
 	// 7 Now add the query
 	Object.keys(query).forEach(function(key, i, array) {
 		if (i === 0) r += '?'
-		if(Array.isArray(query[key]))
-			query[key].forEach((value, _i)=>(
-				r += encodeURIComponent(key) + '[]=' + encodeURIComponent(value) + ((
-					(query[key].length - 1 !== _i) ||
-					(array.length - 1 !== i)
-				)? '&' : '')
-			))
+		if (Array.isArray(query[key]))
+			query[key].forEach(
+				(value, _i) =>
+					(r +=
+						encodeURIComponent(key) +
+						'[]=' +
+						encodeURIComponent(value) +
+						(query[key].length - 1 !== _i || array.length - 1 !== i ? '&' : ''))
+			)
 		else
-			r += encodeURIComponent(key) + '=' + encodeURIComponent(query[key]) + (array.length - 1 !== i ? '&' : '')
+			r +=
+				encodeURIComponent(key) +
+				'=' +
+				encodeURIComponent(query[key]) +
+				(array.length - 1 !== i ? '&' : '')
 	})
 
 	// 8 Now add the fragment

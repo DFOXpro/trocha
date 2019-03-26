@@ -26,16 +26,16 @@ describe('Constants returns', () => {
 		assert.deepEqual(Trocha.$RESOURCE, {
 			$id: 'id',
 			show: {
-				$hide: true,
+				$hide: true
 			},
 			edit: {},
 			new: {
-				$id: false,
+				$id: false
 			},
 			list: {
 				$hide: true,
-				$id: false,
-			},
+				$id: false
+			}
 		})
 	})
 	it('should return routes types', () => {

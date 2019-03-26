@@ -8,13 +8,11 @@ class Alias extends Route {
 	 */
 	static diggest(routeDefinition, SS, IS) {
 		let r = {}
-		r[SS+TYPE] = _ALIAS
-		r[SS+ALIAS] = routeDefinition[IS+ALIAS] || routeDefinition
-		r[SS+METHOD] = routeDefinition[IS+METHOD] || Route.DEFAULT_METHOD
-		Route.diggest(routeDefinition, SS, IS, r, [
-			ID, POSTFIX, PARENT_ID
-		])
-		if("string" !== typeof routeDefinition)
+		r[SS + TYPE] = _ALIAS
+		r[SS + ALIAS] = routeDefinition[IS + ALIAS] || routeDefinition
+		r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD
+		Route.diggest(routeDefinition, SS, IS, r, [ID, POSTFIX, PARENT_ID])
+		if ('string' !== typeof routeDefinition)
 			Route._trimSelector(IS, routeDefinition, r)
 		return r
 	}
@@ -46,10 +44,10 @@ class Alias extends Route {
 			if (myData[ID] && routeParams[JUST_ID]) {
 				r += myId
 			} else {
-				let useID = (!!myData[ID] && routeParams[myData[ID]] !== false)
-				r += parent.constructor.name === "Trocha" ? s : _
-				r += (routeParams[HIDE]? s : myData[ALIAS])
-				r += (useID ? myId : s)
+				let useID = !!myData[ID] && routeParams[myData[ID]] !== false
+				r += parent.constructor.name === 'Trocha' ? s : _
+				r += routeParams[HIDE] ? s : myData[ALIAS]
+				r += useID ? myId : s
 			}
 			return r
 		})
