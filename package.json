@@ -44,6 +44,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^4.0.0",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-exec": "^3.0.0",
     "grunt-includes": "^1.1.0",
     "grunt-jsdoc": "^2.3.0",
     "grunt-karma": "^3.0.1",
@@ -60,9 +61,10 @@
     "mocha": "^6.0.2"
   },
   "scripts": {
-    "test": "export NODE_ENV=production; grunt test && mocha ./test/v2/nodeSpec.js",
-    "test:dev": "grunt test && mocha ./test/v2/nodeSpec.js",
-    "dev": "grunt dev",
-    "build": "NODE_ENV=production grunt build"
+    "build": "NODE_ENV=production grunt",
+    "test": "NODE_ENV=production grunt test",
+    "build:dev": "grunt",
+    "test:dev": "grunt test",
+    "extra_tasks": "echo see Gruntfile for dev more task"
   }
 }
