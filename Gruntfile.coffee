@@ -47,6 +47,8 @@ module.exports = (grunt) ->
 			module:
 				files:
 					'./dist/trocha_module.babeled.js': './dist/trocha_module.es6.js'
+			test:
+				files:
 					'./test/v2/librarySpec.babeled.js': './test/v2/librarySpec.js' # for IE testing
 			library:
 				options:
@@ -112,8 +114,16 @@ module.exports = (grunt) ->
 		watch:
 			options: livereload: true
 			js:
-				files: [ 'src/**/*.*' ]
+				files: [ 'src/v2/*.*' ]
 				tasks: [ 'build' ]
+			test:
+				files: [ 'src/test/**/*.*' ]
+				tasks: [ 'test:node' ]
+				options: livereload: false
+			full:
+				files: [ 'src/**/*.*' ]
+				tasks: [ 'clean', 'build', 'test:node' ]
+				options: livereload: false
 			grunt:
 				files: ['Gruntfile.*']
 				tasks: [ 'build' ]
@@ -126,29 +136,87 @@ module.exports = (grunt) ->
 
 		## grunt-mocha only supports browsers
 		## simplemocha have dependencies warnings
-		## so node mocha test is defined in package.json
+		## so node mocha test is defined via exec
 		# simplemocha:
 		# 	npmTest:
 		# 		src: ['./test/v2/nodeSpec.js']
+		exec:
+			mocha: 'npx mocha ./test/v2/nodeSpec.js'
 
+	###*
+	 * Compile all production and development files, use with NODE_ENV=production
+	 * for better production results
+	 * @default
+	 ###
 	grunt.registerTask 'build', [
-		'clean'
-		'includes'
-		'babel'
+		'clean:dist'
+		'includes:dist'
+		'babel:module'
+		'babel:library'
 		'uglify'
 		'copy'
 	]
+
+	###*
+	 * Compile dist files and keep in watch+livereload mode
+	 ###
 	grunt.registerTask 'dev', [
 		'build'
 		'watch'
 	]
+
+	###*
+	 * Compile es6 files and jsdoc
+	 ###
 	grunt.registerTask 'doc', [
-		'build'
+		'includes:dist'
 		'jsdoc'
 	]
+
+	###*
+	 * Compile test/v2 files
+	 ###
+	grunt.registerTask 'build:test', [
+		'clean:test'
+		'clean:testv2'
+		'includes:test'
+	]
+
+	###*
+	 * Compile test/v2 files and run test for node, it's fast
+	 ###
+	grunt.registerTask 'test:node', [
+		'build:test'
+		# 'simplemocha'
+		'exec'
+	]
+
+	###*
+	 * Compile all and test node & all available browsers
+	 ###
 	grunt.registerTask 'test', [
 		'build'
+		'test:node'
+		'babel:test'
 		'karma'
-		# 'simplemocha'
 	]
+
+	###*
+	 * Compile test/v2 files and keep in watch
+	 ###
+	grunt.registerTask 'test:watch', [
+		'test:node'
+		'watch:test'
+	]
+
+	###*
+	 * Compile all and keep in watch
+	 * test node every reload
+	 ###
+	grunt.registerTask 'dev:full', [
+		'build'
+		'build:test'
+		'watch:full'
+	]
+
 	grunt.registerTask 'default', 'build'
