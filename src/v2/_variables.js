@@ -1,15 +1,15 @@
 /*
  * Why variables are outside the Trocha class?
- * Because private variables are still not supported
+ * Because protected attributes are still not supported
  * and because Route share a lot of symbols with Trocha
  */
 
-// Utility vars
-const _ = '/'
+/// Utility vars
 const s = '' // Force string
+const _ = '/'
 const DS = '$' // DEFAULT_SELECTOR
 
-// Request method types
+/// Request method types
 const OPTIONS = 'OPTIONS'
 const GET = 'GET'
 const HEAD = 'HEAD'
@@ -20,7 +20,7 @@ const DELETE = 'DELETE'
 const TRACE = 'TRACE'
 const CONNECT = 'CONNECT'
 
-// Route types
+/// Route types
 const ROUTE = 'ROUTE'
 const SCOPE = 'SCOPE'
 const _RESOURCE = 'RESOURCE'
@@ -96,28 +96,17 @@ const ALWAYS_URL = 'alwaysUrl'
 const ALWAYS_POST = 'alwaysPost'
 const CUSTOM_SELECTOR = 'customSelector'
 
-// Route return attributes
+/// Route return attributes
 const AS = 'as'
 const PATH = 'path'
+
+/// Not used right now
 // const NEW_SCOPE = '_newScope'
 // const NEW_ROUTE = '_newRoute'
 // const NEW_RESOURCE = '_newResource'
 // const NEW_ALIAS = '_newAlias'
 
-// Main object return attributes
-/**
- * @TODO deprecate
- * Reason: all those attributes can have customSelector
- */
-// const $prefix = DS+PREFIX
-// const $postfix = DS+POSTFIX
-// const $alwaysUrl = DS+ALWAYS_URL
-// const $alwaysPost = DS+ALWAYS_POST
-// const $customSelector = DS+CUSTOM_SELECTOR
-
-//// static final
-
-// BASIC RESOURCE
+/// BASIC RESOURCE
 const _show = 'show'
 const _edit = 'edit'
 const _new = 'new'
@@ -137,6 +126,7 @@ const _basicResource = (SS = DS) => {
 	return r
 }
 
+/// Warnings and erros
 const ERROR_HEADER = 'TrochaJS error: '
 const WARNING_HEADER = 'TrochaJS warning: '
 const ERROR_ROUTE_ALREADY_DEFINE = 'Route already declare'
