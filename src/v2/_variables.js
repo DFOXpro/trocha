@@ -26,7 +26,52 @@ const SCOPE = 'SCOPE'
 const _RESOURCE = 'RESOURCE'
 const _ALIAS = 'ALIAS'
 
-// Input attributes
+/// ID modes
+/**
+ * Standard definition of Id; used in Angular, React(Router)
+ * Symbol for "/:the_id" id mode, default ID mode
+ * @Public via Trocha
+ */
+const COLON = 'COLON'
+/**
+ * Definition of Id used in CanJS and other frameworks
+ * Symbol for "/{the_id}" id mode
+ * @Public via Trocha
+ */
+const BRACKETS = 'BRACKETS'
+
+// Next const are private helpers for ID modes
+const _ID_MODE_REPLACE = 'Ñ' // Can be any rare character
+const _PREID = _ + _ID_MODE_REPLACE
+const _AVAILABLE_ID_MODES = {} // In teory only used in _FORMAT_ID_FUN
+_AVAILABLE_ID_MODES[BRACKETS] = `{${_ID_MODE_REPLACE}}`
+_AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
+
+/**
+ * Interpolator of id mode to be used in path function
+ * @todo should be Route protected(private & inheritable) method
+ * @param {string} currentIdMode - can be BRACKETS | COLON
+ * @second_order
+ * @pure
+ * @return {function} see function below
+ */
+const _FORMAT_ID_FUN = currentIdMode =>
+	/**
+	 * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
+	 * @param {string} idName
+	 * @param {template literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
+	 * @lambda
+	 * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
+	 * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
+	 * @return {string}
+	 */
+	(idName, template = _ID_MODE_REPLACE) =>
+		template.replace(
+			_ID_MODE_REPLACE,
+			_AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName)
+		)
+
+/// Input attributes
 const ID = 'id'
 const URL = 'url'
 const NAME = 'name'
@@ -40,6 +85,7 @@ const EXTENDED = 'ext'
 const METHOD = 'method'
 const DOMAIN = 'domain'
 const ROUTES = 'routes'
+const ID_MODE = 'idMode'
 const JUST_ID = 'justId'
 // const AFTER_ID = 'afterId' // FAILS & no DOCS
 const FRAGMENT = 'fragment'

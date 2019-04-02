@@ -1,8 +1,9 @@
 path(routeParams = {}, customNameFun) {
-	let myData = this.#data
-	let parent = myData.parent || {}
-	let rootData = myData.root
-	let SS = myData.SS
+	const myData = this.#data
+	const parent = myData.parent || {}
+	const rootData = myData.root
+	const SS = myData.SS
+	const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 	let r = s
 
 	if (myData[NAME] === undefined) return ''
@@ -40,7 +41,7 @@ path(routeParams = {}, customNameFun) {
 	if ('string' === typeof customNameFromInhered) r += customNameFromInhered
 	else {
 		// 4.B print default name & id(name)
-		let myId = ':' + myData[ID]
+		let myId = _formatID(myData[ID])
 		if (
 			// 4.B.1 justId case
 			routeParams[JUST_ID] !== false &&
@@ -89,7 +90,6 @@ path(routeParams = {}, customNameFun) {
 	// 6 Replace Or Remove(RoR) Ids
 
 	// 6.1 RoR parentId
-	let preId = '/:'
 	if (
 		parent[SS + ID] &&
 		!routeParams[parent[SS + ID]] &&
@@ -97,21 +97,21 @@ path(routeParams = {}, customNameFun) {
 			routeParams[PARENT_ID] === false ||
 			myData[PARENT_ID] === false)
 	)
-		r = r.replace(preId + parent[SS + ID], s)
+		r = r.replace(_formatID(parent[SS + ID], _PREID), s)
 
 	// 6.2 Remove parents Ids designed in constructor
 	Object.keys(myData).forEach(idName => {
 		if (myData[idName] === false && !routeParams[idName])
-			return (r = r.replace(preId + idName, s))
+			return (r = r.replace(_formatID(idName, _PREID), s))
 	})
 
 	// 6.2 RoR selected Ids in path params
 	Object.keys(routeParams).forEach(idName => {
 		if (routeParams[idName] === false)
 			// Remove
-			r = r.replace(preId + idName, s)
+			r = r.replace(_formatID(idName, _PREID), s)
 		// Replace
-		else r = r.replace(':' + idName, routeParams[idName])
+		else r = r.replace(_formatID(idName), routeParams[idName])
 	})
 
 	// 7 Now add the query

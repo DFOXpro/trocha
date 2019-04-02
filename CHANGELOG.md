@@ -1,3 +1,7 @@
+## New Features
+
+- new idMode; now id can be {myId} or :myId (default); intended for libraries like CanJS
+
 # 0.2.0 Big refactor
 
 Trocha was rewritten with ECMAScript (6/7/8/Next) in mind. Now Trocha is a class, a module

@@ -9,15 +9,16 @@ class Trocha extends Route {
 		super(
 			null,
 			null, //Because it's the root
-			args.customSelector,
+			args[CUSTOM_SELECTOR],
 			null,
-			args.routes,
-			args.domain,
-			args.alwaysUrl,
-			args.pre,
-			args.post,
-			args.alwaysPost
-			//args.alwaysPre,/**@TODO
+			args[ROUTES],
+			args[DOMAIN],
+			args[ALWAYS_URL],
+			args[PREFIX],
+			args[POSTFIX],
+			args[ALWAYS_POST],
+			//args[ALWAYSPRE],/**@TODO
+			args[ID_MODE]
 		)
 	}
 
@@ -69,6 +70,16 @@ class Trocha extends Route {
 	}
 	static get CONNECT() {
 		return CONNECT
+	}
+
+	/*
+	 * Offers ID modes
+	 */
+	static get BRACKETS() {
+		return BRACKETS
+	}
+	static get COLON() {
+		return COLON
 	}
 
 	/*
