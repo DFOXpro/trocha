@@ -1,6 +1,26 @@
+# 0.2.1 "Details of fine coquetry"
+
+Trocha now is tested in karma and mocha, source documented in jsDoc, code cleaned by prettier, build in travisCI
+
+Tested in:
+
+- Node 10
+- Chrom(ium)
+- Firefox
+- Safari
+- Edge
+- Ie11
+
+Build now runs in
+
+- Windows(10)
+- MacOS
+- Linux
+
 ## New Features
 
 - new idMode; now id can be {myId} or :myId (default); intended for libraries like CanJS
+- You can check the build and test process in travisCI
 
 # 0.2.0 Big refactor
 
