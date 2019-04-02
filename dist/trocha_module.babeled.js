@@ -41,7 +41,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license trocha@0.2.0 - 2019-03-17
+/** @license trocha@0.2.1 - 2019-04-02
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -93,17 +93,17 @@ var _throwWarning = function _throwWarning(scope, warning_text, value) {
 
 /*
  * Why variables are outside the Trocha class?
- * Because private variables are still not supported
+ * Because protected attributes are still not supported
  * and because Route share a lot of symbols with Trocha
  */
-// Utility vars
+/// Utility vars
 
 
-var _ = '/';
 var s = ''; // Force string
 
+var _ = '/';
 var DS = '$'; // DEFAULT_SELECTOR
-// Request method types
+/// Request method types
 
 var OPTIONS = 'OPTIONS';
 exports.OPTIONS = OPTIONS;
@@ -121,7 +121,7 @@ var DELETE = 'DELETE';
 exports.DELETE = DELETE;
 var TRACE = 'TRACE';
 exports.TRACE = TRACE;
-var CONNECT = 'CONNECT'; // Route types
+var CONNECT = 'CONNECT'; /// Route types
 
 exports.CONNECT = CONNECT;
 var ROUTE = 'ROUTE';
@@ -130,9 +130,60 @@ var SCOPE = 'SCOPE';
 exports.SCOPE = SCOPE;
 var _RESOURCE = 'RESOURCE';
 exports.RESOURCE = _RESOURCE;
-var _ALIAS = 'ALIAS'; // Input attributes
+var _ALIAS = 'ALIAS'; /// ID modes
+
+/**
+ * Standard definition of Id; used in Angular, React(Router)
+ * Symbol for "/:the_id" id mode, default ID mode
+ * @Public via Trocha
+ */
 
 exports.ALIAS = _ALIAS;
+var COLON = 'COLON';
+/**
+ * Definition of Id used in CanJS and other frameworks
+ * Symbol for "/{the_id}" id mode
+ * @Public via Trocha
+ */
+
+var BRACKETS = 'BRACKETS'; // Next const are private helpers for ID modes
+
+var _ID_MODE_REPLACE = 'Ñ'; // Can be any rare character
+
+var _PREID = _ + _ID_MODE_REPLACE;
+
+var _AVAILABLE_ID_MODES = {}; // In teory only used in _FORMAT_ID_FUN
+
+_AVAILABLE_ID_MODES[BRACKETS] = "{".concat(_ID_MODE_REPLACE, "}");
+_AVAILABLE_ID_MODES[COLON] = ":".concat(_ID_MODE_REPLACE);
+/**
+ * Interpolator of id mode to be used in path function
+ * @todo should be Route protected(private & inheritable) method
+ * @param {string} currentIdMode - can be BRACKETS | COLON
+ * @second_order
+ * @pure
+ * @return {function} see function below
+ */
+
+var _FORMAT_ID_FUN = function _FORMAT_ID_FUN(currentIdMode) {
+  return (
+    /**
+     * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
+     * @param {string} idName
+     * @param {template literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
+     * @lambda
+     * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
+     * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
+     * @return {string}
+     */
+    function (idName) {
+      var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _ID_MODE_REPLACE;
+      return template.replace(_ID_MODE_REPLACE, _AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName));
+    }
+  );
+}; /// Input attributes
+
+
 var ID = 'id';
 var URL = 'url';
 var NAME = 'name';
@@ -146,6 +197,7 @@ var EXTENDED = 'ext';
 var METHOD = 'method';
 var DOMAIN = 'domain';
 var ROUTES = 'routes';
+var ID_MODE = 'idMode';
 var JUST_ID = 'justId'; // const AFTER_ID = 'afterId' // FAILS & no DOCS
 
 var FRAGMENT = 'fragment';
@@ -154,26 +206,15 @@ var PARENT_ID = 'parentId';
 var DEFAULT_ID = "defaultId";
 var ALWAYS_URL = 'alwaysUrl';
 var ALWAYS_POST = 'alwaysPost';
-var CUSTOM_SELECTOR = 'customSelector'; // Route return attributes
+var CUSTOM_SELECTOR = 'customSelector'; /// Route return attributes
 
 var AS = 'as';
-var PATH = 'path'; // const NEW_SCOPE = '_newScope'
+var PATH = 'path'; /// Not used right now
+// const NEW_SCOPE = '_newScope'
 // const NEW_ROUTE = '_newRoute'
 // const NEW_RESOURCE = '_newResource'
 // const NEW_ALIAS = '_newAlias'
-// Main object return attributes
-
-/**
- * @TODO deprecate
- * Reason: all those attributes can have customSelector
- */
-// const $prefix = DS+PREFIX
-// const $postfix = DS+POSTFIX
-// const $alwaysUrl = DS+ALWAYS_URL
-// const $alwaysPost = DS+ALWAYS_POST
-// const $customSelector = DS+CUSTOM_SELECTOR
-//// static final
-// BASIC RESOURCE
+/// BASIC RESOURCE
 
 var _show = 'show';
 var _edit = 'edit';
@@ -194,7 +235,8 @@ var _basicResource = function _basicResource() {
   r[_list][SS + ID] = false;
   r[_list][SS + HIDE] = true;
   return r;
-};
+}; /// Warnings and erros
+
 
 exports.$RESOURCE = _basicResource;
 var ERROR_HEADER = 'TrochaJS error: ';
@@ -214,8 +256,56 @@ var WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED = 'Attribute not supported, skiped';
 var Route =
 /*#__PURE__*/
 function () {
-  function Route(myParent, argRouteDef, argCustomSelector, argRoot) //argAlwaysPre,// @TODO
-  {
+  /**
+   * Holds all the route information, note it's not protected(can't be inhered)
+   * @private
+   */
+
+  /**
+   * Adds a (custom)getter of attribute to mySelf
+   * @param {Route} mySelf - tldr this
+   * @param {string} attribute - name of the attribute to expose
+   * @param {function} fun - to use as a custom getter for attribute
+   * @param {boolean} skipSelector - if false will add selectedSelector to getter name
+   * @sideEffect mySelf
+   * @private
+   */
+
+  /**
+   * Constructor helper, set attributes and getters of current route
+   * @param {Route} mySelf - tldr this
+   * @param {string} attribute - name
+   * @sideEffect mySelf - add getters, modify #data; posibleRouteDef - delete all attributes
+   * @private
+   */
+
+  /**
+   * Constructor helper, create one child route
+   * @param {Route} mySelf - tldr this
+   * @param {object} routeDefinition - child route attributes
+   * @param {string} name - route name
+   * @sideEffect mySelf - add getters, modify #data; routeDefinition add $name
+   * @private
+   * @throws ERROR_ROUTE_ALREADY_DEFINE
+   */
+
+  /**
+   * Constructor helper, create child routes
+   * @param {Route} mySelf - tldr this
+   * @param {object} argChildRoutes - child routeDefinitions
+   * @param {boolean} skipResource - prevent infinity loop on resource creation
+   * @sideEffect mySelf - add getters, modify #data
+   * @private
+   * @recursive
+   */
+
+  /**
+   * getter function of $as
+   * @param {Route} mySelf - tldr this
+   * @recursive via parent.$as
+   * @return {string} flat self and parents name separated by _
+   */
+  function Route(myParent, argRouteDef, argCustomSelector, argRoot) {
     var _this2 = this;
 
     var _argChildRoutes = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
@@ -225,6 +315,8 @@ function () {
     var argPre = arguments.length > 7 ? arguments[7] : undefined;
     var argPost = arguments.length > 8 ? arguments[8] : undefined;
     var argAlwaysPost = arguments.length > 9 ? arguments[9] : undefined;
+    var //argAlwaysPre,// @TODO
+    argIdMode = arguments.length > 10 ? arguments[10] : undefined;
 
     _classCallCheck(this, Route);
 
@@ -235,12 +327,22 @@ function () {
         childs: {},
         SS: DS,
         // selectedSelector
-        // next just for root
+        // next attributes just for root
         alwaysPost: false,
         alwaysUrl: false,
+        idMode: COLON,
         domain: '',
         post: '',
         pre: ''
+        /**
+         * @param {Route} mySelf - tldr this
+         * @param {string} id - id to compare to parents ids
+         * @pure
+         * @private
+         * @recursive
+         * @return {boolean} - does the parent or (parent parent and go on) have the id?
+         */
+
       }
     });
 
@@ -272,6 +374,12 @@ function () {
       writable: true,
       value: function value(mySelf, posibleRouteDef) {
         var SS = _classPrivateFieldGet(mySelf, _data).SS;
+        /**
+         * @param {string} attribute - name of the attribute to add to #data then remove of mySelf
+         * @pure false - depends on mySelf
+         * @sideEffect mySelf
+         */
+
 
         var _setAndDisposeAttribute = function _setAndDisposeAttribute(attribute) {
           _classPrivateFieldGet(mySelf, _data)[attribute] = posibleRouteDef[SS + attribute];
@@ -304,7 +412,7 @@ function () {
 
         _classPrivateFieldGet(mySelf, _newGetter).call(mySelf, mySelf, NAME);
 
-        _classPrivateFieldGet(mySelf, _newGetter).call(mySelf, mySelf, ID); // @TODO DOCUMENT ME, TEST ME
+        _classPrivateFieldGet(mySelf, _newGetter).call(mySelf, mySelf, ID); // @TODO DOCUMENT ME
 
 
         _classPrivateFieldGet(mySelf, _newGetter).call(mySelf, mySelf, METHOD);
@@ -428,20 +536,26 @@ function () {
       _classPrivateFieldGet(this, _diggestChildRoutes).call(this, this, argRouteDef);
     } else {
       // It's the root route
-      _classPrivateFieldGet(this, _data)[DOMAIN] = argDomain || _classPrivateFieldGet(this, _data)[DOMAIN];
+      var _setRootAttribute = function _setRootAttribute(attribute, value) {
+        return _classPrivateFieldGet(_this2, _data)[attribute] = value || _classPrivateFieldGet(_this2, _data)[attribute];
+      };
+
+      _setRootAttribute(DOMAIN, argDomain);
 
       _classPrivateFieldGet(this, _newGetter).call(this, this, DOMAIN);
 
-      _classPrivateFieldGet(this, _data)[ALWAYS_URL] = argAlwaysUrl || _classPrivateFieldGet(this, _data)[ALWAYS_URL];
-      _classPrivateFieldGet(this, _data)[ALWAYS_POST] = argAlwaysPost || _classPrivateFieldGet(this, _data)[ALWAYS_POST];
-      _classPrivateFieldGet(this, _data)[POSTFIX] = argPost || _classPrivateFieldGet(this, _data)[POSTFIX];
-      _classPrivateFieldGet(this, _data)[PREFIX] = argPre || _classPrivateFieldGet(this, _data)[PREFIX];
+      _setRootAttribute(ALWAYS_URL, argAlwaysUrl);
+
+      _setRootAttribute(ALWAYS_POST, argAlwaysPost);
+
+      _setRootAttribute(POSTFIX, argPost);
+
+      _setRootAttribute(PREFIX, argPre);
+
+      _setRootAttribute(ID_MODE, argIdMode);
+
       _classPrivateFieldGet(this, _data).root = _classPrivateFieldGet(this, _data);
       delete this[PATH];
-      /**
-       * @TODO Document
-       * Trocha({customSelector: 'ASD'}).ASDResource
-       */
 
       _classPrivateFieldGet(this, _newGetter).call(this, this, _RESOURCE, function () {
         return _basicResource(_SS);
@@ -453,6 +567,7 @@ function () {
 
   _createClass(Route, [{
     key: "path",
+    // prettier-ignore // < Does not work ¬¬
 
     /* Begin: src/v2/_Route_path.js */
     value: function path() {
@@ -464,6 +579,9 @@ function () {
       var parent = myData.parent || {};
       var rootData = myData.root;
       var SS = myData.SS;
+
+      var _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
+
       var r = s;
       if (myData[NAME] === undefined) return ''; // 1 print the domain
 
@@ -482,10 +600,10 @@ function () {
 
       var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE] || myData[JUST_ID] && myData[DEFAULT_ID] === false;
       var customNameFromInhered;
-      if ("function" === typeof customNameFun) customNameFromInhered = customNameFun(myData);
-      if ("string" === typeof customNameFromInhered) r += customNameFromInhered;else {
+      if ('function' === typeof customNameFun) customNameFromInhered = customNameFun(myData);
+      if ('string' === typeof customNameFromInhered) r += customNameFromInhered;else {
         // 4.B print default name & id(name)
-        var myId = ':' + myData[ID];
+        var myId = _formatID(myData[ID]);
 
         if ( // 4.B.1 justId case
         routeParams[JUST_ID] !== false && myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false) {
@@ -523,17 +641,16 @@ function () {
       // 6.1 RoR parentId
 
 
-      var preId = '/:';
-      if (parent[SS + ID] && !routeParams[parent[SS + ID]] && (myData[ID] === false || routeParams[PARENT_ID] === false || myData[PARENT_ID] === false)) r = r.replace(preId + parent[SS + ID], s); // 6.2 Remove parents Ids designed in constructor
+      if (parent[SS + ID] && !routeParams[parent[SS + ID]] && (myData[ID] === false || routeParams[PARENT_ID] === false || myData[PARENT_ID] === false)) r = r.replace(_formatID(parent[SS + ID], _PREID), s); // 6.2 Remove parents Ids designed in constructor
 
       Object.keys(myData).forEach(function (idName) {
-        if (myData[idName] === false && !routeParams[idName]) return r = r.replace(preId + idName, s);
+        if (myData[idName] === false && !routeParams[idName]) return r = r.replace(_formatID(idName, _PREID), s);
       }); // 6.2 RoR selected Ids in path params
 
       Object.keys(routeParams).forEach(function (idName) {
         if (routeParams[idName] === false) // Remove
-          r = r.replace(preId + idName, s);else // Replace
-          r = r.replace(':' + idName, routeParams[idName]);
+          r = r.replace(_formatID(idName, _PREID), s); // Replace
+        else r = r.replace(_formatID(idName), routeParams[idName]);
       }); // 7 Now add the query
 
       Object.keys(query).forEach(function (key, i, array) {
@@ -552,18 +669,27 @@ function () {
     key: "is",
 
     /**
-     * @TOBE_OVERRIDE
+     * Check if given routeDefinition is ROUTE
      * @param {object} routeDefinition -
-     * @param {string} SS -
+     * @param {string} SS - selectedSelector normally $
+     * @static
+     * @pure
+     * @return {boolean} routeDefinition is route?
      */
     value: function is(routeDefinition, SS) {
-      return routeDefinition[SS + TYPE] === ROUTE || "object" === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === undefined;
+      return routeDefinition[SS + TYPE] === ROUTE || 'object' === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === undefined;
     }
     /**
-     * @TOBE_OVERRIDE
-     * @param {} routeDefinition -
-     * @param {} SS - selector to be return
-     * @param {} IS - selector to be find
+     * This function serve 2 purposes:
+     * (With just first 3 params) Sanitize routeDefinition for ROUTE valid params (this behabior is override)
+     * (With full params) add <routeDefinition>.<IS><attributes> to <dest>.<SS><attributes> (this behabior is not inhered)
+     * @tobe_overload
+     * @param {object} routeDefinition -
+     * @param {string} SS - selector to be return
+     * @param {string} IS - selector to be find
+     * @param {object} dest - another routeDefinition
+     * @param {array<string>} attributes - to be added from routeDefinition to dest
+     * @sideEffect dest
      */
 
   }]);
@@ -594,9 +720,10 @@ var _as = new WeakMap();
 _defineProperty(Route, "DEFAULT_METHOD", GET);
 
 _defineProperty(Route, "diggest", function (routeDefinition, SS, IS, dest, attributes) {
-  if (dest && attributes) attributes.forEach(function (attribute) {
-    dest[SS + attribute] = routeDefinition[IS + attribute];
-  });else {
+  if (dest && attributes) // is used from subroutes
+    attributes.forEach(function (attribute) {
+      dest[SS + attribute] = routeDefinition[IS + attribute];
+    });else {
     var r = {};
     r[SS + TYPE] = ROUTE;
     r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD;
@@ -608,9 +735,10 @@ _defineProperty(Route, "diggest", function (routeDefinition, SS, IS, dest, attri
   }
 });
 
-_defineProperty(Route, "_trimSelector", function (SS, src, dest) {
+_defineProperty(Route, "_trimSelector", function (IS, src, dest) {
+  if (IS === '') return;
   Object.keys(src).forEach(function (attribute) {
-    if (attribute.slice(0, 2) !== SS) dest[attribute] = src[attribute];else _throwWarning(Route, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute);
+    if (attribute.slice(0, 2) !== IS) dest[attribute] = src[attribute];else _throwWarning(Route, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute);
   });
 });
 
@@ -631,7 +759,13 @@ function (_Route) {
     return _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Alias)).call.apply(_getPrototypeOf2, [this].concat(args)));
   }
   /**
-   * @override
+   * Sanitize routeDefinition for ALIAS valid params
+   * @static
+   * @overload Route.diggest
+   * @param {object} routeDefinition
+   * @param {string} SS - selector to be return
+   * @param {string} IS - selector to be find
+   * @return {object} sanitized copy of routeDefinition
    */
 
 
@@ -639,22 +773,29 @@ function (_Route) {
     key: "path",
 
     /**
-     * @override
+     * Print ALIAS type routes
+     * diferences with Route.path: use alias instead of name and if it's base will not start with /
+     * @see Route.path
+     * @overload Route.path
      */
     value: function path() {
       var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       return _get(_getPrototypeOf(Alias.prototype), "path", this).call(this, routeParams, function (myData) {
         // Note Alias dnt support hide nor justId in creation
-        var r = s;
-        var myId = _ + ':' + myData[ID];
         var parent = myData.parent || {};
         var rootData = myData.root;
+
+        var _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
+
+        var myId = _formatID(myData[ID], _PREID);
+
+        var r = s;
 
         if (myData[ID] && routeParams[JUST_ID]) {
           r += myId;
         } else {
           var useID = !!myData[ID] && routeParams[myData[ID]] !== false;
-          r += parent.constructor.name === "Trocha" ? s : _;
+          r += parent.constructor.name === 'Trocha' ? s : _;
           r += routeParams[HIDE] ? s : myData[ALIAS];
           r += useID ? myId : s;
         }
@@ -670,17 +811,22 @@ function (_Route) {
       r[SS + ALIAS] = routeDefinition[IS + ALIAS] || routeDefinition;
       r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD;
       Route.diggest(routeDefinition, SS, IS, r, [ID, POSTFIX, PARENT_ID]);
-      if ("string" !== typeof routeDefinition) Route._trimSelector(IS, routeDefinition, r);
+      if ('string' !== typeof routeDefinition) Route._trimSelector(IS, routeDefinition, r);
       return r;
     }
     /**
+     * Check if given routeDefinition is ALIAS
+     * @see Route.is
+     * @pure
+     * @static
      * @override
+     * @return {boolean} routeDefinition is alias?
      */
 
   }, {
     key: "is",
     value: function is(routeDefinition, SS) {
-      return "string" === typeof routeDefinition || routeDefinition[SS + TYPE] === _ALIAS && routeDefinition[SS + ALIAS];
+      return 'string' === typeof routeDefinition || routeDefinition[SS + TYPE] === _ALIAS && routeDefinition[SS + ALIAS];
     }
   }]);
 
@@ -724,7 +870,7 @@ function (_Route2) {
       var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var force = arguments.length > 1 ? arguments[1] : undefined;
       return _get(_getPrototypeOf(Resource.prototype), "path", this).call(this, routeParams, function (myData) {
-        if ("function" === typeof force && force() !== true) _throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE);
+        if ('function' === typeof force && force() !== true) _throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE);
         return false;
       });
     }
@@ -793,7 +939,7 @@ function (_Route3) {
       var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var force = arguments.length > 1 ? arguments[1] : undefined;
       return _get(_getPrototypeOf(Scope.prototype), "path", this).call(this, routeParams, function (myData) {
-        if ("function" === typeof force && force() !== true) _throwError(undefined, ERROR_SCOPE_AS_A_ROUTE);
+        if ('function' === typeof force && force() !== true) _throwError(undefined, ERROR_SCOPE_AS_A_ROUTE);
         return false;
       });
     }
@@ -817,7 +963,7 @@ function (_Route3) {
   }, {
     key: "is",
     value: function is(routeDefinition, SS) {
-      return "object" === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === SCOPE && routeDefinition[SS + ID] // Should scope always have id????
+      return 'object' === _typeof(routeDefinition) && routeDefinition[SS + TYPE] === SCOPE && routeDefinition[SS + ID] // Should scope always have id????
       ;
     }
   }]);
@@ -840,16 +986,16 @@ function (_Route4) {
     _classCallCheck(this, Trocha);
 
     return _possibleConstructorReturn(this, _getPrototypeOf(Trocha).call(this, null, null, //Because it's the root
-    args.customSelector, null, args.routes, args.domain, args.alwaysUrl, args.pre, args.post, args.alwaysPost //args.alwaysPre,/**@TODO
-    ));
+    args[CUSTOM_SELECTOR], null, args[ROUTES], args[DOMAIN], args[ALWAYS_URL], args[PREFIX], args[POSTFIX], args[ALWAYS_POST], //args[ALWAYSPRE],/**@TODO
+    args[ID_MODE]));
   }
   /*
    * STATIC AVAILABLE ATTRIBUTES
    */
 
   /*
-  * Offers all the route types
-  */
+   * Offers all the route types
+   */
 
 
   _createClass(Trocha, null, [{
@@ -920,6 +1066,20 @@ function (_Route4) {
     key: "CONNECT",
     get: function get() {
       return CONNECT;
+    }
+    /*
+     * Offers ID modes
+     */
+
+  }, {
+    key: "BRACKETS",
+    get: function get() {
+      return BRACKETS;
+    }
+  }, {
+    key: "COLON",
+    get: function get() {
+      return COLON;
     }
     /*
      * Offers basic resource structure

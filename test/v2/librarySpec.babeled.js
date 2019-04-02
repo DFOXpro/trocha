@@ -1,5 +1,9 @@
 "use strict";
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 (function () {
   var assert = chai.assert;
   describe('Trocha JS Routes List engine', function () {
@@ -527,8 +531,303 @@
           id: 'service_id'
         });
       });
-    }); // include "_function_path.js"
-    // include "_issues.js"
+    });
+    describe('function path', function () {
+      var myRoutes, myRoutesParams;
+      myRoutesParams = {
+        pre: '/templates',
+        post: '-myH45H.html',
+        domain: 'https://mydomain.net.co',
+        routes: {
+          town: {
+            $id: 'town_name',
+            house: {
+              $id: 'address'
+            }
+          }
+        }
+      };
+      myRoutes = new Trocha(_objectSpread({}, myRoutesParams));
+      describe('path() diferent params', function () {
+        it('no params', function () {
+          assert.throw(myRoutes.path);
+          assert.equal(myRoutes.town.path(), '/town/:town_name');
+          assert.equal(myRoutes.town.house.path(), '/town/:town_name/house/:address');
+        });
+        it('url', function () {
+          var _myRoutes, _myRoutesParams;
+
+          assert.equal(myRoutes.town.path(), '/town/:town_name');
+          assert.equal(myRoutes.town.path({
+            url: true
+          }), 'https://mydomain.net.co/town/:town_name');
+          _myRoutesParams = _objectSpread({}, myRoutesParams);
+          _myRoutesParams.alwaysUrl = true;
+          _myRoutes = new Trocha(_myRoutesParams);
+          assert.equal(_myRoutes.town.path(), 'https://mydomain.net.co/town/:town_name');
+          assert.equal(_myRoutes.town.path({
+            url: false
+          }), '/town/:town_name');
+        });
+        it('pre', function () {
+          assert.equal(myRoutes.town.path(), '/town/:town_name');
+          assert.equal(myRoutes.town.path({
+            pre: true
+          }), '/templates/town/:town_name');
+        });
+        it('post', function () {
+          var _myRoutes, _myRoutesParams;
+
+          assert.equal(myRoutes.town.path(), '/town/:town_name');
+          assert.equal(myRoutes.town.path({
+            post: true
+          }), '/town/:town_name-myH45H.html');
+          _myRoutesParams = _objectSpread({}, myRoutesParams);
+          _myRoutesParams.alwaysPost = true;
+          _myRoutes = new Trocha(_myRoutesParams);
+          assert.equal(_myRoutes.town.path(), '/town/:town_name-myH45H.html');
+          assert.equal(_myRoutes.town.path({
+            post: false
+          }), '/town/:town_name');
+        });
+        it('ext', function () {
+          assert.equal(myRoutes.town.path(), '/town/:town_name');
+          assert.equal(myRoutes.town.path({
+            ext: true
+          }), '/templates/town/:town_name-myH45H.html');
+        });
+        it('hide', function () {
+          var _myRoutes, _myRoutesParams;
+
+          assert.equal(myRoutes.town.path({
+            hide: true
+          }), '/:town_name');
+          _myRoutesParams = _objectSpread({}, myRoutesParams);
+          _myRoutesParams.routes.town.$hide = true;
+          _myRoutes = new Trocha(_myRoutesParams);
+          assert.equal(_myRoutes.town.path(), '/:town_name');
+        });
+        it('parentId', function () {
+          assert.equal(myRoutes.town.house.path({
+            parentId: false
+          }), '/town/house/:address');
+        });
+        it('id: false', function () {
+          assert.equal(myRoutes.town.path({
+            id: false
+          }), '/town');
+          assert.equal(myRoutes.town.house.path({
+            id: false
+          }), '/town/:town_name/house');
+        });
+        it('<someId>', function () {
+          assert.equal(myRoutes.town.path({
+            town_name: ''
+          }), '/town/');
+          assert.equal(myRoutes.town.path({
+            town_name: 'Engativá'
+          }), '/town/Engativá');
+          assert.equal(myRoutes.town.house.path({
+            address: 'calle_falsa'
+          }), '/town/:town_name/house/calle_falsa');
+          assert.equal(myRoutes.town.house.path({
+            address: 'calle_falsa',
+            town_name: false
+          }), '/town/house/calle_falsa');
+        });
+        it('query', function () {
+          assert.equal(myRoutes.town.path({
+            query: {
+              description: true
+            }
+          }), '/town/:town_name?description=true');
+          assert.equal(myRoutes.town.path({
+            query: {
+              description: true,
+              pictures: 4
+            }
+          }), '/town/:town_name?description=true&pictures=4');
+          assert.equal(myRoutes.town.path({
+            query: {
+              an_array: ['qwe', 'asd', 'zxc']
+            }
+          }), '/town/:town_name?an_array[]=qwe&an_array[]=asd&an_array[]=zxc');
+          assert.equal(myRoutes.town.path({
+            query: {
+              an_array: ['qwe', 'asd', 'zxc'],
+              ert: 1
+            }
+          }), '/town/:town_name?an_array[]=qwe&an_array[]=asd&an_array[]=zxc&ert=1');
+          assert.equal(myRoutes.town.path({
+            query: {
+              'ata?&ck': '&' + '?=;:/\\ \t'
+            }
+          }), '/town/:town_name?ata%3F%26ck=%26%3F%3D%3B%3A%2F%5C%20%09');
+        });
+        it('fragment', function () {
+          assert.equal(myRoutes.town.path({
+            fragment: 'references'
+          }), '/town/:town_name#references');
+        });
+      });
+    });
+    describe('Solve issues', function () {
+      it('1: alias routes must provide a path funtion', function () {
+        var myRoutes;
+        myRoutes = new Trocha({
+          routes: {
+            hello: {
+              $type: Trocha.ALIAS,
+              $alias: 'hi',
+              name: {
+                $justId: true,
+                $id: 'my_name'
+              },
+              myCountry: {
+                $type: Trocha.ALIAS,
+                $alias: 'Colombia',
+                $id: 'department'
+              }
+            }
+          }
+        });
+        assert.equal(myRoutes.hello.path(), 'hi');
+        assert.equal(myRoutes.hello.name.path(), 'hi/:my_name');
+        assert.equal(myRoutes.hello.name.path({
+          my_name: 'underworld'
+        }), 'hi/underworld');
+        assert.equal(myRoutes.hello.myCountry.path(), 'hi/Colombia/:department');
+        assert.equal(myRoutes.hello.myCountry.path({
+          department: 'Santander'
+        }), 'hi/Colombia/Santander');
+      });
+      it('4: customSelector must works with routes attributes', function () {
+        var myRoutes;
+        myRoutes = new Trocha({
+          customSelector: 'TRCH',
+          routes: {
+            hello: {
+              TRCHid: 'name',
+              TRCHmethod: Trocha.GET,
+              $id: {}
+            }
+          }
+        });
+        assert.equal(myRoutes.hello.path({
+          name: 'World'
+        }), '/hello/World');
+        assert.equal(myRoutes.hello.TRCHid, 'name');
+        assert.isObject(myRoutes.hello.$id);
+        assert.equal(myRoutes.hello.TRCHmethod, 'GET');
+        assert.equal(myRoutes.hello.$id.path(), '/hello/:name/$id');
+      });
+    });
+    describe('0.2.1 idMode', function () {
+      var r;
+      describe('Default IdMode', function () {
+        before(function () {
+          return r = new Trocha({
+            routes: {
+              withId: {
+                $id: 'myId',
+                child: {}
+              }
+            }
+          });
+        });
+        it('should set default IdMode', function () {
+          assert.equal(r.withId.path(), '/withId/:myId');
+          assert.equal(r.withId.child.path(), '/withId/:myId/child');
+        });
+        it('should override parent id', function () {
+          assert.equal(r.withId.child.path({
+            parentId: false
+          }), '/withId/child');
+          assert.equal(r.withId.child.path({
+            myId: false
+          }), '/withId/child');
+        });
+      });
+      describe('Custom IdMode', function () {
+        before(function () {
+          return r = new Trocha({
+            idMode: Trocha.BRACKETS,
+            routes: {
+              withId: {
+                $id: 'myId',
+                child: {}
+              },
+              anscope: {
+                $type: Trocha.SCOPE,
+                $id: 'asId',
+                aresource: {
+                  $type: Trocha.RESOURCE,
+                  $id: 'arId'
+                },
+                analias: {
+                  $type: Trocha.ALIAS,
+                  $alias: 'theAlias',
+                  $id: 'aaId',
+                  otheralias: 'theOtherAlias'
+                }
+              }
+            }
+          });
+        });
+        it('should set BRACKETS IdMode', function () {
+          assert.equal(r.withId.path(), '/withId/{myId}');
+          assert.equal(r.withId.child.path(), '/withId/{myId}/child');
+        });
+        it('should override parent id', function () {
+          assert.equal(r.withId.child.path({
+            parentId: false
+          }), '/withId/child');
+          assert.equal(r.withId.child.path({
+            myId: false
+          }), '/withId/child');
+        });
+        it('should works with scope', function () {
+          assert.equal(r.anscope.aresource.list.path(), '/{asId}/aresource');
+          assert.equal(r.anscope.aresource.new.path({
+            asId: false
+          }), '/aresource/new');
+        });
+        it('should works with resource', function () {
+          assert.equal(r.aresource.show.path(), '/aresource/{arId}');
+          assert.equal(r.aresource.show.path({
+            arId: false
+          }), '/aresource');
+          assert.equal(r.aresource.new.path(), '/aresource/new');
+        });
+        it('should works with alias', function () {
+          // alias has extra test 'cause it declares the id aside of default path
+          assert.equal(r.analias.path(), 'theAlias/{aaId}');
+          assert.equal(r.analias.path({
+            aaId: false
+          }), 'theAlias');
+          assert.equal(r.analias.path({
+            aaId: 'asd'
+          }), 'theAlias/asd');
+          assert.equal(r.anscope.analias.path(), '/{asId}/theAlias/{aaId}');
+          assert.equal(r.anscope.analias.path({
+            asId: 'asd'
+          }), '/asd/theAlias/{aaId}');
+          assert.equal(r.analias.otheralias.path(), 'theAlias/{aaId}/theOtherAlias');
+          assert.equal(r.analias.otheralias.path({
+            aaId: false
+          }), 'theAlias/theOtherAlias');
+        });
+        r = new Trocha({
+          idMode: Trocha.COLON,
+          routes: {
+            withId: {
+              $id: 'myId'
+            }
+          }
+        });
+        assert.equal(r.withId.path(), '/withId/:myId');
+      });
+    });
   });
 })();
 //# sourceMappingURL=librarySpec.babeled.js.map
