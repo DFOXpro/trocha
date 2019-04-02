@@ -1,4 +1,8 @@
 class Route {
+	/**
+	 * Holds all the route information, note it's not protected(can't be inhered)
+	 * @private
+	 */
 	#data = {
 		parent: null,
 		childs: {},
@@ -11,6 +15,15 @@ class Route {
 		post: '',
 		pre: ''
 	}
+
+	/**
+	 * @param {Route} mySelf - tldr this
+	 * @param {string} id - id to compare to parents ids
+	 * @pure
+	 * @private
+	 * @recursive
+	 * @return {boolean} - does the parent or (parent parent and go on) have the id?
+	 */
 	#anyParentHasThisId = (mySelf, id) => {
 		let SS = mySelf.#data.SS
 		if (!mySelf.#data.parent) return false
@@ -19,6 +32,16 @@ class Route {
 			mySelf.#anyParentHasThisId(mySelf.#data.parent, id)
 		)
 	}
+
+	/**
+	 * Adds a (custom)getter of attribute to mySelf
+	 * @param {Route} mySelf - tldr this
+	 * @param {string} attribute - name of the attribute to expose
+	 * @param {function} fun - to use as a custom getter for attribute
+	 * @param {boolean} skipSelector - if false will add selectedSelector to getter name
+	 * @sideEffect mySelf
+	 * @private
+	 */
 	#newGetter = (mySelf, attribute, fun, skipSelector) => {
 		let SS = skipSelector ? '' : mySelf.#data.SS
 		Object.defineProperty(mySelf, SS + attribute, {
@@ -30,8 +53,22 @@ class Route {
 			configurable: false
 		})
 	}
+
+	/**
+	 * Constructor helper, set attributes and getters of current route
+	 * @param {Route} mySelf - tldr this
+	 * @param {string} attribute - name
+	 * @sideEffect mySelf - add getters, modify #data; posibleRouteDef - delete all attributes
+	 * @private
+	 */
 	#defineMyAttributes = (mySelf, posibleRouteDef) => {
 		let SS = mySelf.#data.SS
+
+		/**
+		 * @param {string} attribute - name of the attribute to add to #data then remove of mySelf
+		 * @pure false - depends on mySelf
+		 * @sideEffect mySelf
+		 */
 		let _setAndDisposeAttribute = attribute => {
 			mySelf.#data[attribute] = posibleRouteDef[SS + attribute]
 			delete posibleRouteDef[SS + attribute]
@@ -53,11 +90,20 @@ class Route {
 		if (false === posibleRouteDef[mySelf.#data.parent[SS + ID]])
 			_setAndDisposeAttribute(mySelf.#data.parent[SS + ID])
 		mySelf.#newGetter(mySelf, NAME)
-		mySelf.#newGetter(mySelf, ID) // @TODO DOCUMENT ME, TEST ME
+		mySelf.#newGetter(mySelf, ID) // @TODO DOCUMENT ME
 		mySelf.#newGetter(mySelf, METHOD)
 		mySelf.#newGetter(mySelf, AS, () => mySelf.#as(mySelf))
 	}
 
+	/**
+	 * Constructor helper, create one child route
+	 * @param {Route} mySelf - tldr this
+	 * @param {object} routeDefinition - child route attributes
+	 * @param {string} name - route name
+	 * @sideEffect mySelf - add getters, modify #data; routeDefinition add $name
+	 * @private
+	 * @throws ERROR_ROUTE_ALREADY_DEFINE
+	 */
 	#createChildRoute = (mySelf, routeDefinition, name) => {
 		let SS = mySelf.#data.SS
 		if (mySelf.#data.childs[name])
@@ -84,6 +130,16 @@ class Route {
 		mySelf.#data.childs[name] = newRoute
 		mySelf.#newGetter(mySelf, name, () => mySelf.#data.childs[name], true)
 	}
+
+	/**
+	 * Constructor helper, create child routes
+	 * @param {Route} mySelf - tldr this
+	 * @param {object} argChildRoutes - child routeDefinitions
+	 * @param {boolean} skipResource - prevent infinity loop on resource creation
+	 * @sideEffect mySelf - add getters, modify #data
+	 * @private
+	 * @recursive
+	 */
 	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
 		let SS = mySelf.#data.SS
 		if (!skipResource && mySelf.#data[TYPE] === _RESOURCE) {
@@ -120,6 +176,12 @@ class Route {
 		}
 	}
 
+	/**
+	 * getter function of $as
+	 * @param {Route} mySelf - tldr this
+	 * @recursive via parent.$as
+	 * @return {string} flat self and parents name separated by _
+	 */
 	#as = mySelf => {
 		let SS = mySelf.#data.SS
 		return mySelf.#data.parent[SS + AS]
@@ -154,9 +216,8 @@ class Route {
 			this.#diggestChildRoutes(this, argRouteDef)
 		} else {
 			// It's the root route
-			const _setRootAttribute = (attribute, value) => (
-				this.#data[attribute] = value || this.#data[attribute]
-			)
+			const _setRootAttribute = (attribute, value) =>
+				(this.#data[attribute] = value || this.#data[attribute])
 			_setRootAttribute(DOMAIN, argDomain)
 			this.#newGetter(this, DOMAIN)
 			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
@@ -208,15 +269,20 @@ class Route {
 		)
 	}
 
+	// prettier-ignore // < Does not work ¬¬
 	include "_Route_path.js"
 
 	toString = () => this.#as(this)
 
 	static DEFAULT_METHOD = GET
+
 	/**
-	 * @TOBE_OVERRIDE
+	 * Check if given routeDefinition is ROUTE
 	 * @param {object} routeDefinition -
-	 * @param {string} SS -
+	 * @param {string} SS - selectedSelector normally $
+	 * @static
+	 * @pure
+	 * @return {boolean} routeDefinition is route?
 	 */
 	static is(routeDefinition, SS) {
 		return (
@@ -227,12 +293,16 @@ class Route {
 	}
 
 	/**
-	 * @TOBE_OVERRIDE
+	 * This function serve 2 purposes:
+	 * (With just first 3 params) Sanitize routeDefinition for ROUTE valid params (this behabior is override)
+	 * (With full params) add <routeDefinition>.<IS><attributes> to <dest>.<SS><attributes> (this behabior is not inhered)
+	 * @tobe_overload
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selector to be return
 	 * @param {string} IS - selector to be find
-	 * @param {object} dest
-	 * @param {array<string>} attributes
+	 * @param {object} dest - another routeDefinition
+	 * @param {array<string>} attributes - to be added from routeDefinition to dest
+	 * @sideEffect dest
 	 */
 	static diggest = (routeDefinition, SS, IS, dest, attributes) => {
 		if (dest && attributes)
