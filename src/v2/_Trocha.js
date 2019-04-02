@@ -72,6 +72,16 @@ class Trocha extends Route {
 	}
 
 	/*
+	 * Offers ID modes
+	 */
+	static get BRACKETS() {
+		return BRACKETS
+	}
+	static get COLON() {
+		return COLON
+	}
+
+	/*
 	 * Offers basic resource structure
 	 * @See Route constructor for custom selector
 	 */
