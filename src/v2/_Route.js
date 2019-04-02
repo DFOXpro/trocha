@@ -3,9 +3,10 @@ class Route {
 		parent: null,
 		childs: {},
 		SS: DS, // selectedSelector
-		// next just for root
+		// next attributes just for root
 		alwaysPost: false,
 		alwaysUrl: false,
+		idMode: COLON,
 		domain: '',
 		post: '',
 		pre: ''
@@ -137,8 +138,9 @@ class Route {
 		argAlwaysUrl,
 		argPre,
 		argPost,
-		argAlwaysPost
+		argAlwaysPost,
 		//argAlwaysPre,// @TODO
+		argIdMode
 	) {
 		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
 		if (
@@ -152,18 +154,18 @@ class Route {
 			this.#diggestChildRoutes(this, argRouteDef)
 		} else {
 			// It's the root route
-			this.#data[DOMAIN] = argDomain || this.#data[DOMAIN]
+			const _setRootAttribute = (attribute, value) => (
+				this.#data[attribute] = value || this.#data[attribute]
+			)
+			_setRootAttribute(DOMAIN, argDomain)
 			this.#newGetter(this, DOMAIN)
-			this.#data[ALWAYS_URL] = argAlwaysUrl || this.#data[ALWAYS_URL]
-			this.#data[ALWAYS_POST] = argAlwaysPost || this.#data[ALWAYS_POST]
-			this.#data[POSTFIX] = argPost || this.#data[POSTFIX]
-			this.#data[PREFIX] = argPre || this.#data[PREFIX]
+			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
+			_setRootAttribute(ALWAYS_POST, argAlwaysPost)
+			_setRootAttribute(POSTFIX, argPost)
+			_setRootAttribute(PREFIX, argPre)
+			_setRootAttribute(ID_MODE, argIdMode)
 			this.#data.root = this.#data
 			delete this[PATH]
-			/**
-			 * @TODO Document
-			 * Trocha({customSelector: 'ASD'}).ASDResource
-			 */
 			this.#newGetter(this, _RESOURCE, () => _basicResource(SS))
 			this.#diggestChildRoutes(this, argChildRoutes)
 		}
