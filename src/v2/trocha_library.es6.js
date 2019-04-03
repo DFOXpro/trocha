@@ -6,4 +6,8 @@
 ;(parent => {
 	include "_core.js"
 	parent.Trocha = Trocha
+	parent.Route = Route
+	parent.Alias = Alias
+	parent.Resource = Resource
+	parent.Scope = Scope
 })(this)
