@@ -75,8 +75,8 @@
 			})
 		})
 
-		describe('Base variables returns', function() {
-			it('should set customSelector', function() {
+		describe('Base variables returns', () => {
+			it('should set customSelector', () => {
 				var r
 				r = new Trocha()
 				assert.isObject(r.$RESOURCE)
@@ -85,16 +85,16 @@
 					customSelector: '$$'
 				})
 				assert.isObject(r.$$RESOURCE)
-				return assert.equal(r.$$domain, '')
+				assert.equal(r.$$domain, '')
 			})
-			return it('should set domain', function() {
+			it('should set domain', () => {
 				var r
 				r = new Trocha()
 				assert.equal(r.$domain, '')
 				r = new Trocha({
 					domain: 'asd'
 				})
-				return assert.equal(r.$domain, 'asd')
+				assert.equal(r.$domain, 'asd')
 			})
 		})
 
@@ -359,7 +359,7 @@
 					}
 				}) // I miss CS in lines like this
 				assert.isObject(r.simple_route)
-				assert.equal(r.simple_route.constructor.name, 'Route')
+				assert.instanceOf(r.simple_route, Route)
 				assert.equal(r.simple_route.path(), '/simple_route')
 				assert.equal(r.simple_route_with_id.path(), '/simple_route_with_id/:my_id')
 				assert.equal(r.simple_route_with_method.$method, 'POST')
@@ -415,7 +415,7 @@
 					}
 				})
 				assert.isObject(r.simple_alias)
-				assert.equal(r.simple_alias.constructor.name, 'Alias')
+				assert.instanceOf(r.simple_alias, Alias)
 				assert.equal(r.quick_alias.path(), 'a.flash/alias')
 				assert.equal(r.simple_alias.path(), 'the.simple.alias')
 				assert.equal(
@@ -462,8 +462,8 @@
 						}
 					}
 				})
-				assert.equal(r.products.constructor.name, 'Resource')
-				assert.equal(r.products.list.constructor.name, 'Route')
+				assert.instanceOf(r.products, Resource)
+				assert.instanceOf(r.products.list, Route)
 				assert.equal(r.products.list.path(), '/products')
 				assert.equal(r.products['new'].path(), '/products/new')
 				assert.equal(r.products.show.path(), '/products/:product_id')
@@ -503,8 +503,8 @@
 							}
 						}
 					})
-					assert.equal(r.products.constructor.name, 'Resource')
-					assert.equal(r.products.create.constructor.name, 'Route')
+					assert.instanceOf(r.products, Resource)
+					assert.instanceOf(r.products.create, Route)
 					assert.equal(r.products.create.path(), '/products')
 					assert.equal(r.products.create.$method, 'POST')
 					assert.equal(r.products.read.path(), '/products/:product_id')
@@ -537,7 +537,7 @@
 						}
 					}
 				})
-				assert.equal(r.language.constructor.name, 'Scope')
+				assert.instanceOf(r.language, Scope)
 				assert.throws(r.language.path)
 				assert.equal(r.language.products.list.path(), '/:language_id/products')
 				assert.equal(

@@ -1,4 +1,4 @@
-/** @license trocha@0.2.1 - 2019-04-02
+/** @license trocha@0.2.1 - 2019-04-10
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -904,4 +904,8 @@
 /* End: src/v2/_Trocha.js */
 /* End: src/v2/_core.js */
 	parent.Trocha = Trocha
+	parent.Route = Route
+	parent.Alias = Alias
+	parent.Resource = Resource
+	parent.Scope = Scope
 })(this)

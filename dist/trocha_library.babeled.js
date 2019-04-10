@@ -34,7 +34,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license trocha@0.2.1 - 2019-04-02
+/** @license trocha@0.2.1 - 2019-04-10
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -1074,5 +1074,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
   parent.Trocha = Trocha;
+  parent.Route = Route;
+  parent.Alias = Alias;
+  parent.Resource = Resource;
+  parent.Scope = Scope;
 })(this);
 //# sourceMappingURL=trocha_library.babeled.js.map
