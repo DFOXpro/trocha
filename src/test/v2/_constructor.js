@@ -10,7 +10,7 @@ describe('Constructor', () => {
 		r = new Trocha()
 		assert.instanceOf(r, Trocha)
 	})
-	return it('should create a valid trocha object', () => {
+	it('should create a valid trocha object', () => {
 		var r
 		r = new Trocha()
 		assert.isObject(r)
