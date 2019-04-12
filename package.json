@@ -1,6 +1,6 @@
 {
   "name": "trocha",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Route/Path listing for JS",
   "author": "Daniel Reinaldo Zorro Forero (@DFOXpro)",
   "private": false,
@@ -25,34 +25,46 @@
   ],
   "files": [
     "dist",
-		"index.require.js"
+    "index.require.js"
   ],
   "main": "index.require.js",
   "module": "./dist/trocha_module.min.js",
-	"sideEffects": false,
+  "sideEffects": false,
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "chai": "^4.2.0",
     "grunt": "^1.0.3",
     "grunt-babel": "^8.0.0",
     "grunt-cli": "^1.3.2",
-    "grunt-coffeescript-concat": "^0.2.1",
     "grunt-contrib-clean": "^2.0.0",
-    "grunt-contrib-coffee": "git@github.com:gruntjs/grunt-contrib-coffee.git",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^4.0.0",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-exec": "^3.0.0",
     "grunt-includes": "^1.1.0",
     "grunt-jsdoc": "^2.3.0",
+    "grunt-karma": "^3.0.1",
     "jsdoc": "^3.5.5",
-    "load-grunt-tasks": "latest"
+    "karma": "^4.0.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^2.0.0",
+    "karma-edge-launcher": "^0.4.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-safari-launcher": "^1.0.0",
+    "load-grunt-tasks": "latest",
+    "mocha": "^6.0.2"
   },
   "scripts": {
-    "test": "echo \"Open ./test/index.html in your favorite browser with dev tools enabled\"",
-    "dev": "grunt dev",
-    "build": "NODE_ENV=production grunt build"
+    "build": "NODE_ENV=production grunt",
+    "test": "NODE_ENV=production grunt test",
+    "build:dev": "grunt",
+    "test:dev": "grunt test",
+    "extra_tasks": "echo see Gruntfile for dev more task"
   }
 }

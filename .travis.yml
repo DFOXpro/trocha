@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - '10'
+before_script:
+  - npm i
+jobs:
+  include:
+    - stage: test
+      os: linux
+      # services:
+      #   - xvfb
+      addons:
+        firefox: latest
+        # chrome: stable
+      before_script:
+        - 'export DISPLAY=:99.0'
+        - 'sh -e /etc/init.d/xvfb start'
+      script: npm test
+    - stage: test
+      env: BROWSER=safari
+      os: osx
+      script: npx grunt test
+    ## travis windows is for early addopters, no IE nor Edge binary found
+    # - stage: test
+    #   before_install:
+    #     - choco install ie11
+    #   os: windows
+    #   script: npx grunt test

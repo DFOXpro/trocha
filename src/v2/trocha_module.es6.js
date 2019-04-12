@@ -10,7 +10,6 @@ export {
 	Alias,
 	Resource,
 	Scope,
-
 	// Request method types
 	OPTIONS,
 	GET,
@@ -21,13 +20,11 @@ export {
 	DELETE,
 	TRACE,
 	CONNECT,
-
 	// Route types
 	ROUTE,
 	SCOPE,
 	_RESOURCE as RESOURCE,
 	_ALIAS as ALIAS,
-
 	// Resource fun
-	_basicResource as $RESOURCE,
+	_basicResource as $RESOURCE
 }
