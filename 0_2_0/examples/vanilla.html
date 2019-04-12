@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Trivial TrochaJS Vanilla example</title>
+	</head>
+	<body>
+		<h1>Trivial TrochaJS Vanilla example</h1>
+		<p>
+			To see the documentation <a href="https://dfoxpro.github.io/trochaJS">click here</a><br>
+			To see the javascript file of this example <a href="vanilla.js">click here</a><br>
+			To see next example (JQuery AJAX) <a href="jquery.html">click here</a>
+		</p>
+
+		<ul>
+			<li><a data-href="users.list">users.list</a></li>
+			<li><a data-href="users.show" data-path='{"userId": "Jhon"}'>users.show Jhon</a></li>
+			<li><a data-href="post.list">post.list</a></li>
+			<li><a data-href="post.show" data-path='{"postId": 1234}'>post.show 1234</a></li>
+			<li><a data-href="post.comments" data-path='{"postId": 1234, "query":{"size":50}}'>post.comments 1234, size 50</a></li>
+		</ul>
+		<h2 id="message"></h2>
+
+		<script src="https://cdn.rawgit.com/DFOXpro/trocha/0.1.3/dist/trocha.min.js"></script>
+		<script src="vanilla.js"></script>
+	</body>
+</html>

@@ -103,6 +103,8 @@
         <div class="lang-selector">
               <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="coffeescript">coffeescript</a>
+              <a><b>THIS IS AN OLD VERSION</b></a>
+              <a href="https://dfoxpro.github.io/trochaJS" ><b>see current docs here</b></a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -111,8 +113,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='https://dfoxpro.github.io/trochaJS/0_2_0/'>Old 0.2.0 docs</a></li>
-            <li><a href='https://dfoxpro.github.io/trochaJS/0_1_3/'>Old 0.1.3 docs</a></li>
+            <li><a href='https://dfoxpro.github.io/trochaJS'>Current docs</a></li>
             <li><a href='#100-contributing'>Español</a></li>
             <li><a href='#100-contributing'>English</a></li>
             <li><a href='#100-contributing'>Français</a></li>
@@ -124,36 +125,14 @@
       <div class="content">
         <h1 id="trochajs">TrochaJS</h1>
 
-<blockquote>
-<p><a href="https://www.mozilla.org/en-US/MPL/2.0/FAQ"><img src="https://img.shields.io/npm/l/trocha.svg?style=plastic&amp;logo=Mozilla" alt="MPL license" /></a>
-<a href="https://www.npmjs.com/package/trocha"><img src="https://img.shields.io/npm/v/trocha.svg?style=plastic&amp;logo=npm" alt="npm version" /></a>
-<a href="https://github.com/DFOXpro/trocha"><img src="https://img.shields.io/badge/src-DFOXpro/trocha-brightgreen.svg?style=plastic&amp;logo=Github" alt="Github project" /></a>
-<a href="https://travis-ci.org/DFOXpro/trocha"><img src="https://img.shields.io/travis/DFOXpro/trocha.svg?logo=Travis%20CI&amp;logoColor=FFFFFF&amp;style=plastic" alt="Build Status" /></a></p>
-
-<p><a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Node.js" alt="Test Node" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Mozilla%20Firefox" alt="Test FX" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Google%20Chrome" alt="Test Chromium" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Microsoft%20Edge" alt="Test Edge" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/11%20asserts-170/173-brightgreen.svg?style=plastic&amp;logo=Internet%20explorer&amp;color=important" alt="Test IE" /></a></p>
-
-<p><a href="https://twitter.com/dfoxpro"><img src="https://img.shields.io/badge/contact-@DFOXpro-informational.svg?style=plastic&amp;logo=Twitter" alt="Contact info" /></a>
-<a href="https://twitter.com/hashtag/TrochaJS"><img src="https://img.shields.io/badge/share-%23TrochaJS-informational.svg?style=plastic&amp;logo=Twitter" alt="Share info" /></a></p>
-
-<p><a href="#idmode">New in 0.2.1: idMode</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.0.svg?style=plastic&amp;logo=Github" alt="Commits since release" /></a></p>
-
-<p><a href="#alias">New in 0.2.0: alias.path</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.1.3.svg?style=plastic&amp;logo=Github" alt="Commits since previous release" /></a></p>
-
-<p><a href="https://github.com/DFOXpro/trocha/blob/master/CHANGELOG.md">Full changelog here</a></p>
-</blockquote>
-
 <p>It&rsquo;s a standalone javascript library that describe route listing.
-Ideal for client-side route management (SPAs and XHR/Ajax async request) and NodeJS route declaration.</p>
+Ideal for client-side route management and NodeJS route declaration.</p>
 
 <p>see our <a href="#101-intro-to-trocha-js">Hello World code example</a> to lear more.</p>
 
 <h3 id="what-it-does">What it does</h3>
 
-<p><strong>print</strong> clean routes for your javascript projects and even help <code class="prettyprint">&lt;your favorite&gt;</code> (framework/set of libraries) to <strong>describe</strong> your app routes.</p>
+<p><strong>print</strong> clean routes for your javascript projects and even help <code class="prettyprint">&lt;your favorite&gt;</code> framework to <strong>describe</strong> your app routes.</p>
 
 <h3 id="what-it-does-not">What it does not</h3>
 
@@ -178,7 +157,7 @@ Ideal for client-side route management (SPAs and XHR/Ajax async request) and Nod
 <span class="nx">sell</span><span class="p">.</span><span class="na">quantity</span>
 </code></pre>
 <blockquote>
-<p>Nice target code example</p>
+<p>Objective code example</p>
 </blockquote>
 <pre class="highlight javascript"><code><span class="nx">theRoute</span> <span class="o">=</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">product</span><span class="p">.</span><span class="nx">buy</span><span class="p">.</span><span class="nx">path</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">product_id</span><span class="p">:</span> <span class="nx">myProduct</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
@@ -199,36 +178,30 @@ Ideal for client-side route management (SPAs and XHR/Ajax async request) and Nod
 <h1 id="101-intro-to-trocha-js">101 - Intro to Trocha JS</h1>
 
 <blockquote>
-<p>Get a copy of the library via npm</p>
+<p>Get a copy of the library via bower</p>
 </blockquote>
-<pre class="highlight plaintext"><code>npm i trocha
+<pre class="highlight plaintext"><code>bower install -S trocha#0.1.3
 </code></pre>
 <blockquote>
-<p>Insert the library within your page</p>
-</blockquote>
-<pre class="highlight html"><code><span class="nt">&lt;body&gt;</span>
+<p>Insert the library within your page
+<code class="prettyprint">html
+&lt;body&gt;
 ...Your page tags
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://&lt;aCDN&gt;/trocha/0.2.0/dist/trocha_library.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+&lt;script src=&quot;https://cdn.rawgit.com/DFOXpro/trocha/0.1.3/dist/trocha.min.js&quot;&gt;&lt;/script&gt;
 ...Your other scripts
-<span class="nt">&lt;/body&gt;</span>
-</code></pre>
-<blockquote>
-<p>Or via ES6 modules</p>
-</blockquote>
-<pre class="highlight javascript"><code><span class="kr">import</span> <span class="p">{</span><span class="nx">Trocha</span><span class="p">}</span> <span class="nx">from</span> <span class="s1">'trocha'</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">import</span> <span class="p">{</span><span class="nx">Trocha</span><span class="p">}</span> <span class="nx">from</span> <span class="s">'trocha'</span>
-</code></pre>
-<blockquote>
+&lt;/body&gt;
+</code></p>
+
 <p>Now define routes</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:{</span>
         <span class="na">hello</span><span class="p">:{</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"name"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">hello</span><span class="o">:</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"name"</span>
@@ -249,17 +222,14 @@ Ideal for client-side route management (SPAs and XHR/Ajax async request) and Nod
 </code></pre>
 <p>Welcome to Trocha JS routes engine, the main goal of this library is to prevent use of annoing/unmantenible strings in sources(JS) and markup(HTML) files of your big projects.</p>
 
-<p>This library does not depend of any other library/framework but can be integrated in those (React/Vue/Angular/Vanilla for example), also can be used on node and any mayor browser.
-<aside class="info">
-Note since <code class="prettyprint">0.2.0</code> tag, Trocha is a class so now is Capitalize and use &lsquo;new&rsquo; on init <code class="prettyprint">new Trocha()</code>
-</aside></p>
+<p>This library does not depend of any other library/framework but can be integrated in those (AngularJS 1.X for example), also can be used on node and any mayor browser.</p>
 
 <h1 id="102-defining-routes">102 - Defining routes</h1>
 
 <p>You can define routes tree with a simple JSON when initialize or after that with a method, please see <a href="#301-best-practices">Best practices</a> and <a href="#201-type-of-routes">Type of routes</a> for depper explanation</p>
 
 <h2 id="via-json-constructor">Via JSON constructor</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">index</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span>
@@ -269,13 +239,13 @@ Note since <code class="prettyprint">0.2.0</code> tag, Trocha is a class so now 
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"name"</span>
         <span class="p">},</span>
         <span class="na">crud</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"crud_id"</span>
         <span class="p">},</span>
-        <span class="na">faq</span><span class="p">:</span> <span class="s2">"/FrequentlyAskedQuestions"</span>
+        <span class="na">faq</span><span class="p">:</span> <span class="s2">"FrequentlyAskedQuestions"</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">index</span><span class="o">:</span>
             <span class="na">$hide</span><span class="o">:</span> <span class="no">true</span>
@@ -283,9 +253,9 @@ Note since <code class="prettyprint">0.2.0</code> tag, Trocha is a class so now 
         <span class="na">hello</span><span class="o">:</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"name"</span>
         <span class="na">crud</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"crud_id"</span>
-        <span class="na">faq</span><span class="o">:</span> <span class="s">"/FrequentlyAskedQuestions"</span>
+        <span class="na">faq</span><span class="o">:</span> <span class="s">"FrequentlyAskedQuestions"</span>
 </code></pre>
 <blockquote>
 <p>This should generate:</p>
@@ -301,25 +271,25 @@ Note since <code class="prettyprint">0.2.0</code> tag, Trocha is a class so now 
 </code></pre>
 <p>This is the recomended way to define your routes tree, when create your trocha object simply add a <code class="prettyprint">routes</code> object tree.</p>
 
-<p>Note the <code class="prettyprint">$</code> prefix this is used to separate trocha especific inputs of route names, this can be change see <a href="#203-route-definition-parameters">Route definition parameters</a>.</p>
+<p>Note the <code class="prettyprint">$</code> prefix this is used to separate trocha especific inputs of route names, this can be change see <a href="#202-route-definition-parameters">Route definition parameters</a>.</p>
 
 <h2 id="via-method">Via method</h2>
-<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">({</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"hello"</span><span class="p">,</span>
     <span class="na">id</span><span class="p">:</span> <span class="s2">"name"</span>
 <span class="p">});</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newAlias</span><span class="p">({</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"faq"</span><span class="p">,</span>
-    <span class="na">alias</span><span class="p">:</span> <span class="s2">"/FrequentlyAskedQuestions"</span>
+    <span class="na">alias</span><span class="p">:</span> <span class="s2">"FrequentlyAskedQuestions"</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newRoute</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"hello"</span>
     <span class="na">id</span><span class="o">:</span> <span class="s">"name"</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newAlias</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"faq"</span>
-    <span class="na">alias</span><span class="o">:</span> <span class="s">"/FrequentlyAskedQuestions"</span>
+    <span class="na">alias</span><span class="o">:</span> <span class="s">"FrequentlyAskedQuestions"</span>
 </code></pre>
 <blockquote>
 <p>This should generate:</p>
@@ -329,7 +299,7 @@ Note since <code class="prettyprint">0.2.0</code> tag, Trocha is a class so now 
 </code></pre>
 <p>This route definition mode can be used in any part of the code, also is usefull to change a route definition.
 <aside class="warning">
-Note <code class="prettyprint">myRoutes</code> should not be <code class="prettyprint">const</code>
+Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prettyprint">const</code>
 </aside></p>
 
 <p>Avoid this way, please see <a href="#301-best-practices">Best practices</a> for depper explanation.</p>
@@ -349,7 +319,7 @@ Note <code class="prettyprint">myRoutes</code> should not be <code class="pretty
     <span class="na">query</span><span class="p">:{</span><span class="na">guest</span><span class="p">:</span><span class="s2">"true"</span><span class="p">}</span>
 <span class="p">});</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">crud</span><span class="p">.</span><span class="nx">edit</span><span class="p">.</span><span class="nx">path</span><span class="p">();</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">faq</span><span class="p">.</span><span class="nx">path</span><span class="p">();</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">faq</span><span class="p">;</span> <span class="c1">// This will change for path()</span>
 </code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span><span class="p">.</span><span class="na">index</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">contact</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">hello</span><span class="p">.</span><span class="na">path</span> <span class="na">name</span><span class="o">:</span> <span class="s">"World"</span>
@@ -359,7 +329,7 @@ Note <code class="prettyprint">myRoutes</code> should not be <code class="pretty
     <span class="na">crud_id</span><span class="o">:</span> <span class="s">"ASD"</span>
     <span class="na">query</span><span class="o">:</span> <span class="na">guest</span><span class="o">:</span> <span class="s">"true"</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">crud</span><span class="p">.</span><span class="na">edit</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="na">faq</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="na">faq</span> <span class="c1"># This will change for path()</span>
 </code></pre>
 <blockquote>
 <p>This should generate:</p>
@@ -375,8 +345,8 @@ Note <code class="prettyprint">myRoutes</code> should not be <code class="pretty
 </code></pre>
 <p>To print any of your routes simply use <code class="prettyprint">path()</code> function at the end of the route.
 See <a href="#204-route-printing-parameters">Route printing parameters</a>
-<aside class="info">
-Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path function
+<aside class="warning">
+Note for <code class="prettyprint">0.1.3</code> tag, alias print without the path function, this will change in future releases
 </aside></p>
 
           <h1 id="200-api">200 - API</h1>
@@ -393,7 +363,7 @@ Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path
 </ul>
 
 <h2 id="route">Route</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">person</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"name"</span><span class="p">,</span>
@@ -403,7 +373,7 @@ Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="c1">//OR</span>
-<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"person"</span><span class="p">,</span>
     <span class="na">hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -412,14 +382,14 @@ Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">person</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"attributes"</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">person</span><span class="o">:</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"name"</span>
             <span class="na">$hide</span><span class="o">:</span> <span class="no">true</span>
             <span class="na">attributes</span><span class="o">:</span> <span class="p">{}</span>
 <span class="c1">#OR</span>
-<span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+<span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newRoute</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"person"</span>
     <span class="na">hide</span><span class="o">:</span> <span class="no">true</span>
@@ -441,27 +411,27 @@ Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path
 </ul>
 
 <h2 id="resource">Resource</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">products</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"product_id"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="c1">//OR</span>
-<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newResource</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"products"</span><span class="p">,</span>
     <span class="na">id</span><span class="p">:</span> <span class="s2">"product_id"</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">products</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"product_id"</span>
 <span class="c1">#OR</span>
-<span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+<span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newResource</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"products"</span><span class="p">,</span>
     <span class="na">id</span><span class="o">:</span> <span class="s">"product_id"</span>
@@ -488,256 +458,186 @@ Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path
 </ul></li>
 </ul>
 
-<p>This kind of routes is useful also for RESTful request
-<aside class="warning">
-Avoid using the resource base route, use instead (in this example) <code class="prettyprint">products.list.path()</code> instead of <code class="prettyprint">products.path()</code>
-</aside></p>
-
 <h2 id="custom-resource">Custom resource</h2>
-<pre class="highlight javascript"><code><span class="nx">apiResource</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">$RESOURCE</span><span class="p">;</span> <span class="c1">// Note the $, this is an object not the String</span>
+<pre class="highlight javascript"><code><span class="nx">apiResource</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">$RESOURCE</span><span class="p">;</span> <span class="c1">// Note the $, this is an object not the String</span>
 <span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="k">new</span><span class="p">;</span>
 <span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="nx">edit</span><span class="p">;</span>
-<span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="nx">show</span><span class="p">;</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">{</span><span class="na">$id</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span> <span class="c1">// Override/Remove $hide: true</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$id</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">POST</span><span class="p">};</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="nx">read</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">PATCH</span><span class="p">};</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="k">delete</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">DELETE</span><span class="p">};</span>
+<span class="c1">//apiResource.show = {$hide: true}; // Already defined</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="p">{</span><span class="na">$id</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span> <span class="c1">// Override $hide: true</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$id</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">POST</span><span class="p">};</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">PATCH</span><span class="p">};</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="k">delete</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">DELETE</span><span class="p">};</span>
 
-<span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<span class="nx">serverRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://myRESTfulAPI.net.co'</span><span class="p">,</span>
     <span class="na">post</span><span class="p">:</span> <span class="s1">'.json'</span><span class="p">,</span>
     <span class="na">alwaysPost</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="na">alwaysUrl</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="c1">// customSelector: 'ñ',</span>
+    <span class="na">resource</span><span class="p">:</span> <span class="nx">apiResource</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">products</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span> <span class="c1">// Note this is String</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">RESOURCE</span><span class="p">,</span> <span class="c1">// Note this is String</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s1">'product_id'</span>
-            <span class="na">$resource</span><span class="p">:</span> <span class="nx">apiResource</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">apiResource</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">$RESOURCE</span> <span class="c1"># Note the $, this is an object not a String</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">apiResource</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">$RESOURCE</span> <span class="c1"># Note the $, this is an object not a String</span>
 <span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="na">new</span>
 <span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="na">edit</span>
-<span class="k">delete</span> <span class="nx">apiResource</span><span class="p">.</span><span class="na">show</span>
+<span class="c1"># apiResource.show = {$hide: true} # Already defined</span>
 <span class="nx">apiResource</span><span class="p">.</span><span class="na">list</span> <span class="o">=</span> <span class="p">{</span><span class="na">$id</span><span class="o">:</span> <span class="no">false</span><span class="p">}</span> <span class="c1"># Override $hide: true</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="na">create</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$id</span><span class="o">:</span> <span class="no">false</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">POST</span><span class="p">}</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="na">read</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">}</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="na">update</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">PATCH</span><span class="p">}</span>
-<span class="nx">apiResource</span><span class="p">.</span><span class="na">delete</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">DELETE</span><span class="p">}</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="na">create</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$id</span><span class="o">:</span> <span class="no">false</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">POST</span><span class="p">}</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="na">update</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">PATCH</span><span class="p">}</span>
+<span class="nx">apiResource</span><span class="p">.</span><span class="na">delete</span> <span class="o">=</span> <span class="p">{</span><span class="na">$hide</span><span class="o">:</span> <span class="no">true</span><span class="p">,</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">DELETE</span><span class="p">}</span>
 
-<span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+<span class="nx">serverRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://myRESTfulAPI.net.co'</span>
     <span class="na">post</span><span class="o">:</span> <span class="s">'.json'</span>
     <span class="na">alwaysPost</span><span class="o">:</span> <span class="no">true</span>
     <span class="na">alwaysUrl</span><span class="o">:</span> <span class="no">true</span>
-    <span class="c1"># customSelector: 'ñ'</span>
+    <span class="na">resource</span><span class="o">:</span> <span class="nx">apiResource</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">products</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">RESOURCE</span> <span class="c1"># Note this is String (whitout the $ prefix)</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">RESOURCE</span> <span class="c1"># Note this is String (whitout the $ prefix)</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">'product_id'</span>
-            <span class="na">$resource</span><span class="o">:</span> <span class="nx">apiResource</span>
 </code></pre>
 <blockquote>
 <p>This should generate:</p>
 </blockquote>
-<pre class="highlight shell"><code>https://myRESTfulAPI.net.co/products/list.json <span class="c"># list with method get</span>
-https://myRESTfulAPI.net.co/products.json <span class="c"># create with method post</span>
-https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># read with method get</span>
-https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># update with method patch</span>
-https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># delete with method delete</span>
+<pre class="highlight shell"><code>https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># get</span>
+https://myRESTfulAPI.net.co/products/list.json <span class="c"># get</span>
+https://myRESTfulAPI.net.co/products.json <span class="c"># post</span>
+https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># patch</span>
+https://myRESTfulAPI.net.co/products/:product_id.json <span class="c"># delete</span>
 </code></pre>
 <p>You can create your customs resources, ideal for RESTful apis (see
 <a href="#301-best-practices">Best practices</a>,
-<a href="#205-methods-amp-attributes">Methods</a> and
+<a href="#205-methods">Methods</a> and
 <a href="#202-constants">Constants</a>
 )</p>
 
-<p>When you&rsquo;re defining your trocha object add a <code class="prettyprint">resource</code> object, it will be use has reference for any resource within this trocha object.</p>
+<p>When you&rsquo;re defining your trocha object add an <code class="prettyprint">resource</code> object, it will be use has reference for any resource within this trocha object.</p>
 
 <ul>
-<li>You can copy and modify default resource at <code class="prettyprint">Trocha.$RESOURCE</code> or with <a href="#amp-customselector">customSelector</a> at <code class="prettyprint">serverRoutes.ñRESOURCE</code></li>
+<li>You can copy and modify default resource at <code class="prettyprint">trocha.$RESOURCE</code></li>
 </ul>
 
 <h2 id="scope">Scope</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">language</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">SCOPE</span><span class="p">,</span>
-            <span class="na">id</span><span class="p">:</span> <span class="s2">"language_id"</span><span class="p">,</span>
+        <span class="na">portal</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">SCOPE</span><span class="p">,</span>
             <span class="na">dashboard</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="c1">//OR</span>
-<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newScope</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s2">"language"</span><span class="p">,</span> <span class="na">id</span><span class="p">:</span> <span class="s2">"language_id"</span><span class="p">});</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">language</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s2">"dashboard"</span><span class="p">});</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">language</span><span class="p">.</span><span class="nx">dashboard</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">language_id</span><span class="p">:</span> <span class="s1">'esBO'</span><span class="p">}));</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">dashboard</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+<span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newScope</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s2">"portal"</span><span class="p">});</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="nx">portal</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s2">"dashboard"</span><span class="p">});</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
-        <span class="na">language</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">SCOPE</span>
-            <span class="na">id</span><span class="o">:</span> <span class="s">"language_id"</span>
+        <span class="na">portal</span><span class="o">:</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">SCOPE</span>
             <span class="na">dashboard</span><span class="o">:</span> <span class="p">{}</span>
 <span class="c1">#OR</span>
-<span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newScope</span> <span class="na">name</span><span class="o">:</span> <span class="s">"language"</span><span class="p">,</span> <span class="na">id</span><span class="o">:</span> <span class="s">"language_id"</span>
-<span class="nx">myRoutes</span><span class="p">.</span><span class="na">language</span><span class="p">.</span><span class="na">_newRoute</span> <span class="na">name</span><span class="o">:</span> <span class="s">"dashboard"</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">language</span><span class="p">.</span><span class="na">dashboard</span><span class="p">.</span><span class="na">path</span> <span class="na">language_id</span><span class="o">:</span> <span class="s">'esBO'</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">dashboard</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
+<span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newScope</span> <span class="na">name</span><span class="o">:</span> <span class="s">"portal"</span>
+<span class="nx">myRoutes</span><span class="p">.</span><span class="na">portal</span><span class="p">.</span><span class="na">_newRoute</span> <span class="na">name</span><span class="o">:</span> <span class="s">"dashboard"</span>
 </code></pre>
 <blockquote>
-<p>This should print:</p>
+<p>This should generate:</p>
 </blockquote>
-<pre class="highlight shell"><code>/esBO/dashboard
-/dashboard
+<pre class="highlight shell"><code>/portal/dashboard
 </code></pre>
-<p>Is an optional level of the route tree.</p>
+<p>Is just a level of the route tree.</p>
 
 <ul>
-<li>It require an <code class="prettyprint">ID</code></li>
-<li>It by default inits with <code class="prettyprint">justId: true</code></li>
 <li>Does not offer <code class="prettyprint">path()</code>.</li>
-<li>generate the same child tree for the parent</li>
 <li>Can be parent of any kind of other routes.</li>
 </ul>
 
 <h2 id="alias">Alias</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">cdns</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">cdns</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="c1">// This is a cool vanilla views/routing system more @ http://mtrpcic.net/pathjs/</span>
         <span class="na">pathjs</span><span class="p">:</span> <span class="s2">"https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js"</span>
-        <span class="na">images</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">ALIAS</span><span class="p">,</span>
-            <span class="na">$alias</span><span class="p">:</span> <span class="s2">"https://cdn.mydomain.io/images"</span><span class="p">,</span>
-            <span class="na">$id</span><span class="p">:</span> <span class="s2">"image_token"</span><span class="p">,</span>
-            <span class="na">desktop</span><span class="p">:</span> <span class="s1">'full_size_for_desktop'</span>
-        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="c1">//OR</span>
-<span class="kd">let</span> <span class="nx">cdns</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<span class="kd">let</span> <span class="nx">cdns</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">cdns</span><span class="p">.</span><span class="nx">_newAlias</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"pathjs"</span><span class="p">,</span>
     <span class="na">alias</span><span class="p">:</span> <span class="s2">"https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js"</span>
 <span class="p">});</span>
-<span class="nx">cdns</span><span class="p">.</span><span class="nx">_newAlias</span><span class="p">(</span> <span class="p">{</span>
-    <span class="na">name</span><span class="p">:</span> <span class="s2">"images"</span><span class="p">,</span>
-    <span class="na">alias</span><span class="p">:</span> <span class="s2">"https://cdn.mydomain.io/images"</span><span class="p">,</span>
-    <span class="na">$id</span><span class="p">:</span> <span class="s2">"image_token"</span>
-<span class="p">});</span>
-<span class="nx">cdns</span><span class="p">.</span><span class="nx">images</span><span class="p">.</span><span class="nx">_newAlias</span><span class="p">({</span>
-    <span class="na">name</span><span class="p">:</span> <span class="s2">"desktop"</span><span class="p">,</span>
-    <span class="na">alias</span><span class="p">:</span> <span class="s2">"full_size_for_desktop"</span>
-<span class="p">})</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cdns</span><span class="p">.</span><span class="nx">pathjs</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cdns</span><span class="p">.</span><span class="nx">images</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">image_token</span><span class="p">:</span> <span class="s1">'car.jpg'</span><span class="p">}));</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cdns</span><span class="p">.</span><span class="nx">images</span><span class="p">.</span><span class="nx">desktop</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">query</span><span class="p">:{</span><span class="na">colour</span><span class="p">:</span><span class="s1">'mono'</span><span class="p">}}));</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">cdns</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">cdns</span><span class="p">.</span><span class="nx">pathjs</span><span class="p">);</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">cdns</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="c1"># This is a cool vanilla views/routing system more @ http://mtrpcic.net/pathjs/</span>
-        <span class="na">pathjs</span><span class="o">:</span> <span class="s">'https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js'</span>
-        <span class="na">images</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">ALIAS</span>
-            <span class="na">$alias</span><span class="o">:</span> <span class="s">'https://cdn.mydomain.io/images'</span>
-            <span class="na">$id</span><span class="o">:</span> <span class="s">'image_token'</span>
-            <span class="na">desktop</span><span class="o">:</span> <span class="s">'full_size_for_desktop'</span>
+        <span class="na">pathjs</span><span class="o">:</span> <span class="s">"https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js"</span>
 <span class="c1">#OR</span>
-<span class="nx">cdns</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+<span class="nx">cdns</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">cdns</span><span class="p">.</span><span class="na">_newAlias</span>
-    <span class="na">name</span><span class="o">:</span> <span class="s">'pathjs'</span>
-    <span class="na">alias</span><span class="o">:</span> <span class="s">'https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js'</span>
-<span class="nx">cdns</span><span class="p">.</span><span class="na">_newAlias</span>
-    <span class="na">name</span><span class="o">:</span> <span class="s">'images'</span>
-    <span class="na">$id</span><span class="o">:</span> <span class="s">'image_token'</span>
-    <span class="na">alias</span><span class="o">:</span> <span class="s">'https://cdn.mydomain.io/images'</span>
-<span class="nx">cdns</span><span class="p">.</span><span class="na">images</span><span class="p">.</span><span class="na">_newAlias</span>
-    <span class="na">name</span><span class="o">:</span> <span class="s">'desktop'</span>
-    <span class="na">alias</span><span class="o">:</span> <span class="s">'full_size_for_desktop'</span>
-
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">cdns</span><span class="p">.</span><span class="na">pathjs</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">cdns</span><span class="p">.</span><span class="na">images</span><span class="p">.</span><span class="na">path</span> <span class="na">image_token</span><span class="o">:</span> <span class="s">'car.jpg'</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">cdns</span><span class="p">.</span><span class="na">images</span><span class="p">.</span><span class="na">desktop</span><span class="p">.</span><span class="na">path</span> <span class="na">query</span><span class="o">:</span> <span class="na">colour</span><span class="o">:</span><span class="s">'mono'</span>
+    <span class="na">name</span><span class="o">:</span> <span class="s">"pathjs"</span>
+    <span class="na">alias</span><span class="o">:</span> <span class="s">"https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js"</span>
+<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">cdns</span><span class="p">.</span><span class="na">pathjs</span>
 </code></pre>
 <blockquote>
 <p>This should print:</p>
 </blockquote>
 <pre class="highlight shell"><code>https://cdn.rawgit.com/mtrpcic/pathjs/master/path.min.js
-https://cdn.mydomain.io/images/car.jpg
-https://cdn.mydomain.io/images/:image_token/full_size_for_desktop?colour<span class="o">=</span>mono
 </code></pre>
-<p>This type of route can render an specific string independent of the name, it&rsquo;s usefull to print cdns and very long and isolated paths</p>
-
-<ul>
-<li>It can be created by an string in the constructor.</li>
-<li>Can be parent of any kind of other routes.</li>
-</ul>
-
-<p>You can also use alias like a obfuscation/minification option for magle childs
-<aside class="info">
-Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path function
+<p>This type of route can render an specific string independent of the name, it&rsquo;s usefull to print cdns and very long and isolated paths
+<aside class="warning">
+Note for <code class="prettyprint">0.1.3</code> tag, alias print without the path function, this will change in future releases
 </aside></p>
 
           <h1 id="202-constants">202 - Constants</h1>
-<pre class="highlight javascript"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">);</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">GET</span>
+<pre class="highlight javascript"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">);</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">GET</span>
 </code></pre>
 <blockquote>
 <p>This should print:</p>
 </blockquote>
 <pre class="highlight shell"><code>GET
 </code></pre>
-<p>The Trocha class also offers a set of useful constants, to call those constants simply write <code class="prettyprint">Trocha.&lt;CONST_NAME&gt;</code> or within the module include <code class="prettyprint">import {Trocha, GET, ROUTE, $RESOURCE} from &#39;trocha&#39;</code>.</p>
-
+<p>The Trocha constructor also offers a set of useful constants, to call those constants simply write <code class="prettyprint">trocha.&lt;CONST_NAME&gt;</code>.
 <aside class="notice">
-Some constants have the prefix `$` this means it&rsquo;s an object not an string
-</aside>
+Some constants have the prefix <code class="prettyprint">$</code> this means it&rsquo;s not an String
+</aside></p>
 
 <h2 id="route-types-names">Route types names</h2>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">ROUTES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">ROUTES</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:{</span>
         <span class="na">route_a</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">ROUTE</span> <span class="c1">// Not necesary</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">ROUTE</span> <span class="c1">// Not necesary</span>
         <span class="p">},</span>
         <span class="na">route_b</span><span class="p">:</span> <span class="p">{},</span>
         <span class="na">scope</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">SCOPE</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">SCOPE</span>
         <span class="p">},</span>
         <span class="na">resource</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">RESOURCE</span>
+            <span class="na">$type</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">RESOURCE</span>
         <span class="p">},</span>
-        <span class="na">alias</span><span class="p">:</span> <span class="p">{</span> <span class="c1">// if alias don't have child, should be use the alias string directly</span>
-            <span class="na">$type</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">ALIAS</span><span class="p">,</span>
-            <span class="na">$alias</span><span class="p">:</span> <span class="s2">"theAlias"</span>
-        <span class="p">}</span>
+        <span class="na">alias</span><span class="p">:</span> <span class="s2">"theAlias"</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">ROUTES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">ROUTES</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">route_a</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">ROUTE</span> <span class="c1"># Not necesary</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">ROUTE</span> <span class="c1"># Not necesary</span>
         <span class="na">route_b</span><span class="o">:</span> <span class="p">{}</span>
         <span class="na">scope</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">SCOPE</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">SCOPE</span>
         <span class="na">resource</span><span class="o">:</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
-        <span class="na">alias</span><span class="o">:</span> <span class="c1"># if alias don't have child, should be use the alias string directly</span>
-            <span class="na">$type</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">ALIAS</span>
-            <span class="na">$alias</span><span class="o">:</span> <span class="s">"theAlias"</span>
+            <span class="na">$type</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">RESOURCE</span>
+        <span class="na">alias</span><span class="o">:</span> <span class="s">"theAlias"</span>
 </code></pre>
-<p>There are 4 type of routes implemented in trocha but only 2 route type names normally is needed to be use:</p>
+<p>There are 4 type of routes implemented in trocha but only 2 route type names need to be use:</p>
 
 <ul>
-<li><code class="prettyprint">Trocha.SCOPE</code></li>
-<li><code class="prettyprint">Trocha.RESOURCE</code></li>
-<li><code class="prettyprint">Trocha.ALIAS</code></li>
-<li><code class="prettyprint">Trocha.ROUTE</code></li>
+<li><code class="prettyprint">trocha.SCOPE</code></li>
+<li><code class="prettyprint">trocha.RESOURCE</code></li>
 </ul>
 
 <p>The other 2 can be defined via:</p>
@@ -751,25 +651,25 @@ Some constants have the prefix `$` this means it&rsquo;s an object not an string
 
 <h2 id="http-request-methods-names">HTTP request methods names</h2>
 <pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">ROUTES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">SERVER</span><span class="p">:</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+    <span class="na">SERVER</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">({</span>
         <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://myRESTfulAPI.net.co'</span><span class="p">,</span>
         <span class="na">alwaysUrl</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
         <span class="na">routes</span><span class="p">:{</span>
             <span class="na">users</span><span class="p">:</span> <span class="p">{</span>
                 <span class="na">login</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">PATCH</span>
+                    <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">PATCH</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">});</span>
 <span class="p">};</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">ROUTES</span><span class="p">.</span><span class="na">SERVER</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">ROUTES</span><span class="p">.</span><span class="na">SERVER</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://myRESTfulAPI.net.co'</span>
     <span class="na">alwaysUrl</span><span class="o">:</span> <span class="no">true</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">users</span><span class="o">:</span>
             <span class="na">login</span><span class="o">:</span>
-                <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">PATCH</span>
+                <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">PATCH</span>
 </code></pre>
 <blockquote>
 <p>This should generate:</p>
@@ -811,41 +711,33 @@ Some constants have the prefix `$` this means it&rsquo;s an object not an string
 <p>There are 9 HTTP request methods names implemented in trocha:</p>
 
 <ul>
-<li><code class="prettyprint">Trocha.GET</code></li>
-<li><code class="prettyprint">Trocha.POST</code></li>
-<li><code class="prettyprint">Trocha.PATCH</code></li>
-<li><code class="prettyprint">Trocha.DELETE</code></li>
-<li><code class="prettyprint">Trocha.HEAD</code></li>
-<li><code class="prettyprint">Trocha.PUT</code></li>
-<li><code class="prettyprint">Trocha.CONNECT</code></li>
-<li><code class="prettyprint">Trocha.OPTIONS</code></li>
-<li><code class="prettyprint">Trocha.TRACE</code></li>
+<li><code class="prettyprint">trocha.GET</code></li>
+<li><code class="prettyprint">trocha.POST</code></li>
+<li><code class="prettyprint">trocha.PATCH</code></li>
+<li><code class="prettyprint">trocha.DELETE</code></li>
+<li><code class="prettyprint">trocha.HEAD</code></li>
+<li><code class="prettyprint">trocha.PUT</code></li>
+<li><code class="prettyprint">trocha.CONNECT</code></li>
+<li><code class="prettyprint">trocha.OPTIONS</code></li>
+<li><code class="prettyprint">trocha.TRACE</code></li>
 </ul>
 
 <p>Those names are usefull when you&rsquo;re using the route object to point a RESTful server see <a href="#304-angular-1-x">Angular 1.X implentation</a>
 You can set/get the method name of any of your routes via the <code class="prettyprint">$method</code> param/attribute.
 Remember the objective of trocha is to avoid the use of repetitive or unmantenable Strings</p>
 
-<ul>
-<li>For any Route or Alias default $method is <code class="prettyprint">GET</code></li>
-<li>Scopes and Resource base routes has no $method</li>
-<li>It&rsquo;s interacting with customSelector so <code class="prettyprint">&lt;customSelector&gt;method</code> to set and get this attribute</li>
-</ul>
-
 <h2 id="resource-base-object">Resource base object</h2>
-<pre class="highlight javascript"><code><span class="kd">var</span> <span class="nx">myResource</span> <span class="o">=</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">$RESOURCE</span>
-<span class="kr">const</span> <span class="nx">ROUTES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span><span class="na">customSelector</span><span class="p">:</span> <span class="s1">'TC_'</span><span class="p">})</span>
-<span class="kd">var</span> <span class="nx">myOtherResource</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="nx">TC_RESOURCE</span>
-
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myResource</span> <span class="o">=</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">$RESOURCE</span>
-<span class="nx">ROUTES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="na">customSelector</span><span class="o">:</span> <span class="s">'TC_'</span>
-<span class="nx">myOtherResource</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">TC_RESOURCE</span>
+<pre class="highlight javascript"><code><span class="p">(</span><span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">trocha</span><span class="p">.</span><span class="nx">$RESOURCE</span>
+<span class="p">})()</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="p">(</span><span class="o">-&gt;</span>
+    <span class="nx">trocha</span><span class="p">.</span><span class="na">$RESOURCE</span>
+<span class="p">)()</span>
 </code></pre>
 <blockquote>
-<p>This should generate:</p>
+<p>This should return an object:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-</span><span class="nt">"myResource"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nt">"$id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id"</span><span class="p">,</span><span class="w">
     </span><span class="nt">"edit"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
     </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -858,34 +750,16 @@ Remember the objective of trocha is to avoid the use of repetitive or unmantenab
     </span><span class="nt">"show"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="nt">"$hide"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
     </span><span class="p">}</span><span class="w">
-</span><span class="p">},</span><span class="w">
-</span><span class="nt">"myOtherResource"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"TC_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"edit"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
-    </span><span class="nt">"list"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"TC_hide"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"TC_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"new"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"TC_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"show"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"TC_hide"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p><code class="prettyprint">Trocha.$RESOURCE</code> This routes tree (object like the <code class="prettyprint">routes: {...}</code> you do) define how any resource will be created within this trocha object, you can modify this object if you want to create <a href="#custom-resource">Custom resources</a></p>
-
-<ul>
-<li>It’s interacting with customSelector so <code class="prettyprint">&lt;customSelector&gt;RESOURCE</code> to get this object</li>
-</ul>
+<p><code class="prettyprint">trocha.$RESOURCE</code> This routes tree (object like the <code class="prettyprint">routes: {...}</code> you do) define how any resource will be created within this trocha object, you can modify this object if you want to create <a href="#custom-resource">Custom resources</a></p>
 
           <h1 id="203-route-definition-parameters">203 - Route definition parameters</h1>
 
 <p>When you&rsquo;re creating your trocha object you can set some basic parameters so when a route need to be printed it will do with more or less content if you like.</p>
 
 <h2 id="routes-amp-its-parameters">Routes &amp; its parameters</h2>
-<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">home</span><span class="p">:</span> <span class="p">{},</span> <span class="c1">// A simple route</span>
         <span class="na">The</span><span class="p">:</span> <span class="p">{</span> <span class="c1">// It's supports many levels of hierarchy</span>
@@ -901,7 +775,7 @@ Remember the objective of trocha is to avoid the use of repetitive or unmantenab
             <span class="na">$id</span><span class="p">:</span> <span class="s2">"name"</span><span class="p">,</span>
             <span class="na">update</span><span class="p">:</span> <span class="p">{</span>
                 <span class="na">$hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// The "update" will be hidden</span>
-                <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">PATCH</span> <span class="c1">// This can be part of a (custom) resource ;)</span>
+                <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">PATCH</span> <span class="c1">// This can be part of a (custom) resource ;)</span>
             <span class="p">}</span>
         <span class="p">},</span>
         <span class="na">ninja</span><span class="p">:</span> <span class="p">{</span> <span class="c1">// see 300 - Real World applications &gt; Advance ID handling</span>
@@ -926,7 +800,7 @@ Remember the objective of trocha is to avoid the use of repetitive or unmantenab
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">ninja</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">ninja</span><span class="p">.</span><span class="nx">flying_shuriken</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">shuriken_id</span><span class="p">:</span> <span class="s1">'the·distracting·one'</span><span class="p">}));</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">ninja</span><span class="p">.</span><span class="nx">silent_knife</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">knife_id</span><span class="p">:</span> <span class="s1">'the·killer·one'</span><span class="p">}));</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">home</span><span class="o">:</span> <span class="p">{}</span> <span class="c1"># A simple route</span>
         <span class="na">The</span><span class="o">:</span> <span class="c1"># It's supports many levels of hierarchy</span>
@@ -942,7 +816,7 @@ Remember the objective of trocha is to avoid the use of repetitive or unmantenab
             <span class="na">$id</span><span class="o">:</span> <span class="s">"name"</span>
             <span class="na">update</span><span class="o">:</span>
                 <span class="na">$hide</span><span class="o">:</span> <span class="no">true</span> <span class="c1"># The "update" will be hidden</span>
-                <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">PATCH</span> <span class="c1"># This can be part of a (custom) resource ;)</span>
+                <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">PATCH</span> <span class="c1"># This can be part of a (custom) resource ;)</span>
         <span class="na">ninja</span><span class="o">:</span> <span class="c1"># see 300 - Real World applications &gt; Advance ID handling</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">"ninja_shadow"</span>
             <span class="na">$justId</span><span class="o">:</span> <span class="no">true</span>
@@ -1076,7 +950,7 @@ PATCH
 <p>(*) Also note <code class="prettyprint">name</code> and <code class="prettyprint">alias</code> are only used when the route is defined vía method</p>
 
           <h2 id="domain-amp-always-url">Domain &amp; Always Url</h2>
-<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://mydomain.net.co'</span><span class="p">,</span>
     <span class="na">alwaysUrl</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
@@ -1084,7 +958,7 @@ PATCH
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverRoutes</span><span class="p">.</span><span class="nx">home</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://mydomain.net.co'</span>
     <span class="na">alwaysUrl</span><span class="o">:</span> <span class="no">true</span>
     <span class="na">routes</span><span class="o">:</span> <span class="na">home</span><span class="o">:</span> <span class="p">{}</span>
@@ -1100,7 +974,7 @@ PATCH
 <p>This is very usefull when you&rsquo;re defining routes for a RESTful server.</p>
 
           <h2 id="prefix-amp-postfix-string">Prefix &amp; postfix string</h2>
-<pre class="highlight javascript"><code><span class="nx">templateRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">templateRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">pre</span><span class="p">:</span> <span class="s1">'/templates'</span><span class="p">,</span> <span class="c1">// note the /</span>
     <span class="na">post</span><span class="p">:</span> <span class="s1">'-myH45H.html'</span><span class="p">,</span>
     <span class="na">alwaysPost</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1112,7 +986,7 @@ PATCH
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">templateRoutes</span><span class="p">.</span><span class="nx">home</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">post</span><span class="p">:</span> <span class="kc">false</span><span class="p">}));</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">templateRoutes</span><span class="p">.</span><span class="nx">home</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">pre</span><span class="p">:</span> <span class="kc">true</span><span class="p">}));</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">templateRoutes</span><span class="p">.</span><span class="nx">home</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">ext</span><span class="p">:</span> <span class="kc">true</span><span class="p">}));</span> <span class="c1">// only if alwaysPost is not set</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">templateRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">templateRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">pre</span><span class="o">:</span> <span class="s">'/templates'</span> <span class="c1"># note the /</span>
     <span class="na">post</span><span class="o">:</span> <span class="s">'-myH45H.html'</span>
     <span class="na">alwaysPost</span><span class="o">:</span> <span class="no">true</span>
@@ -1146,49 +1020,13 @@ PATCH
 Avoid the use of <code class="prettyprint">pre</code> if <code class="prettyprint">domain</code> can be use
 </aside></p>
 
-          <h2 id="idmode">idMode</h2>
-<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
-    <span class="na">idMode</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">BRACKETS</span><span class="p">,</span>
-    <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">hello</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$id</span><span class="p">:</span> <span class="s1">'name'</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
-    <span class="na">idMode</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">BRACKETS</span><span class="p">,</span>
-    <span class="na">routes</span><span class="o">:</span> <span class="na">hello</span><span class="o">:</span>
-        <span class="na">$id</span><span class="o">:</span> <span class="s">'name'</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">serverRoutes</span><span class="p">.</span><span class="na">hello</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
-</code></pre>
-<blockquote>
-<p>This should print:</p>
-</blockquote>
-<pre class="highlight shell"><code>https://mydomain.net.co/hello/<span class="o">{</span>name<span class="o">}</span>
-<span class="c"># Normally is</span>
-<span class="c"># https://mydomain.net.co/hello/:name</span>
-</code></pre>
-<p>You can choice the id mode of your routes via <code class="prettyprint">idMode</code> constructor attribute.</p>
-
-<p><code class="prettyprint">idMode</code> can be:</p>
-
-<p><code class="prettyprint">Trocha.BRACKETS</code> will render: <code class="prettyprint">/{id}</code>.</p>
-
-<p><code class="prettyprint">Trocha.COLON</code> will render: <code class="prettyprint">/:id</code>, this is the default behavior.</p>
-
-<p>This is useful for not so standard framework/libraries.
-<aside class="info">
-New in <code class="prettyprint">0.2.1</code>! before this only <code class="prettyprint">/:id</code> idMode was rendered
-</aside></p>
-
           <h2 id="amp-customselector">$ &amp; customSelector</h2>
-<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">customSelector</span><span class="p">:</span> <span class="s1">'TRCH'</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">hello</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">TRCHid</span><span class="p">:</span> <span class="s1">'name'</span><span class="p">,</span>
-            <span class="na">TRCHmethod</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">,</span>
+            <span class="na">TRCHmethod</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">,</span>
             <span class="na">$id</span><span class="p">:</span> <span class="p">{}</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1198,12 +1036,12 @@ New in <code class="prettyprint">0.2.1</code>! before this only <code class="pre
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">$id</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">TRCHmethod</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">$id</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">customSelector</span><span class="o">:</span> <span class="s">'TRCH'</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">hello</span><span class="o">:</span>
             <span class="na">TRCHid</span><span class="o">:</span> <span class="s">'name'</span>
-            <span class="na">TRCHmethod</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">GET</span>
+            <span class="na">TRCHmethod</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">GET</span>
             <span class="na">$id</span><span class="o">:</span> <span class="p">{}</span>
 <span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">hello</span><span class="p">.</span><span class="na">path</span> <span class="p">{</span><span class="na">name</span><span class="o">:</span> <span class="s">'World'</span><span class="p">}</span>
 <span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">hello</span><span class="p">.</span><span class="na">TRCHid</span>
@@ -1242,7 +1080,7 @@ finally any javascript variable illegal character like <code class="prettyprint"
 </aside></p>
 
           <h1 id="204-route-printing-parameters">204 - Route printing parameters</h1>
-<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">pre</span><span class="p">:</span> <span class="s1">'/templates'</span><span class="p">,</span> <span class="c1">// note the /</span>
     <span class="na">post</span><span class="p">:</span> <span class="s1">'-myH45H.html'</span><span class="p">,</span>
     <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://mydomain.net.co'</span><span class="p">,</span>
@@ -1270,7 +1108,7 @@ finally any javascript variable illegal character like <code class="prettyprint"
     <span class="na">address</span><span class="p">:</span> <span class="s1">'P._Sherman_42_wallaby_way'</span>
 <span class="p">}));</span>
 
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">pre</span><span class="o">:</span> <span class="s">'/templates'</span> <span class="c1"># note the /</span>
     <span class="na">post</span><span class="o">:</span> <span class="s">'-myH45H.html'</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://mydomain.net.co'</span>
@@ -1323,10 +1161,10 @@ https://mydomain.net.co/town/:town_name
 <li><code class="prettyprint">ext: true</code> (extended) print prefix and postfix.</li>
 <li><code class="prettyprint">hide: true</code> Hide the last name of the path, if an id is setted it will appears anyway.</li>
 <li><code class="prettyprint">parentId: false</code> Hide the parent route id.</li>
-<li><code class="prettyprint">id: false</code> Hide the route last id, also note the last <code class="prettyprint">/</code> is skip.</li>
-<li><code class="prettyprint">&lt;someId&gt;: &lt;String&gt;|false</code> if <code class="prettyprint">String</code> set the value of some id of the route, if <code class="prettyprint">false</code> skip this id path (remove <code class="prettyprint">/:someId</code>).</li>
+<li><code class="prettyprint">id: false</code> Hide the route id.</li>
+<li><code class="prettyprint">&lt;someId&gt;: String</code> set the value of some id of the route.</li>
 <li><code class="prettyprint">query: {&lt;attribute&gt;:&lt;value&gt;}</code> Print a define query <code class="prettyprint">?&lt;attribute&gt;=&lt;value&gt;&amp;...</code>.</li>
-<li><code class="prettyprint">fragment: &lt;String&gt;</code> Print the fragment <code class="prettyprint">#&lt;value&gt;</code>.</li>
+<li><code class="prettyprint">fragment: String</code> Print the fragment <code class="prettyprint">#&lt;value&gt;</code>.</li>
 </ul>
 
 <aside class="notice">
@@ -1343,7 +1181,7 @@ Note creation methods have <code class="prettyprint">_</code> prefix.</p>
 </aside></p>
 
 <h2 id="name">$name</h2>
-<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">country</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">state</span><span class="p">:</span> <span class="p">{</span>
@@ -1354,7 +1192,7 @@ Note creation methods have <code class="prettyprint">_</code> prefix.</p>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">$name</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">$name</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">city</span><span class="p">.</span><span class="nx">town</span><span class="p">.</span><span class="nx">$name</span><span class="p">);</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">country</span><span class="o">:</span>
             <span class="na">state</span><span class="o">:</span>
@@ -1374,7 +1212,7 @@ town
 <p><code class="prettyprint">&lt;selector&gt;name</code> Is a String, last child of the route.</p>
 
 <h2 id="as">$as</h2>
-<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">country</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">state</span><span class="p">:</span> <span class="p">{</span>
@@ -1385,7 +1223,7 @@ town
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">$as</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">$as</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">country</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">city</span><span class="p">.</span><span class="nx">town</span><span class="p">.</span><span class="nx">$as</span><span class="p">);</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">country</span><span class="o">:</span>
             <span class="na">state</span><span class="o">:</span>
@@ -1410,20 +1248,20 @@ If you know the Ruby(language) Rails(framework) routes(gem) as(attribute) it wor
 </aside></p>
 
 <h2 id="method">$method</h2>
-<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">students</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">,</span>
-            <span class="na">create</span><span class="p">:</span> <span class="p">{</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">POST</span><span class="p">}}</span>
+            <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">,</span>
+            <span class="na">create</span><span class="p">:</span> <span class="p">{</span> <span class="na">$method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">POST</span><span class="p">}}</span>
     <span class="p">}</span>
 <span class="p">});</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverRoutes</span><span class="p">.</span><span class="nx">students</span><span class="p">.</span><span class="nx">$method</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverRoutes</span><span class="p">.</span><span class="nx">students</span><span class="p">.</span><span class="nx">create</span><span class="p">.</span><span class="nx">$method</span><span class="p">);</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">students</span><span class="o">:</span>
-            <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">GET</span>
-            <span class="na">create</span><span class="o">:</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">POST</span>
+            <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">GET</span>
+            <span class="na">create</span><span class="o">:</span> <span class="na">$method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">POST</span>
 <span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">students</span><span class="p">.</span><span class="na">$method</span>
 <span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="na">students</span><span class="p">.</span><span class="na">create</span><span class="p">.</span><span class="na">$method</span>
 </code></pre>
@@ -1444,13 +1282,13 @@ POST
 <p><code class="prettyprint">&lt;route&gt;.path({args})</code> See <a href="#204-route-printing-parameters">Route printing parameters</a>.</p>
 
 <h3 id="_new-lt-route-type-gt">_new&lt;Route type&gt;</h3>
-<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">({</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"person"</span><span class="p">,</span>
     <span class="c1">// Optionals</span>
     <span class="na">id</span><span class="p">:</span> <span class="s2">"name"</span><span class="p">,</span>
     <span class="na">hide</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="na">method</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">PUT</span>
+    <span class="na">method</span><span class="p">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="nx">PUT</span>
 <span class="p">});</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newScope</span><span class="p">({</span>
     <span class="na">name</span><span class="p">:</span> <span class="s2">"language"</span><span class="p">,</span>
@@ -1472,13 +1310,13 @@ POST
     <span class="na">name</span><span class="p">:</span> <span class="s2">"faq"</span><span class="p">,</span>
     <span class="na">alias</span><span class="p">:</span> <span class="s2">"FrequentlyAskedQuestions"</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newRoute</span> <span class="p">{</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"person"</span>
     <span class="c1"># Optionals</span>
     <span class="na">id</span><span class="o">:</span> <span class="s">"name"</span>
     <span class="na">hide</span><span class="o">:</span> <span class="no">true</span>
-    <span class="na">method</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">PUT</span>
+    <span class="na">method</span><span class="o">:</span> <span class="nx">trocha</span><span class="p">.</span><span class="na">PUT</span>
 <span class="p">}</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newScope</span> <span class="p">{</span>
     <span class="na">name</span><span class="o">:</span> <span class="s">"language"</span>
@@ -1548,7 +1386,7 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 /reports/123
 /reports/tables
 /reports/tables/321
-</code></pre><pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
+</code></pre><pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">reports</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">$id</span><span class="p">:</span> <span class="s1">'report_id'</span><span class="p">,</span>
@@ -1561,7 +1399,7 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
             <span class="p">}}</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="na">reports</span><span class="o">:</span>
             <span class="na">$id</span><span class="o">:</span> <span class="s">'report_id'</span>
@@ -1624,12 +1462,12 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>BAD idea</p>
 </blockquote>
-<pre class="highlight html"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.rawgit.com/DFOXpro/trocha/master/dist/Trocha.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<pre class="highlight html"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.rawgit.com/DFOXpro/trocha/master/dist/trocha.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre>
 <blockquote>
 <p>GOOD idea</p>
 </blockquote>
-<pre class="highlight html"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.rawgit.com/DFOXpro/trocha/0.1.3/dist/Trocha.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<pre class="highlight html"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.rawgit.com/DFOXpro/trocha/0.1.3/dist/trocha.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre>
 <p>Wherever you use this library never point to master branch, use always an especific version of the library.</p>
 
@@ -1642,20 +1480,20 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>BAD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">();</span>
+<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">();</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">_newRoute</span><span class="p">({</span><span class="nx">args</span><span class="p">...});</span>
 <span class="p">...</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">()</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">()</span>
 <span class="nx">myRoutes</span><span class="p">.</span><span class="na">_newRoute</span> <span class="p">{</span><span class="nx">args</span><span class="p">...}</span>
 <span class="p">...</span>
 </code></pre>
 <blockquote>
 <p>GOOD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">my</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span> <span class="p">{...</span> <span class="na">my</span> <span class="nx">routes</span> <span class="p">...}</span>
 </code></pre>
 <p>Always use the JSON constructor to declarate the routes tree, avoid the creation methods.</p>
@@ -1673,24 +1511,24 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>BAD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kd">let</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">my</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span> <span class="p">{...</span> <span class="na">my</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">...</span>
 </code></pre>
 <blockquote>
 <p>GOOD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">my</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="p">{...</span> <span class="na">my</span> <span class="nx">routes</span> <span class="p">...}</span> <span class="c1"># for CS2</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span> <span class="p">{...</span> <span class="na">my</span> <span class="nx">routes</span> <span class="p">...}</span> <span class="c1"># for CS2</span>
 
 <span class="c1"># for coffeescript vanilla :(</span>
 <span class="nx">__myRoutes</span> <span class="o">=</span> <span class="p">{...</span> <span class="na">my</span> <span class="nx">routes</span> <span class="p">...}</span>
-<span class="o">`</span><span class="nx">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<span class="o">`</span><span class="nx">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="o">:</span> <span class="nx">__myRoutes</span>
 <span class="p">});</span>
 <span class="o">`</span>
@@ -1710,14 +1548,14 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>BAD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
         <span class="nx">client</span> <span class="nx">routes</span> <span class="p">...</span>
         <span class="nx">serverA</span> <span class="nx">routes</span> <span class="p">...</span>
         <span class="nx">serverB</span> <span class="nx">routes</span> <span class="p">...</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="nx">trocha</span>
     <span class="na">routes</span><span class="o">:</span>
         <span class="nx">client</span> <span class="nx">routes</span> <span class="p">...</span>
         <span class="nx">serverA</span> <span class="nx">routes</span> <span class="p">...</span>
@@ -1726,30 +1564,30 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>GOOD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">clientRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<pre class="highlight javascript"><code><span class="kr">const</span> <span class="nx">clientRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">pre</span><span class="p">:</span> <span class="s1">'/the/templates/route'</span><span class="p">,</span>
     <span class="na">post</span><span class="p">:</span> <span class="s1">'_the_hash_and_ext.html'</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">client</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-<span class="kr">const</span> <span class="nx">serverARoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<span class="kr">const</span> <span class="nx">serverARoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://api.serverA.net.co/'</span><span class="p">,</span>
     <span class="na">alwaysUrl</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">serverA</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-<span class="kr">const</span> <span class="nx">serverBRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
+<span class="kr">const</span> <span class="nx">serverBRoutes</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span>
     <span class="na">domain</span><span class="p">:</span> <span class="s1">'https://api.serverB.net.co/'</span><span class="p">,</span>
     <span class="na">alwaysUrl</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
     <span class="na">routes</span><span class="p">:</span> <span class="p">{...</span> <span class="nx">serverB</span> <span class="nx">routes</span> <span class="p">...}</span>
 <span class="p">});</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">clientRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="p">{</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">clientRoutes</span> <span class="o">=</span> <span class="nx">trocha</span> <span class="p">{</span>
     <span class="na">pre</span><span class="o">:</span> <span class="s">'/the/templates/route'</span>
     <span class="na">post</span><span class="o">:</span> <span class="s">'_the_hash_and_ext.html'</span>
     <span class="na">routes</span><span class="o">:</span> <span class="p">{...</span> <span class="na">client</span> <span class="nx">routes</span> <span class="p">...}</span>
-<span class="nx">serverARoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="p">{</span>
+<span class="nx">serverARoutes</span> <span class="o">=</span> <span class="nx">trocha</span> <span class="p">{</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://api.serverA.net.co/'</span>
     <span class="na">alwaysUrl</span><span class="o">:</span> <span class="no">true</span>
     <span class="na">routes</span><span class="o">:</span> <span class="p">{...</span> <span class="na">serverA</span> <span class="nx">routes</span> <span class="p">...}</span>
-<span class="nx">serverBRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="p">{</span>
+<span class="nx">serverBRoutes</span> <span class="o">=</span> <span class="nx">trocha</span> <span class="p">{</span>
     <span class="na">domain</span><span class="o">:</span> <span class="s">'https://api.serverB.net.co/'</span>
     <span class="na">alwaysUrl</span><span class="o">:</span> <span class="no">true</span>
     <span class="na">routes</span><span class="o">:</span> <span class="p">{...</span> <span class="na">serverB</span> <span class="nx">routes</span> <span class="p">...}</span>
@@ -1775,9 +1613,9 @@ Note <code class="prettyprint">myRoutes</code> can&rsquo;t be <code class="prett
 <blockquote>
 <p>GOOD idea</p>
 </blockquote>
-<pre class="highlight javascript"><code><span class="nx">myCDN</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span><span class="na">routes</span><span class="p">:</span> <span class="na">min</span><span class="p">:</span> <span class="s1">'www.myCDN.io/min.js'</span><span class="p">});</span>
+<pre class="highlight javascript"><code><span class="nx">myCDN</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">({</span><span class="na">routes</span><span class="p">:</span> <span class="na">min</span><span class="p">:</span> <span class="s1">'www.myCDN.io/min.js'</span><span class="p">});</span>
 <span class="nx">loadAsyncCDN</span><span class="p">(</span><span class="nx">myCDN</span><span class="p">.</span><span class="nx">min</span><span class="p">);</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">myCDN</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span> <span class="na">routes</span><span class="o">:</span> <span class="na">min</span><span class="o">:</span> <span class="s">'www.myCDN.io/min.js'</span>
+</code></pre><pre class="highlight coffeescript"><code><span class="nx">myCDN</span> <span class="o">=</span> <span class="nx">trocha</span> <span class="na">routes</span><span class="o">:</span> <span class="na">min</span><span class="o">:</span> <span class="s">'www.myCDN.io/min.js'</span>
 <span class="nx">loadAsyncCDN</span> <span class="nx">myCDN</span><span class="p">.</span><span class="na">min</span>
 </code></pre>
 <p>If you use async libraries or technologies like AMD use trocha to point the cdn url</p>
@@ -1917,10 +1755,10 @@ BTW Trocha can be loaded any time in runtime :) so feel free to load whenever yo
 <pre class="highlight javascript"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'$trocha'</span><span class="p">,</span> <span class="p">[</span>
     <span class="s1">'$http'</span><span class="p">,</span>
     <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">$trocha</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">;</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="nx">CLIENT</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="nx">CLIENT</span><span class="p">;</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="nx">SERVER</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="nx">SERVER</span><span class="p">;</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="nx">xhr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">$trocha</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">;</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="nx">CLIENT</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="nx">CLIENT</span><span class="p">;</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="nx">SERVER</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="nx">SERVER</span><span class="p">;</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="nx">xhr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="kd">let</span> <span class="nx">args</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="na">url</span><span class="p">:</span> <span class="nx">route</span><span class="p">.</span><span class="nx">path</span><span class="p">(</span><span class="nx">path</span><span class="p">),</span>
                 <span class="na">method</span><span class="p">:</span> <span class="nx">route</span><span class="p">.</span><span class="nx">$method</span>
@@ -1934,10 +1772,10 @@ BTW Trocha can be loaded any time in runtime :) so feel free to load whenever yo
 </code></pre><pre class="highlight coffeescript"><code><span class="nx">app</span><span class="p">.</span><span class="na">factory</span> <span class="s">'$trocha'</span><span class="p">,</span> <span class="p">[</span>
     <span class="s">'$http'</span><span class="p">,</span>
     <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="o">-&gt;</span>
-        <span class="nx">$trocha</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">;</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="na">CLIENT</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">CLIENT</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="na">SERVER</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">SERVER</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="na">xhr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
+        <span class="nx">$trocha</span> <span class="o">=</span> <span class="nx">trocha</span><span class="p">;</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="na">CLIENT</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">CLIENT</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="na">SERVER</span> <span class="o">=</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">SERVER</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="na">xhr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">-&gt;</span>
             <span class="nx">args</span> <span class="o">=</span>
                 <span class="na">url</span><span class="o">:</span> <span class="nx">route</span><span class="p">.</span><span class="na">path</span> <span class="nx">path</span>
                 <span class="na">method</span><span class="o">:</span> <span class="nx">route</span><span class="p">.</span><span class="na">$method</span>
@@ -1972,17 +1810,17 @@ BTW Trocha can be loaded any time in runtime :) so feel free to load whenever yo
 <pre class="highlight javascript"><code><span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="nx">ROUTES</span><span class="p">.</span><span class="nx">CLIENT</span><span class="p">.</span><span class="nx">the</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">route</span><span class="p">.</span><span class="nx">$as</span><span class="p">,</span> <span class="p">[</span>
     <span class="s1">'$scope'</span><span class="p">,</span> <span class="s1">'$trocha'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$trocha</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">$scope</span><span class="p">.</span><span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="na">routes</span><span class="p">:</span> <span class="nx">$Trocha</span><span class="p">.</span><span class="nx">CLIENT</span>
+            <span class="na">routes</span><span class="p">:</span> <span class="nx">$trocha</span><span class="p">.</span><span class="nx">CLIENT</span>
         <span class="p">};</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="nx">xhr</span><span class="p">(</span><span class="nx">$Trocha</span><span class="p">.</span><span class="nx">SERVER</span><span class="p">.</span><span class="nx">the</span><span class="p">.</span><span class="nx">server</span><span class="p">.</span><span class="nx">route</span><span class="p">,</span> <span class="p">{</span><span class="nx">path</span> <span class="nx">args</span><span class="p">...},</span> <span class="p">{</span><span class="nx">data</span><span class="p">...})</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="nx">xhr</span><span class="p">(</span><span class="nx">$trocha</span><span class="p">.</span><span class="nx">SERVER</span><span class="p">.</span><span class="nx">the</span><span class="p">.</span><span class="nx">server</span><span class="p">.</span><span class="nx">route</span><span class="p">,</span> <span class="p">{</span><span class="nx">path</span> <span class="nx">args</span><span class="p">...},</span> <span class="p">{</span><span class="nx">data</span><span class="p">...})</span>
         <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">xhrSuccess</span><span class="p">,</span> <span class="nx">xhrFail</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">]);</span>
 </code></pre><pre class="highlight coffeescript"><code><span class="nx">app</span><span class="p">.</span><span class="na">controller</span> <span class="nx">ROUTES</span><span class="p">.</span><span class="na">CLIENT</span><span class="p">.</span><span class="na">the</span><span class="p">.</span><span class="na">client</span><span class="p">.</span><span class="na">route</span><span class="p">.</span><span class="na">$as</span><span class="p">,</span> <span class="p">[</span>
     <span class="s">'$scope'</span><span class="p">,</span> <span class="s">'$trocha'</span><span class="p">,</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$trocha</span><span class="p">)</span> <span class="o">-&gt;</span>
         <span class="nx">$scope</span><span class="p">.</span><span class="na">data</span> <span class="o">=</span>
-            <span class="na">routes</span><span class="o">:</span> <span class="nx">$Trocha</span><span class="p">.</span><span class="na">CLIENT</span>
-        <span class="nx">$Trocha</span><span class="p">.</span><span class="na">xhr</span> <span class="nx">$Trocha</span><span class="p">.</span><span class="na">SERVER</span><span class="p">.</span><span class="na">the</span><span class="p">.</span><span class="na">server</span><span class="p">.</span><span class="na">route</span><span class="p">,</span> <span class="p">{</span><span class="nx">path</span> <span class="nx">args</span><span class="p">...},</span> <span class="p">{</span><span class="nx">data</span><span class="p">...}</span>
+            <span class="na">routes</span><span class="o">:</span> <span class="nx">$trocha</span><span class="p">.</span><span class="na">CLIENT</span>
+        <span class="nx">$trocha</span><span class="p">.</span><span class="na">xhr</span> <span class="nx">$trocha</span><span class="p">.</span><span class="na">SERVER</span><span class="p">.</span><span class="na">the</span><span class="p">.</span><span class="na">server</span><span class="p">.</span><span class="na">route</span><span class="p">,</span> <span class="p">{</span><span class="nx">path</span> <span class="nx">args</span><span class="p">...},</span> <span class="p">{</span><span class="nx">data</span><span class="p">...}</span>
         <span class="p">.</span><span class="na">then</span> <span class="nx">xhrSuccess</span><span class="p">,</span> <span class="nx">xhrFail</span>
 <span class="p">]</span>
 </code></pre>

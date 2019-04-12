@@ -103,6 +103,8 @@
         <div class="lang-selector">
               <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="coffeescript">coffeescript</a>
+              <a><b>THIS IS AN OLD VERSION</b></a>
+              <a href="https://dfoxpro.github.io/trochaJS" ><b>see current docs here</b></a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -111,7 +113,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='https://dfoxpro.github.io/trochaJS/0_2_0/'>Old 0.2.0 docs</a></li>
+            <li><a href='https://dfoxpro.github.io/trochaJS'>Current docs</a></li>
             <li><a href='https://dfoxpro.github.io/trochaJS/0_1_3/'>Old 0.1.3 docs</a></li>
             <li><a href='#100-contributing'>Español</a></li>
             <li><a href='#100-contributing'>English</a></li>
@@ -123,28 +125,6 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id="trochajs">TrochaJS</h1>
-
-<blockquote>
-<p><a href="https://www.mozilla.org/en-US/MPL/2.0/FAQ"><img src="https://img.shields.io/npm/l/trocha.svg?style=plastic&amp;logo=Mozilla" alt="MPL license" /></a>
-<a href="https://www.npmjs.com/package/trocha"><img src="https://img.shields.io/npm/v/trocha.svg?style=plastic&amp;logo=npm" alt="npm version" /></a>
-<a href="https://github.com/DFOXpro/trocha"><img src="https://img.shields.io/badge/src-DFOXpro/trocha-brightgreen.svg?style=plastic&amp;logo=Github" alt="Github project" /></a>
-<a href="https://travis-ci.org/DFOXpro/trocha"><img src="https://img.shields.io/travis/DFOXpro/trocha.svg?logo=Travis%20CI&amp;logoColor=FFFFFF&amp;style=plastic" alt="Build Status" /></a></p>
-
-<p><a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Node.js" alt="Test Node" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Mozilla%20Firefox" alt="Test FX" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Google%20Chrome" alt="Test Chromium" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Microsoft%20Edge" alt="Test Edge" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/11%20asserts-170/173-brightgreen.svg?style=plastic&amp;logo=Internet%20explorer&amp;color=important" alt="Test IE" /></a></p>
-
-<p><a href="https://twitter.com/dfoxpro"><img src="https://img.shields.io/badge/contact-@DFOXpro-informational.svg?style=plastic&amp;logo=Twitter" alt="Contact info" /></a>
-<a href="https://twitter.com/hashtag/TrochaJS"><img src="https://img.shields.io/badge/share-%23TrochaJS-informational.svg?style=plastic&amp;logo=Twitter" alt="Share info" /></a></p>
-
-<p><a href="#idmode">New in 0.2.1: idMode</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.0.svg?style=plastic&amp;logo=Github" alt="Commits since release" /></a></p>
-
-<p><a href="#alias">New in 0.2.0: alias.path</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.1.3.svg?style=plastic&amp;logo=Github" alt="Commits since previous release" /></a></p>
-
-<p><a href="https://github.com/DFOXpro/trocha/blob/master/CHANGELOG.md">Full changelog here</a></p>
-</blockquote>
 
 <p>It&rsquo;s a standalone javascript library that describe route listing.
 Ideal for client-side route management (SPAs and XHR/Ajax async request) and NodeJS route declaration.</p>
@@ -178,7 +158,7 @@ Ideal for client-side route management (SPAs and XHR/Ajax async request) and Nod
 <span class="nx">sell</span><span class="p">.</span><span class="na">quantity</span>
 </code></pre>
 <blockquote>
-<p>Nice target code example</p>
+<p>Objective code example</p>
 </blockquote>
 <pre class="highlight javascript"><code><span class="nx">theRoute</span> <span class="o">=</span> <span class="nx">myRoutes</span><span class="p">.</span><span class="nx">product</span><span class="p">.</span><span class="nx">buy</span><span class="p">.</span><span class="nx">path</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">product_id</span><span class="p">:</span> <span class="nx">myProduct</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
@@ -676,13 +656,11 @@ https://cdn.mydomain.io/images/:image_token/full_size_for_desktop?colour<span cl
 
 <ul>
 <li>It can be created by an string in the constructor.</li>
-<li>Can be parent of any kind of other routes.</li>
-</ul>
-
-<p>You can also use alias like a obfuscation/minification option for magle childs
+<li>Can be parent of any kind of other routes.
 <aside class="info">
 Note since <code class="prettyprint">0.2.0</code> tag, alias print with the path function
-</aside></p>
+</aside></li>
+</ul>
 
           <h1 id="202-constants">202 - Constants</h1>
 <pre class="highlight javascript"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Trocha</span><span class="p">.</span><span class="nx">GET</span><span class="p">);</span>
@@ -1144,42 +1122,6 @@ PATCH
 <p>see <a href="#204-route-printing-parameters">Route printing parameters</a> for furter explanation
 <aside class="notice">
 Avoid the use of <code class="prettyprint">pre</code> if <code class="prettyprint">domain</code> can be use
-</aside></p>
-
-          <h2 id="idmode">idMode</h2>
-<pre class="highlight javascript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
-    <span class="na">idMode</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">BRACKETS</span><span class="p">,</span>
-    <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">hello</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">$id</span><span class="p">:</span> <span class="s1">'name'</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">serverRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">serverRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
-    <span class="na">idMode</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">BRACKETS</span><span class="p">,</span>
-    <span class="na">routes</span><span class="o">:</span> <span class="na">hello</span><span class="o">:</span>
-        <span class="na">$id</span><span class="o">:</span> <span class="s">'name'</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">serverRoutes</span><span class="p">.</span><span class="na">hello</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
-</code></pre>
-<blockquote>
-<p>This should print:</p>
-</blockquote>
-<pre class="highlight shell"><code>https://mydomain.net.co/hello/<span class="o">{</span>name<span class="o">}</span>
-<span class="c"># Normally is</span>
-<span class="c"># https://mydomain.net.co/hello/:name</span>
-</code></pre>
-<p>You can choice the id mode of your routes via <code class="prettyprint">idMode</code> constructor attribute.</p>
-
-<p><code class="prettyprint">idMode</code> can be:</p>
-
-<p><code class="prettyprint">Trocha.BRACKETS</code> will render: <code class="prettyprint">/{id}</code>.</p>
-
-<p><code class="prettyprint">Trocha.COLON</code> will render: <code class="prettyprint">/:id</code>, this is the default behavior.</p>
-
-<p>This is useful for not so standard framework/libraries.
-<aside class="info">
-New in <code class="prettyprint">0.2.1</code>! before this only <code class="prettyprint">/:id</code> idMode was rendered
 </aside></p>
 
           <h2 id="amp-customselector">$ &amp; customSelector</h2>
