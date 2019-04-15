@@ -9,4 +9,5 @@ describe('Trocha JS Routes List engine', ()=> {
 	include "_function_path.js"
 	include "_issues.js"
 	include "0.2.X/id_mode.js"
+	include "0.2.X/custom_separator.js"
 })
