@@ -18,7 +18,9 @@ class Trocha extends Route {
 			args[POSTFIX],
 			args[ALWAYS_POST],
 			//args[ALWAYSPRE],/**@TODO
-			args[ID_MODE]
+			args[ID_MODE],
+			args[SEPARATOR],
+			args[FIRST_SEPARATOR]
 		)
 	}
 
@@ -88,5 +90,33 @@ class Trocha extends Route {
 	 */
 	static get $RESOURCE() {
 		return _basicResource()
+	}
+
+	/**
+	 * Standard definition of separator; used in Unix, http
+	 * Symbol for "/" separator, default separator
+	 * @public
+	 * @static
+	 */
+	static get SLASH() {
+		return SLASH
+	}
+	/**
+	 * Used in MS Windows file system
+	 * Symbol for "\" separator
+	 * @public
+	 * @static
+	 */
+	static get BACK_SLASH() {
+		return BACK_SLASH
+	}
+	/**
+	 * Used in localization libraries and other properties enviorements
+	 * Symbol for "." separator
+	 * @public
+	 * @static
+	 */
+	static get DOT() {
+		return DOT
 	}
 }
