@@ -29,7 +29,7 @@ class Resource extends Route {
 	 * @override
 	 */
 	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE)
 			return false

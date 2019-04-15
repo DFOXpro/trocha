@@ -45,12 +45,12 @@ class Alias extends Route {
 	 * @overload Route.path
 	 */
 	path(routeParams = {}) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			// Note Alias dnt support hide nor justId in creation
 			const parent = myData.parent || {}
 			const rootData = myData.root
 			const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
-			const myId = _formatID(myData[ID], _PREID)
+			const myId = _formatID(myData[ID], rootData[_PREID])
 			let r = s
 
 			if (myData[ID] && routeParams[JUST_ID]) {
