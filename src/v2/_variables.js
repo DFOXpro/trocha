@@ -6,43 +6,54 @@
 
 /// Utility vars
 const s = '' // Force string
-const _ = '/'
 const DS = '$' // DEFAULT_SELECTOR
 
 /// Request method types
-const OPTIONS = 'OPTIONS'
+// @see _Trocha.js /// Offers all the request types
 const GET = 'GET'
-const HEAD = 'HEAD'
 const POST = 'POST'
 const PUT = 'PUT'
 const PATCH = 'PATCH'
 const DELETE = 'DELETE'
+const OPTIONS = 'OPTIONS'
+const HEAD = 'HEAD'
 const TRACE = 'TRACE'
 const CONNECT = 'CONNECT'
 
 /// Route types
+// @see _Trocha.js
 const ROUTE = 'ROUTE'
 const SCOPE = 'SCOPE'
 const _RESOURCE = 'RESOURCE'
 const _ALIAS = 'ALIAS'
 
+/// custom separator
+// @see _Trocha.js
+const SLASH = 'SLASH'
+const BACK_SLASH = 'BACK_SLASH'
+const DOT = 'DOT'
+
+// Next const are private helpers for ID modes
+const _PREID = '_PREID'
+const _AVAILABLE_SEPARATORS = {}
+_AVAILABLE_SEPARATORS[SLASH] = {}
+_AVAILABLE_SEPARATORS[SLASH][SEPARATOR] = '/'
+_AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR] = true
+_AVAILABLE_SEPARATORS[BACK_SLASH] = {}
+_AVAILABLE_SEPARATORS[BACK_SLASH][SEPARATOR] = '\\'
+_AVAILABLE_SEPARATORS[BACK_SLASH][FIRST_SEPARATOR] = false
+_AVAILABLE_SEPARATORS[DOT] = {}
+_AVAILABLE_SEPARATORS[DOT][SEPARATOR] = '.'
+_AVAILABLE_SEPARATORS[DOT][FIRST_SEPARATOR] = false
+_AVAILABLE_SEPARATORS[undefined] = {}
+
 /// ID modes
-/**
- * Standard definition of Id; used in Angular, React(Router)
- * Symbol for "/:the_id" id mode, default ID mode
- * @Public via Trocha
- */
+// @see _Trocha.js
 const COLON = 'COLON'
-/**
- * Definition of Id used in CanJS and other frameworks
- * Symbol for "/{the_id}" id mode
- * @Public via Trocha
- */
 const BRACKETS = 'BRACKETS'
 
 // Next const are private helpers for ID modes
 const _ID_MODE_REPLACE = 'Ñ' // Can be any rare character
-const _PREID = _ + _ID_MODE_REPLACE
 const _AVAILABLE_ID_MODES = {} // In teory only used in _FORMAT_ID_FUN
 _AVAILABLE_ID_MODES[BRACKETS] = `{${_ID_MODE_REPLACE}}`
 _AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
@@ -53,13 +64,14 @@ _AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
  * @param {string} currentIdMode - can be BRACKETS | COLON
  * @second_order
  * @pure
+ * @private
  * @return {function} see function below
  */
 const _FORMAT_ID_FUN = currentIdMode =>
 	/**
 	 * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
 	 * @param {string} idName
-	 * @param {template literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
+	 * @param {template_literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
 	 * @lambda
 	 * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
 	 * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
@@ -91,9 +103,11 @@ const JUST_ID = 'justId'
 const FRAGMENT = 'fragment'
 const RESOURCE = 'resource'
 const PARENT_ID = 'parentId'
-const DEFAULT_ID = `defaultId`
+const SEPARATOR = 'separator'
+const DEFAULT_ID = 'defaultId'
 const ALWAYS_URL = 'alwaysUrl'
 const ALWAYS_POST = 'alwaysPost'
+const FIRST_SEPARATOR = 'firstSeparator'
 const CUSTOM_SELECTOR = 'customSelector'
 
 /// Route return attributes
