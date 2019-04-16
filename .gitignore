@@ -38,3 +38,7 @@ jspm_packages
 
 #docs
 api_doc
+
+# Compiled files (this should be push via Travis)
+dist
+test
