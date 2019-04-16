@@ -39,8 +39,15 @@ module.exports = (grunt) ->
 					flatten: true
 		jsdoc:
 			dist:
-				src: ['./dist/**/*.es6.js', './README.md']
+				src: [
+					'./dist/trocha_module.es6.js'
+					'./README.md'
+					# './CHANGELOG.md'
+					# './CONTRIBUTING.md'
+					# './LICENSE.md'
+				]
 				dest: './api_doc'
+				# options: ignoreWarnings: true
 
 		babel:
 			# options: @see .babelrc
@@ -116,6 +123,9 @@ module.exports = (grunt) ->
 			js:
 				files: [ 'src/v2/*.*' ]
 				tasks: [ 'build' ]
+			doc:
+				files: [ 'src/v2/*.*' ]
+				tasks: [ 'includes:dist', 'jsdoc' ]
 			test:
 				files: [ 'src/test/**/*.*' ]
 				tasks: [ 'test:node' ]
@@ -171,6 +181,11 @@ module.exports = (grunt) ->
 	grunt.registerTask 'doc', [
 		'includes:dist'
 		'jsdoc'
+	]
+	grunt.registerTask 'doc:watch', [
+		'includes:dist'
+		'jsdoc'
+		'watch:doc'
 	]
 
 	###*
