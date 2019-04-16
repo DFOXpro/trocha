@@ -1,9 +1,10 @@
 path(routeParams = {}, customNameFun) {
-	const myData = this.#data
-	const parent = myData.parent || {}
-	const rootData = myData.root
-	const SS = myData.SS
-	const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
+	const
+		myData = this.#data,
+		parent = myData.parent || {},
+		rootData = myData.root,
+		SS = myData.SS,
+		_formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 	let r = s
 
 	if (myData[NAME] === undefined) return ''
