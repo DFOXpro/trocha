@@ -8,6 +8,33 @@
 const s = '' // Force string
 const DS = '$' // DEFAULT_SELECTOR
 
+/// Input attributes
+const ID = 'id'
+const URL = 'url'
+const NAME = 'name'
+const HIDE = 'hide'
+const TYPE = 'type'
+const PREFIX = 'pre'
+const ALIAS = 'alias'
+const QUERY = 'query'
+const POSTFIX = 'post'
+const EXTENDED = 'ext'
+const METHOD = 'method'
+const DOMAIN = 'domain'
+const ROUTES = 'routes'
+const ID_MODE = 'idMode'
+const JUST_ID = 'justId'
+// const AFTER_ID = 'afterId' // FAILS & no DOCS
+const FRAGMENT = 'fragment'
+const RESOURCE = 'resource'
+const PARENT_ID = 'parentId'
+const SEPARATOR = 'separator'
+const DEFAULT_ID = 'defaultId'
+const ALWAYS_URL = 'alwaysUrl'
+const ALWAYS_POST = 'alwaysPost'
+const FIRST_SEPARATOR = 'firstSeparator'
+const CUSTOM_SELECTOR = 'customSelector'
+
 /// Request method types
 // @see _Trocha.js /// Offers all the request types
 const GET = 'GET'
@@ -82,33 +109,6 @@ const _FORMAT_ID_FUN = currentIdMode =>
 			_ID_MODE_REPLACE,
 			_AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName)
 		)
-
-/// Input attributes
-const ID = 'id'
-const URL = 'url'
-const NAME = 'name'
-const HIDE = 'hide'
-const TYPE = 'type'
-const PREFIX = 'pre'
-const ALIAS = 'alias'
-const QUERY = 'query'
-const POSTFIX = 'post'
-const EXTENDED = 'ext'
-const METHOD = 'method'
-const DOMAIN = 'domain'
-const ROUTES = 'routes'
-const ID_MODE = 'idMode'
-const JUST_ID = 'justId'
-// const AFTER_ID = 'afterId' // FAILS & no DOCS
-const FRAGMENT = 'fragment'
-const RESOURCE = 'resource'
-const PARENT_ID = 'parentId'
-const SEPARATOR = 'separator'
-const DEFAULT_ID = 'defaultId'
-const ALWAYS_URL = 'alwaysUrl'
-const ALWAYS_POST = 'alwaysPost'
-const FIRST_SEPARATOR = 'firstSeparator'
-const CUSTOM_SELECTOR = 'customSelector'
 
 /// Route return attributes
 const AS = 'as'
