@@ -1,9 +1,9 @@
-# 0.2.2 "First step in a long road"
+# 0.2.2b "First step in a long road"
 
 ## New Features
 
 - new separator and firstSeparator; now the result can be tokenized via SLASH `/a/b/c` (default) or DOT `a.b.c` or BACK_SLASH; intended for localization libraries and other cases.
-- You can check the api doc [here (./api_doc)](https://github.com/DFOXpro/trocha/tree/develop/doc/api_doc)
+- You can check the api doc [here (./api_doc)](https://github.com/DFOXpro/trocha/tree/develop/api_doc)
 
 # 0.2.1 "Details of fine coquetry"
 
