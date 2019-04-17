@@ -213,6 +213,7 @@ class Route {
 	 * @param {Trocha.COLON | Trocha.BRACKETS} [argIdMod=Trocha.COLON]
 	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [argSeparator=Trocha.SLASH]
 	 * @param {boolean} [argfirstSeparator=true]
+	 * @param {function | object<function>} [argCustomFunction]
 	 */
 	constructor(
 		myParent,
@@ -229,7 +230,8 @@ class Route {
 		//argAlwaysPre,// @TODO
 		argIdMode,
 		argSeparator,
-		argfirstSeparator
+		argfirstSeparator,
+		argCustomFunction
 	) {
 		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
 		if (
@@ -244,7 +246,8 @@ class Route {
 		} else {
 			// It's the root route
 			const _setRootAttribute = (attribute, value) =>
-				(this.#data[attribute] = value !== undefined ? value : this.#data[attribute])
+				(this.#data[attribute] =
+					value !== undefined ? value : this.#data[attribute])
 			_setRootAttribute(DOMAIN, argDomain)
 			this.#newGetter(this, DOMAIN)
 			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
@@ -253,12 +256,18 @@ class Route {
 			_setRootAttribute(PREFIX, argPre)
 			_setRootAttribute(ID_MODE, argIdMode)
 
-			_setRootAttribute(SEPARATOR, _AVAILABLE_SEPARATORS[argSeparator][SEPARATOR])
+			_setRootAttribute(
+				SEPARATOR,
+				_AVAILABLE_SEPARATORS[argSeparator][SEPARATOR]
+			)
 			_setRootAttribute(
 				FIRST_SEPARATOR,
-				argfirstSeparator !==  undefined ? argfirstSeparator : _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
+				argfirstSeparator !== undefined
+					? argfirstSeparator
+					: _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
 			)
 			_setRootAttribute(_PREID, this.#data[SEPARATOR] + _ID_MODE_REPLACE)
+			_setRootAttribute(CUSTOM_FUNCTION, argCustomFunction)
 
 			this.#data.root = this.#data
 			delete this[PATH]
@@ -304,8 +313,7 @@ class Route {
 		)
 	}
 
-	// prettier-ignore // < Does not work ¬¬
-	include "_Route_path.js"
+	path = routeParams => _path(routeParams, this.#data)
 
 	toString = () => this.#as(this)
 

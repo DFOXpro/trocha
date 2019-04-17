@@ -28,13 +28,15 @@ class Scope extends Route {
 	}
 
 	/**
+	 * Print SCOPE type routes
+	 * diferences with Route.path: throw an error if force don't return true
+	 * @see _path
 	 * @override
 	 */
-	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData, _) {
+	path = (routeParams, force) =>
+		_path(routeParams, this.#data, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwError(undefined, ERROR_SCOPE_AS_A_ROUTE)
 			return false
 		})
-	}
 }

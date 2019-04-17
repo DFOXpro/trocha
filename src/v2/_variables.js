@@ -34,6 +34,7 @@ const ALWAYS_URL = 'alwaysUrl'
 const ALWAYS_POST = 'alwaysPost'
 const FIRST_SEPARATOR = 'firstSeparator'
 const CUSTOM_SELECTOR = 'customSelector'
+const CUSTOM_FUNCTION = 'fun'
 
 /// Request method types
 // @see _Trocha.js /// Offers all the request types

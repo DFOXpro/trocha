@@ -220,7 +220,7 @@ module.exports = (grunt) ->
 	 * Compile test/v2 files and keep in watch
 	 ###
 	grunt.registerTask 'test:watch', [
-		'test:node'
+		# 'test:node'
 		'watch:test'
 	]
 

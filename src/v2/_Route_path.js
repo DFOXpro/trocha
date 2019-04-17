@@ -1,6 +1,5 @@
-path(routeParams = {}, customNameFun) {
-	const
-		myData = this.#data,
+function _path(routeParams = {}, myData, customNameFun) {
+	const // myData = this.#data,
 		parent = myData.parent || {},
 		rootData = myData.root,
 		SS = myData.SS,
@@ -29,9 +28,9 @@ path(routeParams = {}, customNameFun) {
 	// 3 print parent paths
 	let parentPathArg = {}
 	let parentPathResponse = parent[PATH](parentPathArg, () => true)
-	let thisIsChildPath = !! parentPathResponse
+	let thisIsChildPath = !!parentPathResponse
 	// 3.1 enable firstSeparator
-	let _ = (thisIsChildPath || rootData[FIRST_SEPARATOR]) ? rootData[SEPARATOR] : s
+	let _ = thisIsChildPath || rootData[FIRST_SEPARATOR] ? rootData[SEPARATOR] : s
 	parentPathArg[POSTFIX] = false
 	r += parentPathResponse
 

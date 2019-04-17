@@ -41,11 +41,11 @@ class Alias extends Route {
 	/**
 	 * Print ALIAS type routes
 	 * diferences with Route.path: use alias instead of name and if it's base will not start with /
-	 * @see Route.path
-	 * @overload Route.path
+	 * @see _path
+	 * @override
 	 */
-	path(routeParams = {}) {
-		return super.path(routeParams, function(myData, _) {
+	path = routeParams =>
+		_path(routeParams, this.#data, function(myData, _) {
 			// Note Alias dnt support hide nor justId in creation
 			const parent = myData.parent || {}
 			const rootData = myData.root
@@ -63,5 +63,4 @@ class Alias extends Route {
 			}
 			return r
 		})
-	}
 }
