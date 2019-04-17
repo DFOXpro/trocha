@@ -27,29 +27,29 @@
 * 1.0 version
 * Error for missing params
 * More useful Scope
-  _ namespace
-  _ Shallow somethig
+  [ ] namespace
+  [ ] Shallow somethig
 * Subdomains
 * Nested Resources
 * Resource modes (singular, api, client)
 * Changelog
-  _ in package
-  _ in github releases
+  [x] in package
+  [x] in github releases
 * Documentation
-  _ Usage for 0.2
-  _ warnings
-  _ errors
-  _ localization
-  _ clone gh-pages for this repo
-  _ Examples
-  _ React
-  _ Vue
-  _ DoneJS
-  _ Angular 2^n \* JSDoc for 0.2
+  [ ] Usage for 0.2.2
+  [ ] warnings
+  [ ] errors
+  [ ] localization
+  [ ] clone gh-pages for this repo
+  [ ] Examples
+  [ ] React
+  [ ] Vue
+  [ ] DoneJS
+  [ ] Angular 2^n \* JSDoc for 0.2
 * Helpers
-  _ Vanilla
-  _ React
-  _ Vue
-  _ DoneJS \* Angular 2^n
+  [ ] Vanilla
+  [ ] React
+  [ ] Vue
+  [ ] DoneJS \* Angular 2^n
 * Better minimization & transpillation (clousure?)
 * Real logo

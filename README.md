@@ -5,7 +5,7 @@
 [![MPL license](https://img.shields.io/npm/l/trocha.svg?style=plastic&logo=Mozilla)](https://www.mozilla.org/en-US/MPL/2.0/FAQ)
 [![npm version](https://img.shields.io/npm/v/trocha.svg?style=plastic&logo=npm)](https://www.npmjs.com/package/trocha)
 
-[![Commits since release](https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.0.svg?style=plastic&logo=Github)]()
+[![Commits since release](https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.1.svg?style=plastic&logo=Github)]()
 [![Commits since previous release](https://img.shields.io/github/commits-since/DFOXpro/trocha/0.1.3.svg?style=plastic&logo=Github)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=plastic&logo=Github)](http://makeapullrequest.com)
 
