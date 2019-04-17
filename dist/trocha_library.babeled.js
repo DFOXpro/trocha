@@ -34,7 +34,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license trocha@0.2.1 - 2019-04-10
+/** @license trocha@0.2.2 - 2019-04-16
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -96,75 +96,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
   var s = ''; // Force string
 
-  var _ = '/';
   var DS = '$'; // DEFAULT_SELECTOR
-  /// Request method types
-
-  var OPTIONS = 'OPTIONS';
-  var GET = 'GET';
-  var HEAD = 'HEAD';
-  var POST = 'POST';
-  var PUT = 'PUT';
-  var PATCH = 'PATCH';
-  var DELETE = 'DELETE';
-  var TRACE = 'TRACE';
-  var CONNECT = 'CONNECT'; /// Route types
-
-  var ROUTE = 'ROUTE';
-  var SCOPE = 'SCOPE';
-  var _RESOURCE = 'RESOURCE';
-  var _ALIAS = 'ALIAS'; /// ID modes
-
-  /**
-   * Standard definition of Id; used in Angular, React(Router)
-   * Symbol for "/:the_id" id mode, default ID mode
-   * @Public via Trocha
-   */
-
-  var COLON = 'COLON';
-  /**
-   * Definition of Id used in CanJS and other frameworks
-   * Symbol for "/{the_id}" id mode
-   * @Public via Trocha
-   */
-
-  var BRACKETS = 'BRACKETS'; // Next const are private helpers for ID modes
-
-  var _ID_MODE_REPLACE = 'Ñ'; // Can be any rare character
-
-  var _PREID = _ + _ID_MODE_REPLACE;
-
-  var _AVAILABLE_ID_MODES = {}; // In teory only used in _FORMAT_ID_FUN
-
-  _AVAILABLE_ID_MODES[BRACKETS] = "{".concat(_ID_MODE_REPLACE, "}");
-  _AVAILABLE_ID_MODES[COLON] = ":".concat(_ID_MODE_REPLACE);
-  /**
-   * Interpolator of id mode to be used in path function
-   * @todo should be Route protected(private & inheritable) method
-   * @param {string} currentIdMode - can be BRACKETS | COLON
-   * @second_order
-   * @pure
-   * @return {function} see function below
-   */
-
-  var _FORMAT_ID_FUN = function _FORMAT_ID_FUN(currentIdMode) {
-    return (
-      /**
-       * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
-       * @param {string} idName
-       * @param {template literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
-       * @lambda
-       * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
-       * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
-       * @return {string}
-       */
-      function (idName) {
-        var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _ID_MODE_REPLACE;
-        return template.replace(_ID_MODE_REPLACE, _AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName));
-      }
-    );
-  }; /// Input attributes
-
+  /// Input attributes
 
   var ID = 'id';
   var URL = 'url';
@@ -185,10 +118,86 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   var FRAGMENT = 'fragment';
   var RESOURCE = 'resource';
   var PARENT_ID = 'parentId';
-  var DEFAULT_ID = "defaultId";
+  var SEPARATOR = 'separator';
+  var DEFAULT_ID = 'defaultId';
   var ALWAYS_URL = 'alwaysUrl';
   var ALWAYS_POST = 'alwaysPost';
-  var CUSTOM_SELECTOR = 'customSelector'; /// Route return attributes
+  var FIRST_SEPARATOR = 'firstSeparator';
+  var CUSTOM_SELECTOR = 'customSelector'; /// Request method types
+  // @see _Trocha.js /// Offers all the request types
+
+  var GET = 'GET';
+  var POST = 'POST';
+  var PUT = 'PUT';
+  var PATCH = 'PATCH';
+  var DELETE = 'DELETE';
+  var OPTIONS = 'OPTIONS';
+  var HEAD = 'HEAD';
+  var TRACE = 'TRACE';
+  var CONNECT = 'CONNECT'; /// Route types
+  // @see _Trocha.js
+
+  var ROUTE = 'ROUTE';
+  var SCOPE = 'SCOPE';
+  var _RESOURCE = 'RESOURCE';
+  var _ALIAS = 'ALIAS'; /// custom separator
+  // @see _Trocha.js
+
+  var SLASH = 'SLASH';
+  var BACK_SLASH = 'BACK_SLASH';
+  var DOT = 'DOT'; // Next const are private helpers for ID modes
+
+  var _PREID = '_PREID';
+  var _AVAILABLE_SEPARATORS = {};
+  _AVAILABLE_SEPARATORS[SLASH] = {};
+  _AVAILABLE_SEPARATORS[SLASH][SEPARATOR] = '/';
+  _AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR] = true;
+  _AVAILABLE_SEPARATORS[BACK_SLASH] = {};
+  _AVAILABLE_SEPARATORS[BACK_SLASH][SEPARATOR] = '\\';
+  _AVAILABLE_SEPARATORS[BACK_SLASH][FIRST_SEPARATOR] = false;
+  _AVAILABLE_SEPARATORS[DOT] = {};
+  _AVAILABLE_SEPARATORS[DOT][SEPARATOR] = '.';
+  _AVAILABLE_SEPARATORS[DOT][FIRST_SEPARATOR] = false;
+  _AVAILABLE_SEPARATORS[undefined] = {}; /// ID modes
+  // @see _Trocha.js
+
+  var COLON = 'COLON';
+  var BRACKETS = 'BRACKETS'; // Next const are private helpers for ID modes
+
+  var _ID_MODE_REPLACE = 'Ñ'; // Can be any rare character
+
+  var _AVAILABLE_ID_MODES = {}; // In teory only used in _FORMAT_ID_FUN
+
+  _AVAILABLE_ID_MODES[BRACKETS] = "{".concat(_ID_MODE_REPLACE, "}");
+  _AVAILABLE_ID_MODES[COLON] = ":".concat(_ID_MODE_REPLACE);
+  /**
+   * Interpolator of id mode to be used in path function
+   * @todo should be Route protected(private & inheritable) method
+   * @param {string} currentIdMode - can be BRACKETS | COLON
+   * @second_order
+   * @pure
+   * @private
+   * @return {function} see function below
+   */
+
+  var _FORMAT_ID_FUN = function _FORMAT_ID_FUN(currentIdMode) {
+    return (
+      /**
+       * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
+       * @param {string} idName
+       * @param {template_literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
+       * @lambda
+       * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
+       * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
+       * @return {string}
+       */
+      function (idName) {
+        var template = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _ID_MODE_REPLACE;
+        return template.replace(_ID_MODE_REPLACE, _AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName));
+      }
+    );
+  }; /// Route return attributes
+
 
   var AS = 'as';
   var PATH = 'path'; /// Not used right now
@@ -233,6 +242,13 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   // Route classes
 
   /* Begin: src/v2/_Route.js */
+
+  /**
+   * The Class where all other route types inherit
+   * @module Route
+   * @exports Route
+   * @class
+   */
 
   var Route =
   /*#__PURE__*/
@@ -286,6 +302,24 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
      * @recursive via parent.$as
      * @return {string} flat self and parents name separated by _
      */
+
+    /**
+     * This constructor should be used just for test'n debug purposes
+     * pure false depends on #data initial attributes
+     * @param {Route} myParent
+     * @param {routeParamsDefinition} argRouteDef
+     * @param {string} argCustomSelector
+     * @param {Route} argRoot
+     * @param {object} [argChildRoutes={}]
+     * @param {string} [argDomain]
+     * @param {boolean} [argAlwaysUrl]
+     * @param {string} [argPre]
+     * @param {string} [argPost]
+     * @param {boolean} [argAlwaysPost]
+     * @param {Trocha.COLON | Trocha.BRACKETS} [argIdMod=Trocha.COLON]
+     * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [argSeparator=Trocha.SLASH]
+     * @param {boolean} [argfirstSeparator=true]
+     */
     function Route(myParent, argRouteDef, argCustomSelector, argRoot) {
       var _this2 = this;
 
@@ -298,6 +332,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       var argAlwaysPost = arguments.length > 9 ? arguments[9] : undefined;
       var //argAlwaysPre,// @TODO
       argIdMode = arguments.length > 10 ? arguments[10] : undefined;
+      var argSeparator = arguments.length > 11 ? arguments[11] : undefined;
+      var argfirstSeparator = arguments.length > 12 ? arguments[12] : undefined;
 
       _classCallCheck(this, Route);
 
@@ -314,7 +350,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
           idMode: COLON,
           domain: '',
           post: '',
-          pre: ''
+          pre: '',
+          separator: _AVAILABLE_SEPARATORS[SLASH][SEPARATOR],
+          firstSeparator: _AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR]
           /**
            * @param {Route} mySelf - tldr this
            * @param {string} id - id to compare to parents ids
@@ -518,7 +556,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       } else {
         // It's the root route
         var _setRootAttribute = function _setRootAttribute(attribute, value) {
-          return _classPrivateFieldGet(_this2, _data)[attribute] = value || _classPrivateFieldGet(_this2, _data)[attribute];
+          return _classPrivateFieldGet(_this2, _data)[attribute] = value !== undefined ? value : _classPrivateFieldGet(_this2, _data)[attribute];
         };
 
         _setRootAttribute(DOMAIN, argDomain);
@@ -534,6 +572,12 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         _setRootAttribute(PREFIX, argPre);
 
         _setRootAttribute(ID_MODE, argIdMode);
+
+        _setRootAttribute(SEPARATOR, _AVAILABLE_SEPARATORS[argSeparator][SEPARATOR]);
+
+        _setRootAttribute(FIRST_SEPARATOR, argfirstSeparator !== undefined ? argfirstSeparator : _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]);
+
+        _setRootAttribute(_PREID, _classPrivateFieldGet(this, _data)[SEPARATOR] + _ID_MODE_REPLACE);
 
         _classPrivateFieldGet(this, _data).root = _classPrivateFieldGet(this, _data);
         delete this[PATH];
@@ -555,13 +599,11 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var customNameFun = arguments.length > 1 ? arguments[1] : undefined;
 
-        var myData = _classPrivateFieldGet(this, _data);
-
-        var parent = myData.parent || {};
-        var rootData = myData.root;
-        var SS = myData.SS;
-
-        var _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
+        var myData = _classPrivateFieldGet(this, _data),
+            parent = myData.parent || {},
+            rootData = myData.root,
+            SS = myData.SS,
+            _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
 
         var r = s;
         if (myData[NAME] === undefined) return ''; // 1 print the domain
@@ -574,14 +616,19 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         delete routeParams[PREFIX]; // 3 print parent paths
 
         var parentPathArg = {};
-        parentPathArg[POSTFIX] = false;
-        r += parent[PATH] ? parent[PATH](parentPathArg, function () {
+        var parentPathResponse = parent[PATH](parentPathArg, function () {
           return true;
-        }) : s; // 4.A print name & id(name) from customNameFun like Alias
+        });
+        var thisIsChildPath = !!parentPathResponse; // 3.1 enable firstSeparator
+
+        var _ = thisIsChildPath || rootData[FIRST_SEPARATOR] ? rootData[SEPARATOR] : s;
+
+        parentPathArg[POSTFIX] = false;
+        r += parentPathResponse; // 4.A print name & id(name) from customNameFun like Alias
 
         var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE] || myData[JUST_ID] && myData[DEFAULT_ID] === false;
         var customNameFromInhered;
-        if ('function' === typeof customNameFun) customNameFromInhered = customNameFun(myData);
+        if ('function' === typeof customNameFun) customNameFromInhered = customNameFun(myData, _);
         if ('string' === typeof customNameFromInhered) r += customNameFromInhered;else {
           // 4.B print default name & id(name)
           var myId = _formatID(myData[ID]);
@@ -593,7 +640,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
             // 4.B.2 hide case
             var noIdentifier = myData[ID] ? routeParams[ID] === false : true;
             r += hide ? s : _ + myData[NAME];
-            r += noIdentifier ? s : _ + myId;
+            r += noIdentifier ? s : rootData[SEPARATOR] + myId;
           }
         } // 5 add the postfix
 
@@ -622,15 +669,15 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
         // 6.1 RoR parentId
 
 
-        if (parent[SS + ID] && !routeParams[parent[SS + ID]] && (myData[ID] === false || routeParams[PARENT_ID] === false || myData[PARENT_ID] === false)) r = r.replace(_formatID(parent[SS + ID], _PREID), s); // 6.2 Remove parents Ids designed in constructor
+        if (parent[SS + ID] && !routeParams[parent[SS + ID]] && (myData[ID] === false || routeParams[PARENT_ID] === false || myData[PARENT_ID] === false)) r = r.replace(_formatID(parent[SS + ID], rootData[_PREID]), s); // 6.2 Remove parents Ids designed in constructor
 
         Object.keys(myData).forEach(function (idName) {
-          if (myData[idName] === false && !routeParams[idName]) return r = r.replace(_formatID(idName, _PREID), s);
+          if (myData[idName] === false && !routeParams[idName]) return r = r.replace(_formatID(idName, rootData[_PREID]), s);
         }); // 6.2 RoR selected Ids in path params
 
         Object.keys(routeParams).forEach(function (idName) {
           if (routeParams[idName] === false) // Remove
-            r = r.replace(_formatID(idName, _PREID), s); // Replace
+            r = r.replace(_formatID(idName, rootData[_PREID]), s); // Replace
           else r = r.replace(_formatID(idName), routeParams[idName]);
         }); // 7 Now add the query
 
@@ -650,7 +697,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       key: "is",
 
       /**
-       * Check if given routeDefinition is ROUTE
+       * Check if given routeDefinition is Route
        * @param {object} routeDefinition -
        * @param {string} SS - selectedSelector normally $
        * @static
@@ -759,14 +806,14 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
        */
       value: function path() {
         var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        return _get(_getPrototypeOf(Alias.prototype), "path", this).call(this, routeParams, function (myData) {
+        return _get(_getPrototypeOf(Alias.prototype), "path", this).call(this, routeParams, function (myData, _) {
           // Note Alias dnt support hide nor justId in creation
           var parent = myData.parent || {};
           var rootData = myData.root;
 
           var _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
 
-          var myId = _formatID(myData[ID], _PREID);
+          var myId = _formatID(myData[ID], rootData[_PREID]);
 
           var r = s;
 
@@ -846,7 +893,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       value: function path() {
         var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var force = arguments.length > 1 ? arguments[1] : undefined;
-        return _get(_getPrototypeOf(Resource.prototype), "path", this).call(this, routeParams, function (myData) {
+        return _get(_getPrototypeOf(Resource.prototype), "path", this).call(this, routeParams, function (myData, _) {
           if ('function' === typeof force && force() !== true) _throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE);
           return false;
         });
@@ -913,7 +960,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       value: function path() {
         var routeParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var force = arguments.length > 1 ? arguments[1] : undefined;
-        return _get(_getPrototypeOf(Scope.prototype), "path", this).call(this, routeParams, function (myData) {
+        return _get(_getPrototypeOf(Scope.prototype), "path", this).call(this, routeParams, function (myData, _) {
           if ('function' === typeof force && force() !== true) _throwError(undefined, ERROR_SCOPE_AS_A_ROUTE);
           return false;
         });
@@ -947,12 +994,39 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
   }(Route);
   /* End: src/v2/_Scope.js */
 
+  /**
+   * The main Class of the trocha library
+   * @see https://dfoxpro.github.io/trochaJS/#101-intro-to-trocha-js
+   * @module Trocha
+   * @exports default, Trocha
+   * @class
+   */
+
 
   var Trocha =
   /*#__PURE__*/
   function (_Route4) {
     _inherits(Trocha, _Route4);
 
+    /**
+     * @constr0uctor
+     * @see https://dfoxpro.github.io/trochaJS/#203-route-definition-parameters
+     * @param {object} [arg]
+     * @param {routeParamsDefinition} [arg.routes]
+     * @param {routeParamsDefinition} arg.routes.<children_route>
+     * @param {Trocha.ROUTE | Trocha.SCOPE | Trocha.RESOURCE | Trocha.ALIAS} [arg.routes.$type=Trocha.ROUTE]
+     * @param {Trocha.COLON | Trocha.BRACKETS} [arg.idMode=Trocha.COLON]
+     * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [arg.separator=Trocha.SLASH]
+     * @param {String} arg.routes.$alias
+     * @param {String} arg.routes.$id
+     * @param {string} [arg.customSelector=$]
+     * @param {string} [arg.domain]
+     * @param {string} [arg.pre]
+     * @param {string} [arg.post]
+     * @param {boolean} [firstSeparator=true]
+     * @param {boolean} [arg.alwaysUrl=false]
+     * @param {boolean} [arg.alwaysPost=false]
+     */
     function Trocha() {
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -960,14 +1034,16 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
       return _possibleConstructorReturn(this, _getPrototypeOf(Trocha).call(this, null, null, //Because it's the root
       args[CUSTOM_SELECTOR], null, args[ROUTES], args[DOMAIN], args[ALWAYS_URL], args[PREFIX], args[POSTFIX], args[ALWAYS_POST], //args[ALWAYSPRE],/**@TODO
-      args[ID_MODE]));
-    }
-    /*
-     * STATIC AVAILABLE ATTRIBUTES
-     */
+      args[ID_MODE], args[SEPARATOR], args[FIRST_SEPARATOR]));
+    } //// STATIC AVAILABLE ATTRIBUTES
+    /// Offers all the route types
 
-    /*
-     * Offers all the route types
+    /**
+     * Default route type
+     * Symbol for Route type... route
+     * @see https://dfoxpro.github.io/trochaJS/#route
+     * @public
+     * @static
      */
 
 
@@ -976,23 +1052,51 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       get: function get() {
         return ROUTE;
       }
+      /**
+       * Route type optional to tree definition
+       * Symbol for Scope type route
+       * @see https://dfoxpro.github.io/trochaJS/#scope
+       * @public
+       * @static
+       */
+
     }, {
       key: "SCOPE",
       get: function get() {
         return SCOPE;
       }
+      /**
+       * Route type that contain a CRUD like tree route definition
+       * Symbol for Resource type route
+       * @see https://dfoxpro.github.io/trochaJS/#resource
+       * @public
+       * @static
+       */
+
     }, {
       key: "RESOURCE",
       get: function get() {
         return _RESOURCE;
       }
+      /**
+       * Route type that can be used to abbreviate long name routes, like CDN
+       * Symbol for Alias type route
+       * @see https://dfoxpro.github.io/trochaJS/#alias
+       * @public
+       * @static
+       */
+
     }, {
       key: "ALIAS",
       get: function get() {
         return _ALIAS;
-      }
-      /*
-       * Offers all the request types
+      } /// Offers all the request types
+
+      /**
+       * HTTP request method
+       * Used by browsers to ask CORS permissions
+       * @public
+       * @static
        */
 
     }, {
@@ -1000,59 +1104,127 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       get: function get() {
         return OPTIONS;
       }
+      /**
+       * Most common HTTP request method
+       * It's tue default method for all routes
+       * Used in REST for Read operations
+       * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods for all methods info
+       * @public
+       * @static
+       */
+
     }, {
       key: "GET",
       get: function get() {
         return GET;
       }
+      /**
+       * HTTP request method
+       * Same as get without body response
+       * @public
+       * @static
+       */
+
     }, {
       key: "HEAD",
       get: function get() {
         return HEAD;
       }
+      /**
+       * HTTP request method
+       * Used in REST for Create operations
+       * @public
+       * @static
+       */
+
     }, {
       key: "POST",
       get: function get() {
         return POST;
       }
+      /**
+       * HTTP request method
+       * Used in REST for Create operations
+       * @public
+       * @static
+       */
+
     }, {
       key: "PUT",
       get: function get() {
         return PUT;
       }
+      /**
+       * HTTP request method
+       * Used in REST for Update/Write operations
+       * @public
+       * @static
+       */
+
     }, {
       key: "PATCH",
       get: function get() {
         return PATCH;
       }
+      /**
+       * HTTP request method
+       * Used in REST for Destroy/Remove operations
+       * @public
+       * @static
+       */
+
     }, {
       key: "DELETE",
       get: function get() {
         return DELETE;
       }
+      /**
+       * HTTP request method
+       * Used for usage/error log client to server
+       * @public
+       * @static
+       */
+
     }, {
       key: "TRACE",
       get: function get() {
         return TRACE;
       }
+      /**
+       * HTTP request method
+       * @public
+       * @static
+       */
+
     }, {
       key: "CONNECT",
       get: function get() {
         return CONNECT;
+      } /// Offers ID modes
+
+      /**
+       * Standard definition of Id; used in Angular, React(Router)
+       * Symbol for "/:the_id" id mode, default ID mode
+       * @public
+       * @static
+       */
+
+    }, {
+      key: "COLON",
+      get: function get() {
+        return COLON;
       }
-      /*
-       * Offers ID modes
+      /**
+       * Definition of Id used in CanJS and other frameworks
+       * Symbol for "/{the_id}" id mode
+       * @public
+       * @static
        */
 
     }, {
       key: "BRACKETS",
       get: function get() {
         return BRACKETS;
-      }
-    }, {
-      key: "COLON",
-      get: function get() {
-        return COLON;
       }
       /*
        * Offers basic resource structure
@@ -1063,6 +1235,42 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
       key: "$RESOURCE",
       get: function get() {
         return _basicResource();
+      }
+      /**
+       * Standard definition of separator; used in Unix, http
+       * Symbol for "/" separator, default separator
+       * @public
+       * @static
+       */
+
+    }, {
+      key: "SLASH",
+      get: function get() {
+        return SLASH;
+      }
+      /**
+       * Used in MS Windows file system
+       * Symbol for "\" separator
+       * @public
+       * @static
+       */
+
+    }, {
+      key: "BACK_SLASH",
+      get: function get() {
+        return BACK_SLASH;
+      }
+      /**
+       * Used in localization libraries and other properties enviorements
+       * Symbol for "." separator
+       * @public
+       * @static
+       */
+
+    }, {
+      key: "DOT",
+      get: function get() {
+        return DOT;
       }
     }]);
 

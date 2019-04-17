@@ -1,4 +1,4 @@
-/** @license trocha@0.2.1 - 2019-04-10
+/** @license trocha@0.2.2 - 2019-04-16
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -40,70 +40,7 @@ let _throwWarning = (scope, warning_text, value) => {
 
 /// Utility vars
 const s = '' // Force string
-const _ = '/'
 const DS = '$' // DEFAULT_SELECTOR
-
-/// Request method types
-const OPTIONS = 'OPTIONS'
-const GET = 'GET'
-const HEAD = 'HEAD'
-const POST = 'POST'
-const PUT = 'PUT'
-const PATCH = 'PATCH'
-const DELETE = 'DELETE'
-const TRACE = 'TRACE'
-const CONNECT = 'CONNECT'
-
-/// Route types
-const ROUTE = 'ROUTE'
-const SCOPE = 'SCOPE'
-const _RESOURCE = 'RESOURCE'
-const _ALIAS = 'ALIAS'
-
-/// ID modes
-/**
- * Standard definition of Id; used in Angular, React(Router)
- * Symbol for "/:the_id" id mode, default ID mode
- * @Public via Trocha
- */
-const COLON = 'COLON'
-/**
- * Definition of Id used in CanJS and other frameworks
- * Symbol for "/{the_id}" id mode
- * @Public via Trocha
- */
-const BRACKETS = 'BRACKETS'
-
-// Next const are private helpers for ID modes
-const _ID_MODE_REPLACE = 'Ñ' // Can be any rare character
-const _PREID = _ + _ID_MODE_REPLACE
-const _AVAILABLE_ID_MODES = {} // In teory only used in _FORMAT_ID_FUN
-_AVAILABLE_ID_MODES[BRACKETS] = `{${_ID_MODE_REPLACE}}`
-_AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
-
-/**
- * Interpolator of id mode to be used in path function
- * @todo should be Route protected(private & inheritable) method
- * @param {string} currentIdMode - can be BRACKETS | COLON
- * @second_order
- * @pure
- * @return {function} see function below
- */
-const _FORMAT_ID_FUN = currentIdMode =>
-	/**
-	 * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
-	 * @param {string} idName
-	 * @param {template literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
-	 * @lambda
-	 * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
-	 * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
-	 * @return {string}
-	 */
-	(idName, template = _ID_MODE_REPLACE) =>
-		template.replace(
-			_ID_MODE_REPLACE,
-			_AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName)
-		)
 
 /// Input attributes
 const ID = 'id'
@@ -125,10 +62,87 @@ const JUST_ID = 'justId'
 const FRAGMENT = 'fragment'
 const RESOURCE = 'resource'
 const PARENT_ID = 'parentId'
-const DEFAULT_ID = `defaultId`
+const SEPARATOR = 'separator'
+const DEFAULT_ID = 'defaultId'
 const ALWAYS_URL = 'alwaysUrl'
 const ALWAYS_POST = 'alwaysPost'
+const FIRST_SEPARATOR = 'firstSeparator'
 const CUSTOM_SELECTOR = 'customSelector'
+
+/// Request method types
+// @see _Trocha.js /// Offers all the request types
+const GET = 'GET'
+const POST = 'POST'
+const PUT = 'PUT'
+const PATCH = 'PATCH'
+const DELETE = 'DELETE'
+const OPTIONS = 'OPTIONS'
+const HEAD = 'HEAD'
+const TRACE = 'TRACE'
+const CONNECT = 'CONNECT'
+
+/// Route types
+// @see _Trocha.js
+const ROUTE = 'ROUTE'
+const SCOPE = 'SCOPE'
+const _RESOURCE = 'RESOURCE'
+const _ALIAS = 'ALIAS'
+
+/// custom separator
+// @see _Trocha.js
+const SLASH = 'SLASH'
+const BACK_SLASH = 'BACK_SLASH'
+const DOT = 'DOT'
+
+// Next const are private helpers for ID modes
+const _PREID = '_PREID'
+const _AVAILABLE_SEPARATORS = {}
+_AVAILABLE_SEPARATORS[SLASH] = {}
+_AVAILABLE_SEPARATORS[SLASH][SEPARATOR] = '/'
+_AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR] = true
+_AVAILABLE_SEPARATORS[BACK_SLASH] = {}
+_AVAILABLE_SEPARATORS[BACK_SLASH][SEPARATOR] = '\\'
+_AVAILABLE_SEPARATORS[BACK_SLASH][FIRST_SEPARATOR] = false
+_AVAILABLE_SEPARATORS[DOT] = {}
+_AVAILABLE_SEPARATORS[DOT][SEPARATOR] = '.'
+_AVAILABLE_SEPARATORS[DOT][FIRST_SEPARATOR] = false
+_AVAILABLE_SEPARATORS[undefined] = {}
+
+/// ID modes
+// @see _Trocha.js
+const COLON = 'COLON'
+const BRACKETS = 'BRACKETS'
+
+// Next const are private helpers for ID modes
+const _ID_MODE_REPLACE = 'Ñ' // Can be any rare character
+const _AVAILABLE_ID_MODES = {} // In teory only used in _FORMAT_ID_FUN
+_AVAILABLE_ID_MODES[BRACKETS] = `{${_ID_MODE_REPLACE}}`
+_AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
+
+/**
+ * Interpolator of id mode to be used in path function
+ * @todo should be Route protected(private & inheritable) method
+ * @param {string} currentIdMode - can be BRACKETS | COLON
+ * @second_order
+ * @pure
+ * @private
+ * @return {function} see function below
+ */
+const _FORMAT_ID_FUN = currentIdMode =>
+	/**
+	 * Interpolate template with _AVAILABLE_ID_MODES[currentIdMode] and idName
+	 * @param {string} idName
+	 * @param {template_literal | string} template - should contain _ID_MODE_REPLACE value; default _ID_MODE_REPLACE
+	 * @lambda
+	 * @pure false - depends on currentIdMode, _AVAILABLE_ID_MODES and _ID_MODE_REPLACE
+	 * @example λ('zxc',`asd${_ID_MODE_REPLACE}qwe`) will return 'asd:zxcqwe' or 'asd{zxc}qwe'
+	 * @return {string}
+	 */
+	(idName, template = _ID_MODE_REPLACE) =>
+		template.replace(
+			_ID_MODE_REPLACE,
+			_AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName)
+		)
 
 /// Route return attributes
 const AS = 'as'
@@ -172,6 +186,12 @@ const WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED = 'Attribute not supported, skiped'
 /* Begin: src/v2/_Trocha.js */
 // Route classes
 /* Begin: src/v2/_Route.js */
+/**
+ * The Class where all other route types inherit
+ * @module Route
+ * @exports Route
+ * @class
+ */
 class Route {
 	/**
 	 * Holds all the route information, note it's not protected(can't be inhered)
@@ -187,7 +207,9 @@ class Route {
 		idMode: COLON,
 		domain: '',
 		post: '',
-		pre: ''
+		pre: '',
+		separator: _AVAILABLE_SEPARATORS[SLASH][SEPARATOR],
+		firstSeparator: _AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR]
 	}
 
 	/**
@@ -363,6 +385,23 @@ class Route {
 			: mySelf.#data[NAME]
 	}
 
+	/**
+	 * This constructor should be used just for test'n debug purposes
+	 * pure false depends on #data initial attributes
+	 * @param {Route} myParent
+	 * @param {routeParamsDefinition} argRouteDef
+	 * @param {string} argCustomSelector
+	 * @param {Route} argRoot
+	 * @param {object} [argChildRoutes={}]
+	 * @param {string} [argDomain]
+	 * @param {boolean} [argAlwaysUrl]
+	 * @param {string} [argPre]
+	 * @param {string} [argPost]
+	 * @param {boolean} [argAlwaysPost]
+	 * @param {Trocha.COLON | Trocha.BRACKETS} [argIdMod=Trocha.COLON]
+	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [argSeparator=Trocha.SLASH]
+	 * @param {boolean} [argfirstSeparator=true]
+	 */
 	constructor(
 		myParent,
 		argRouteDef,
@@ -376,7 +415,9 @@ class Route {
 		argPost,
 		argAlwaysPost,
 		//argAlwaysPre,// @TODO
-		argIdMode
+		argIdMode,
+		argSeparator,
+		argfirstSeparator
 	) {
 		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
 		if (
@@ -391,7 +432,7 @@ class Route {
 		} else {
 			// It's the root route
 			const _setRootAttribute = (attribute, value) =>
-				(this.#data[attribute] = value || this.#data[attribute])
+				(this.#data[attribute] = value !== undefined ? value : this.#data[attribute])
 			_setRootAttribute(DOMAIN, argDomain)
 			this.#newGetter(this, DOMAIN)
 			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
@@ -399,6 +440,14 @@ class Route {
 			_setRootAttribute(POSTFIX, argPost)
 			_setRootAttribute(PREFIX, argPre)
 			_setRootAttribute(ID_MODE, argIdMode)
+
+			_setRootAttribute(SEPARATOR, _AVAILABLE_SEPARATORS[argSeparator][SEPARATOR])
+			_setRootAttribute(
+				FIRST_SEPARATOR,
+				argfirstSeparator !==  undefined ? argfirstSeparator : _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
+			)
+			_setRootAttribute(_PREID, this.#data[SEPARATOR] + _ID_MODE_REPLACE)
+
 			this.#data.root = this.#data
 			delete this[PATH]
 			this.#newGetter(this, _RESOURCE, () => _basicResource(SS))
@@ -446,11 +495,12 @@ class Route {
 	// prettier-ignore // < Does not work ¬¬
 /* Begin: src/v2/_Route_path.js */
 	path(routeParams = {}, customNameFun) {
-		const myData = this.#data
-		const parent = myData.parent || {}
-		const rootData = myData.root
-		const SS = myData.SS
-		const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
+		const
+			myData = this.#data,
+			parent = myData.parent || {},
+			rootData = myData.root,
+			SS = myData.SS,
+			_formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 		let r = s
 
 		if (myData[NAME] === undefined) return ''
@@ -474,8 +524,12 @@ class Route {
 
 		// 3 print parent paths
 		let parentPathArg = {}
+		let parentPathResponse = parent[PATH](parentPathArg, () => true)
+		let thisIsChildPath = !! parentPathResponse
+		// 3.1 enable firstSeparator
+		let _ = (thisIsChildPath || rootData[FIRST_SEPARATOR]) ? rootData[SEPARATOR] : s
 		parentPathArg[POSTFIX] = false
-		r += parent[PATH] ? parent[PATH](parentPathArg, () => true) : s
+		r += parentPathResponse
 
 		// 4.A print name & id(name) from customNameFun like Alias
 		let hide =
@@ -484,7 +538,7 @@ class Route {
 				: myData[HIDE] || (myData[JUST_ID] && myData[DEFAULT_ID] === false)
 		let customNameFromInhered
 		if ('function' === typeof customNameFun)
-			customNameFromInhered = customNameFun(myData)
+			customNameFromInhered = customNameFun(myData, _)
 		if ('string' === typeof customNameFromInhered) r += customNameFromInhered
 		else {
 			// 4.B print default name & id(name)
@@ -499,7 +553,7 @@ class Route {
 				// 4.B.2 hide case
 				let noIdentifier = myData[ID] ? routeParams[ID] === false : true
 				r += hide ? s : _ + myData[NAME]
-				r += noIdentifier ? s : _ + myId
+				r += noIdentifier ? s : rootData[SEPARATOR] + myId
 			}
 		}
 
@@ -544,19 +598,19 @@ class Route {
 				routeParams[PARENT_ID] === false ||
 				myData[PARENT_ID] === false)
 		)
-			r = r.replace(_formatID(parent[SS + ID], _PREID), s)
+			r = r.replace(_formatID(parent[SS + ID], rootData[_PREID]), s)
 
 		// 6.2 Remove parents Ids designed in constructor
 		Object.keys(myData).forEach(idName => {
 			if (myData[idName] === false && !routeParams[idName])
-				return (r = r.replace(_formatID(idName, _PREID), s))
+				return (r = r.replace(_formatID(idName, rootData[_PREID]), s))
 		})
 
 		// 6.2 RoR selected Ids in path params
 		Object.keys(routeParams).forEach(idName => {
 			if (routeParams[idName] === false)
 				// Remove
-				r = r.replace(_formatID(idName, _PREID), s)
+				r = r.replace(_formatID(idName, rootData[_PREID]), s)
 			// Replace
 			else r = r.replace(_formatID(idName), routeParams[idName])
 		})
@@ -593,7 +647,7 @@ class Route {
 	static DEFAULT_METHOD = GET
 
 	/**
-	 * Check if given routeDefinition is ROUTE
+	 * Check if given routeDefinition is Route
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selectedSelector normally $
 	 * @static
@@ -710,12 +764,12 @@ class Alias extends Route {
 	 * @overload Route.path
 	 */
 	path(routeParams = {}) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			// Note Alias dnt support hide nor justId in creation
 			const parent = myData.parent || {}
 			const rootData = myData.root
 			const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
-			const myId = _formatID(myData[ID], _PREID)
+			const myId = _formatID(myData[ID], rootData[_PREID])
 			let r = s
 
 			if (myData[ID] && routeParams[JUST_ID]) {
@@ -763,7 +817,7 @@ class Resource extends Route {
 	 * @override
 	 */
 	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE)
 			return false
@@ -805,7 +859,7 @@ class Scope extends Route {
 	 * @override
 	 */
 	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwError(undefined, ERROR_SCOPE_AS_A_ROUTE)
 			return false
@@ -814,7 +868,33 @@ class Scope extends Route {
 }
 /* End: src/v2/_Scope.js */
 
+/**
+ * The main Class of the trocha library
+ * @see https://dfoxpro.github.io/trochaJS/#101-intro-to-trocha-js
+ * @module Trocha
+ * @exports default, Trocha
+ * @class
+ */
 class Trocha extends Route {
+	/**
+	 * @constr0uctor
+	 * @see https://dfoxpro.github.io/trochaJS/#203-route-definition-parameters
+	 * @param {object} [arg]
+	 * @param {routeParamsDefinition} [arg.routes]
+	 * @param {routeParamsDefinition} arg.routes.<children_route>
+	 * @param {Trocha.ROUTE | Trocha.SCOPE | Trocha.RESOURCE | Trocha.ALIAS} [arg.routes.$type=Trocha.ROUTE]
+	 * @param {Trocha.COLON | Trocha.BRACKETS} [arg.idMode=Trocha.COLON]
+	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [arg.separator=Trocha.SLASH]
+	 * @param {String} arg.routes.$alias
+	 * @param {String} arg.routes.$id
+	 * @param {string} [arg.customSelector=$]
+	 * @param {string} [arg.domain]
+	 * @param {string} [arg.pre]
+	 * @param {string} [arg.post]
+	 * @param {boolean} [firstSeparator=true]
+	 * @param {boolean} [arg.alwaysUrl=false]
+	 * @param {boolean} [arg.alwaysPost=false]
+	 */
 	constructor(args = {}) {
 		super(
 			null,
@@ -828,68 +908,157 @@ class Trocha extends Route {
 			args[POSTFIX],
 			args[ALWAYS_POST],
 			//args[ALWAYSPRE],/**@TODO
-			args[ID_MODE]
+			args[ID_MODE],
+			args[SEPARATOR],
+			args[FIRST_SEPARATOR]
 		)
 	}
 
-	/*
-	 * STATIC AVAILABLE ATTRIBUTES
-	 */
-	/*
-	 * Offers all the route types
+	//// STATIC AVAILABLE ATTRIBUTES
+	/// Offers all the route types
+	/**
+	 * Default route type
+	 * Symbol for Route type... route
+	 * @see https://dfoxpro.github.io/trochaJS/#route
+	 * @public
+	 * @static
 	 */
 	static get ROUTE() {
 		return ROUTE
 	}
+	/**
+	 * Route type optional to tree definition
+	 * Symbol for Scope type route
+	 * @see https://dfoxpro.github.io/trochaJS/#scope
+	 * @public
+	 * @static
+	 */
 	static get SCOPE() {
 		return SCOPE
 	}
+	/**
+	 * Route type that contain a CRUD like tree route definition
+	 * Symbol for Resource type route
+	 * @see https://dfoxpro.github.io/trochaJS/#resource
+	 * @public
+	 * @static
+	 */
 	static get RESOURCE() {
 		return _RESOURCE
 	}
+	/**
+	 * Route type that can be used to abbreviate long name routes, like CDN
+	 * Symbol for Alias type route
+	 * @see https://dfoxpro.github.io/trochaJS/#alias
+	 * @public
+	 * @static
+	 */
 	static get ALIAS() {
 		return _ALIAS
 	}
 
-	/*
-	 * Offers all the request types
+	/// Offers all the request types
+	/**
+	 * HTTP request method
+	 * Used by browsers to ask CORS permissions
+	 * @public
+	 * @static
 	 */
 	static get OPTIONS() {
 		return OPTIONS
 	}
+	/**
+	 * Most common HTTP request method
+	 * It's tue default method for all routes
+	 * Used in REST for Read operations
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods for all methods info
+	 * @public
+	 * @static
+	 */
 	static get GET() {
 		return GET
 	}
+	/**
+	 * HTTP request method
+	 * Same as get without body response
+	 * @public
+	 * @static
+	 */
 	static get HEAD() {
 		return HEAD
 	}
+	/**
+	 * HTTP request method
+	 * Used in REST for Create operations
+	 * @public
+	 * @static
+	 */
 	static get POST() {
 		return POST
 	}
+	/**
+	 * HTTP request method
+	 * Used in REST for Create operations
+	 * @public
+	 * @static
+	 */
 	static get PUT() {
 		return PUT
 	}
+	/**
+	 * HTTP request method
+	 * Used in REST for Update/Write operations
+	 * @public
+	 * @static
+	 */
 	static get PATCH() {
 		return PATCH
 	}
+	/**
+	 * HTTP request method
+	 * Used in REST for Destroy/Remove operations
+	 * @public
+	 * @static
+	 */
 	static get DELETE() {
 		return DELETE
 	}
+	/**
+	 * HTTP request method
+	 * Used for usage/error log client to server
+	 * @public
+	 * @static
+	 */
 	static get TRACE() {
 		return TRACE
 	}
+	/**
+	 * HTTP request method
+	 * @public
+	 * @static
+	 */
 	static get CONNECT() {
 		return CONNECT
 	}
 
-	/*
-	 * Offers ID modes
+	/// Offers ID modes
+	/**
+	 * Standard definition of Id; used in Angular, React(Router)
+	 * Symbol for "/:the_id" id mode, default ID mode
+	 * @public
+	 * @static
+	 */
+	static get COLON() {
+		return COLON
+	}
+	/**
+	 * Definition of Id used in CanJS and other frameworks
+	 * Symbol for "/{the_id}" id mode
+	 * @public
+	 * @static
 	 */
 	static get BRACKETS() {
 		return BRACKETS
-	}
-	static get COLON() {
-		return COLON
 	}
 
 	/*
@@ -898,6 +1067,34 @@ class Trocha extends Route {
 	 */
 	static get $RESOURCE() {
 		return _basicResource()
+	}
+
+	/**
+	 * Standard definition of separator; used in Unix, http
+	 * Symbol for "/" separator, default separator
+	 * @public
+	 * @static
+	 */
+	static get SLASH() {
+		return SLASH
+	}
+	/**
+	 * Used in MS Windows file system
+	 * Symbol for "\" separator
+	 * @public
+	 * @static
+	 */
+	static get BACK_SLASH() {
+		return BACK_SLASH
+	}
+	/**
+	 * Used in localization libraries and other properties enviorements
+	 * Symbol for "." separator
+	 * @public
+	 * @static
+	 */
+	static get DOT() {
+		return DOT
 	}
 }
 /* End: src/v2/_Trocha.js */

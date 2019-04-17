@@ -69,7 +69,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         r = new Trocha();
         assert.instanceOf(r, Trocha);
       });
-      return it('should create a valid trocha object', function () {
+      it('should create a valid trocha object', function () {
         var r;
         r = new Trocha();
         assert.isObject(r);
@@ -826,6 +826,86 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         });
         assert.equal(r.withId.path(), '/withId/:myId');
+      });
+    });
+    describe('0.2.2 custom separator & firstSeparator', function () {
+      var r;
+      describe('Default separator', function () {
+        it('should set default separator', function () {
+          r = new Trocha({
+            // separator: Trocha.SLASH,
+            routes: {
+              hello: {
+                Susy: {},
+                myAlias: 'asd'
+              },
+              myResource: {
+                $type: Trocha.RESOURCE,
+                $id: 'miId'
+              }
+            }
+          });
+          assert.equal(r.hello.Susy.path(), '/hello/Susy');
+          assert.equal(r.hello.myAlias.path(), '/hello/asd');
+        });
+        it('should set firstSeparator', function () {
+          r = new Trocha({
+            firstSeparator: false,
+            routes: {
+              hello: {
+                Susy: {}
+              },
+              myAlias: {
+                $type: Trocha.ALIAS,
+                $alias: 'asd',
+                qwe: {}
+              },
+              myResource: {
+                $type: Trocha.RESOURCE,
+                $id: 'miId'
+              }
+            }
+          });
+          assert.equal(r.hello.Susy.path(), 'hello/Susy');
+          assert.equal(r.myAlias.qwe.path(), 'asd/qwe');
+          assert.equal(r.myResource.show.path(), 'myResource/:miId');
+          r = new Trocha({
+            separator: Trocha.BACK_SLASH,
+            firstSeparator: true,
+            routes: {
+              hello: {
+                Susy: {}
+              }
+            }
+          });
+          assert.equal(r.hello.Susy.path(), '\\hello\\Susy');
+        });
+      });
+      describe('Custom separator', function () {
+        it('should set DOT separator', function () {
+          r = new Trocha({
+            separator: Trocha.DOT,
+            routes: {
+              hello: {
+                Susy: {}
+              }
+            }
+          });
+          assert.equal(r.hello.Susy.path(), 'hello.Susy');
+          assert.equal(Trocha.DOT, 'DOT');
+        });
+        it('should set BACK_SLASH separator', function () {
+          r = new Trocha({
+            separator: Trocha.BACK_SLASH,
+            routes: {
+              hello: {
+                Susy: {}
+              }
+            }
+          });
+          assert.equal(r.hello.Susy.path(), 'hello\\Susy');
+          assert.equal(Trocha.BACK_SLASH, 'BACK_SLASH');
+        });
       });
     });
   });
