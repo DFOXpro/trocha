@@ -1,3 +1,6 @@
+// base path function
+include "_Route_path.js"
+
 // Route classes
 include "_Route.js"
 include "_Alias.js"
@@ -30,6 +33,7 @@ class Trocha extends Route {
 	 * @param {boolean} [firstSeparator=true]
 	 * @param {boolean} [arg.alwaysUrl=false]
 	 * @param {boolean} [arg.alwaysPost=false]
+	 * @param {function | object<function>} [arg.fun]
 	 */
 	constructor(args = {}) {
 		super(
@@ -46,7 +50,8 @@ class Trocha extends Route {
 			//args[ALWAYSPRE],/**@TODO
 			args[ID_MODE],
 			args[SEPARATOR],
-			args[FIRST_SEPARATOR]
+			args[FIRST_SEPARATOR],
+			args[CUSTOM_FUNCTION],
 		)
 	}
 

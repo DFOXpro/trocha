@@ -26,13 +26,15 @@ class Resource extends Route {
 	}
 
 	/**
+	 * Print RESOURCE type routes
+	 * diferences with Route.path: throw a warning if force don't return true
+	 * @see _path
 	 * @override
 	 */
-	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData, _) {
+	path = (routeParams, force) =>
+		_path(routeParams, this._data, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE)
 			return false
 		})
-	}
 }

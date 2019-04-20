@@ -4,12 +4,13 @@
  * @exports Route
  * @class
  */
-class Route {
+(() =>
+function Route () {
 	/**
 	 * Holds all the route information, note it's not protected(can't be inhered)
 	 * @private
 	 */
-	#data = {
+	let _data = {
 		parent: null,
 		childs: {},
 		SS: DS, // selectedSelector
@@ -32,12 +33,12 @@ class Route {
 	 * @recursive
 	 * @return {boolean} - does the parent or (parent parent and go on) have the id?
 	 */
-	#anyParentHasThisId = (mySelf, id) => {
-		let SS = mySelf.#data.SS
-		if (!mySelf.#data.parent) return false
+	const _anyParentHasThisId = (mySelf, id) => {
+		let SS = _data.SS
+		if (!_data.parent) return false
 		return (
-			mySelf.#data.parent[SS + ID] === id ||
-			mySelf.#anyParentHasThisId(mySelf.#data.parent, id)
+			_data.parent[SS + ID] === id ||
+			_anyParentHasThisId(_data.parent, id)
 		)
 	}
 
@@ -50,12 +51,12 @@ class Route {
 	 * @sideEffect mySelf
 	 * @private
 	 */
-	#newGetter = (mySelf, attribute, fun, skipSelector) => {
-		let SS = skipSelector ? '' : mySelf.#data.SS
+	const _newGetter = (mySelf, attribute, fun, skipSelector) => {
+		let SS = skipSelector ? '' : _data.SS
 		Object.defineProperty(mySelf, SS + attribute, {
 			get() {
 				if (fun) return fun()
-				else return mySelf.#data[attribute]
+				else return _data[attribute]
 			},
 			enumerable: true,
 			configurable: false
@@ -63,24 +64,25 @@ class Route {
 	}
 
 	/**
+	 * @param {string} attribute - name of the attribute to add to _data then remove of mySelf
+	 * @pure false - depends on mySelf
+	 * @sideEffect mySelf
+	 */
+	const _setAndDisposeAttribute = attribute => {
+		let SS = _data.SS
+		_data[attribute] = posibleRouteDef[SS + attribute]
+		delete posibleRouteDef[SS + attribute]
+	}
+
+	/**
 	 * Constructor helper, set attributes and getters of current route
 	 * @param {Route} mySelf - tldr this
 	 * @param {string} attribute - name
-	 * @sideEffect mySelf - add getters, modify #data; posibleRouteDef - delete all attributes
+	 * @sideEffect mySelf - add getters, modify _data; posibleRouteDef - delete all attributes
 	 * @private
 	 */
-	#defineMyAttributes = (mySelf, posibleRouteDef) => {
-		let SS = mySelf.#data.SS
-
-		/**
-		 * @param {string} attribute - name of the attribute to add to #data then remove of mySelf
-		 * @pure false - depends on mySelf
-		 * @sideEffect mySelf
-		 */
-		let _setAndDisposeAttribute = attribute => {
-			mySelf.#data[attribute] = posibleRouteDef[SS + attribute]
-			delete posibleRouteDef[SS + attribute]
-		}
+	const _defineMyAttributes = (mySelf, posibleRouteDef) => {
+		let SS = _data.SS
 
 		_setAndDisposeAttribute(NAME)
 		_setAndDisposeAttribute(ID)
@@ -95,12 +97,12 @@ class Route {
 		_setAndDisposeAttribute(POSTFIX)
 		_setAndDisposeAttribute(JUST_ID)
 		_setAndDisposeAttribute(PARENT_ID)
-		if (false === posibleRouteDef[mySelf.#data.parent[SS + ID]])
-			_setAndDisposeAttribute(mySelf.#data.parent[SS + ID])
-		mySelf.#newGetter(mySelf, NAME)
-		mySelf.#newGetter(mySelf, ID) // @TODO DOCUMENT ME
-		mySelf.#newGetter(mySelf, METHOD)
-		mySelf.#newGetter(mySelf, AS, () => mySelf.#as(mySelf))
+		if (false === posibleRouteDef[_data.parent[SS + ID]])
+			_setAndDisposeAttribute(_data.parent[SS + ID])
+		_newGetter(mySelf, NAME)
+		_newGetter(mySelf, ID) // @TODO DOCUMENT ME
+		_newGetter(mySelf, METHOD)
+		_newGetter(mySelf, AS, () => _as(mySelf))
 	}
 
 	/**
@@ -108,13 +110,13 @@ class Route {
 	 * @param {Route} mySelf - tldr this
 	 * @param {object} routeDefinition - child route attributes
 	 * @param {string} name - route name
-	 * @sideEffect mySelf - add getters, modify #data; routeDefinition add $name
+	 * @sideEffect mySelf - add getters, modify _data; routeDefinition add $name
 	 * @private
 	 * @throws ERROR_ROUTE_ALREADY_DEFINE
 	 */
-	#createChildRoute = (mySelf, routeDefinition, name) => {
-		let SS = mySelf.#data.SS
-		if (mySelf.#data.childs[name])
+	const _createChildRoute = (mySelf, routeDefinition, name) => {
+		let SS = _data.SS
+		if (_data.childs[name])
 			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
 		let routeSubclasses = [Route, Alias, Resource, Scope]
 		routeSubclasses.forEach(routeSubclass => {
@@ -133,10 +135,10 @@ class Route {
 			mySelf,
 			routeDefinition,
 			SS,
-			mySelf.#data.root
+			_data.root
 		)
-		mySelf.#data.childs[name] = newRoute
-		mySelf.#newGetter(mySelf, name, () => mySelf.#data.childs[name], true)
+		_data.childs[name] = newRoute
+		_newGetter(mySelf, name, () => _data.childs[name], true)
 	}
 
 	/**
@@ -144,16 +146,16 @@ class Route {
 	 * @param {Route} mySelf - tldr this
 	 * @param {object} argChildRoutes - child routeDefinitions
 	 * @param {boolean} skipResource - prevent infinity loop on resource creation
-	 * @sideEffect mySelf - add getters, modify #data
+	 * @sideEffect mySelf - add getters, modify _data
 	 * @private
 	 * @recursive
 	 */
-	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
-		let SS = mySelf.#data.SS
-		if (!skipResource && mySelf.#data[TYPE] === _RESOURCE) {
-			let resourceChilds = mySelf.#data[RESOURCE]
+	const _diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
+		let SS = _data.SS
+		if (!skipResource && _data[TYPE] === _RESOURCE) {
+			let resourceChilds = _data[RESOURCE]
 			delete resourceChilds[SS + ID]
-			mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
+			_diggestChildRoutes(mySelf, resourceChilds, true)
 		}
 
 		let posibleChildRoutesNames = Object.keys(argChildRoutes)
@@ -162,20 +164,20 @@ class Route {
 			if (
 				// This case disable any <id>=false
 				argChildRoutes[posibleChild] === false &&
-				mySelf.#anyParentHasThisId(mySelf, posibleChild)
+				_anyParentHasThisId(mySelf, posibleChild)
 			)
-				mySelf.#data[posibleChild] = false
+				_data[posibleChild] = false
 			else {
-				mySelf.#createChildRoute(
+				_createChildRoute(
 					mySelf,
 					argChildRoutes[posibleChild],
 					posibleChild
 				)
-				if (mySelf.#data[TYPE] === SCOPE) {
+				if (_data[TYPE] === SCOPE) {
 					let scopedChild = { ...argChildRoutes[posibleChild] }
 					scopedChild[SS + PARENT_ID] = false
-					mySelf.#createChildRoute(
-						mySelf.#data.parent,
+					_createChildRoute(
+						_data.parent,
 						scopedChild,
 						posibleChild
 					)
@@ -190,16 +192,17 @@ class Route {
 	 * @recursive via parent.$as
 	 * @return {string} flat self and parents name separated by _
 	 */
-	#as = mySelf => {
-		let SS = mySelf.#data.SS
-		return mySelf.#data.parent[SS + AS]
-			? `${mySelf.#data.parent[SS + AS]}_${mySelf.#data[NAME]}`
-			: mySelf.#data[NAME]
+	const _as = mySelf => {
+		let SS = _data.SS
+		return _data.parent[SS + AS]
+			? `${_data.parent[SS + AS]}_${_data[NAME]}`
+			: _data[NAME]
 	}
 
 	/**
 	 * This constructor should be used just for test'n debug purposes
-	 * pure false depends on #data initial attributes
+	 * pure false depends on _data initial attributes
+	 * @constructor
 	 * @param {Route} myParent
 	 * @param {routeParamsDefinition} argRouteDef
 	 * @param {string} argCustomSelector
@@ -213,8 +216,9 @@ class Route {
 	 * @param {Trocha.COLON | Trocha.BRACKETS} [argIdMod=Trocha.COLON]
 	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [argSeparator=Trocha.SLASH]
 	 * @param {boolean} [argfirstSeparator=true]
+	 * @param {function | object<function>} [argCustomFunction]
 	 */
-	constructor(
+	const _Route_constructor = function (
 		myParent,
 		argRouteDef,
 		argCustomSelector,
@@ -229,85 +233,92 @@ class Route {
 		//argAlwaysPre,// @TODO
 		argIdMode,
 		argSeparator,
-		argfirstSeparator
+		argfirstSeparator,
+		argCustomFunction
 	) {
-		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
+		let SS = (_data.SS = argCustomSelector || DS) // selectedSelector
 		if (
 			myParent ||
 			(argRouteDef && argRouteDef[SS + NAME] && argRouteDef[SS + TYPE])
 		) {
 			// It's a normal route
-			this.#data.parent = myParent
-			this.#data.root = argRoot
-			this.#defineMyAttributes(this, argRouteDef)
-			this.#diggestChildRoutes(this, argRouteDef)
+			_data.parent = myParent
+			_data.root = argRoot
+			_defineMyAttributes(this, argRouteDef)
+			_diggestChildRoutes(this, argRouteDef)
 		} else {
 			// It's the root route
 			const _setRootAttribute = (attribute, value) =>
-				(this.#data[attribute] = value !== undefined ? value : this.#data[attribute])
+				(_data[attribute] =
+					value !== undefined ? value : _data[attribute])
 			_setRootAttribute(DOMAIN, argDomain)
-			this.#newGetter(this, DOMAIN)
+			_newGetter(this, DOMAIN)
 			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
 			_setRootAttribute(ALWAYS_POST, argAlwaysPost)
 			_setRootAttribute(POSTFIX, argPost)
 			_setRootAttribute(PREFIX, argPre)
 			_setRootAttribute(ID_MODE, argIdMode)
 
-			_setRootAttribute(SEPARATOR, _AVAILABLE_SEPARATORS[argSeparator][SEPARATOR])
+			_setRootAttribute(
+				SEPARATOR,
+				_AVAILABLE_SEPARATORS[argSeparator][SEPARATOR]
+			)
 			_setRootAttribute(
 				FIRST_SEPARATOR,
-				argfirstSeparator !==  undefined ? argfirstSeparator : _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
+				argfirstSeparator !== undefined
+					? argfirstSeparator
+					: _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
 			)
-			_setRootAttribute(_PREID, this.#data[SEPARATOR] + _ID_MODE_REPLACE)
+			_setRootAttribute(_PREID, _data[SEPARATOR] + _ID_MODE_REPLACE)
+			_setRootAttribute(CUSTOM_FUNCTION, argCustomFunction)
 
-			this.#data.root = this.#data
+			_data.root = _data
 			delete this[PATH]
-			this.#newGetter(this, _RESOURCE, () => _basicResource(SS))
-			this.#diggestChildRoutes(this, argChildRoutes)
+			_newGetter(this, _RESOURCE, () => _basicResource(SS))
+			_diggestChildRoutes(this, argChildRoutes)
 		}
 	}
 
 	_newRoute = args => {
 		args[TYPE] = ROUTE
 		if (!Route.is(args, '')) return false
-		this.#createChildRoute(
+		_createChildRoute(
 			this,
-			Route.diggest(args, this.#data.SS, ''),
+			Route.diggest(args, _data.SS, ''),
 			args[NAME]
 		)
 	}
 	_newScope = args => {
 		args[TYPE] = SCOPE
 		if (!Scope.is(args, '')) return false
-		this.#createChildRoute(
+		_createChildRoute(
 			this,
-			Scope.diggest(args, this.#data.SS, ''),
+			Scope.diggest(args, _data.SS, ''),
 			args[NAME]
 		)
 	}
 	_newAlias = args => {
 		args[TYPE] = _ALIAS
 		if (!Alias.is(args, '')) return false
-		this.#createChildRoute(
+		_createChildRoute(
 			this,
-			Alias.diggest(args, this.#data.SS, ''),
+			Alias.diggest(args, _data.SS, ''),
 			args[NAME]
 		)
 	}
 	_newResource = args => {
 		args[TYPE] = _RESOURCE
 		if (!Resource.is(args, '')) return false
-		this.#createChildRoute(
+		_createChildRoute(
 			this,
-			Resource.diggest(args, this.#data.SS, ''),
+			Resource.diggest(args, _data.SS, ''),
 			args[NAME]
 		)
 	}
 
-	// prettier-ignore // < Does not work ¬¬
-	include "_Route_path.js"
+	path = routeParams => _path(routeParams, _data)
 
-	toString = () => this.#as(this)
+	toString = () => _as(this)
 
 	static DEFAULT_METHOD = GET
 
@@ -380,3 +391,11 @@ class Route {
 		})
 	}
 }
+
+Object.defineProperty(Route, DEFAULT_METHOD, {
+  get: function() {
+    return GET
+  }
+})
+
+)()
