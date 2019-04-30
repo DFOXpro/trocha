@@ -5,11 +5,11 @@
  */
 include "_core.js"
 export {
-	Trocha,
-	Route,
-	Alias,
-	Resource,
-	Scope,
+	_Trocha as Trocha,
+	// Route,
+	// Alias,
+	// Resource,
+	// Scope,
 	// Request method types
 	OPTIONS,
 	GET,

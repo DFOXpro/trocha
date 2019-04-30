@@ -12,7 +12,7 @@ class Scope extends Route {
 		r[SS + JUST_ID] = true
 		r[SS + DEFAULT_ID] = routeDefinition[IS + DEFAULT_ID] || false
 		Route.diggest(routeDefinition, SS, IS, r, [ID, HIDE])
-		Route._trimSelector(IS, routeDefinition, r)
+		Route[TRIM_SELECTOR](IS, routeDefinition, r)
 		return r
 	}
 

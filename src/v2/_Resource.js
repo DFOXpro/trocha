@@ -11,7 +11,7 @@ class Resource extends Route {
 		r[SS + TYPE] = _RESOURCE
 		r[SS + RESOURCE] = routeDefinition[IS + RESOURCE] || _basicResource(SS)
 		Route.diggest(routeDefinition, SS, IS, r, [ID])
-		Route._trimSelector(IS, routeDefinition, r)
+		Route[TRIM_SELECTOR](IS, routeDefinition, r)
 		return r
 	}
 

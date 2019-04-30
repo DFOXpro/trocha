@@ -172,7 +172,7 @@ module.exports = (grunt) ->
 	 ###
 	grunt.registerTask 'dev', [
 		'build'
-		'watch'
+		'watch:js'
 	]
 
 	###*

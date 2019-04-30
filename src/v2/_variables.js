@@ -36,6 +36,11 @@ const FIRST_SEPARATOR = 'firstSeparator'
 const CUSTOM_SELECTOR = 'customSelector'
 const CUSTOM_FUNCTION = 'fun'
 
+// shared private attributes
+const PARENT = 'parent'
+const CHILDS = 'childs'
+const SELECTED_SELECTOR = 'SS'
+
 /// Request method types
 // @see _Trocha.js /// Offers all the request types
 const GET = 'GET'
@@ -111,15 +116,16 @@ const _FORMAT_ID_FUN = currentIdMode =>
 			_AVAILABLE_ID_MODES[currentIdMode].replace(_ID_MODE_REPLACE, idName)
 		)
 
-/// Route return attributes
+/// Route attributes
 const AS = 'as'
+const IS = 'is'
 const PATH = 'path'
-
-/// Not used right now
-// const NEW_SCOPE = '_newScope'
-// const NEW_ROUTE = '_newRoute'
-// const NEW_RESOURCE = '_newResource'
-// const NEW_ALIAS = '_newAlias'
+const DIGGEST = 'diggest'
+const NEW_SCOPE = '_newScope'
+const NEW_ROUTE = '_newRoute'
+const NEW_ALIAS = '_newAlias'
+const NEW_RESOURCE = '_newResource'
+const TRIM_SELECTOR = '_trimSelector'
 
 /// BASIC RESOURCE
 const _show = 'show'
@@ -127,7 +133,6 @@ const _edit = 'edit'
 const _new = 'new'
 const _list = 'list'
 const _basicResource = (SS = DS) => {
-	// selectedSelector
 	const r = {}
 	r[SS + ID] = ID
 	r[_show] = {}

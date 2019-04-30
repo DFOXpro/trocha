@@ -19,7 +19,7 @@ class Alias extends Route {
 		r[SS + METHOD] = routeDefinition[IS + METHOD] || Route.DEFAULT_METHOD
 		Route.diggest(routeDefinition, SS, IS, r, [ID, POSTFIX, PARENT_ID])
 		if ('string' !== typeof routeDefinition)
-			Route._trimSelector(IS, routeDefinition, r)
+			Route[TRIM_SELECTOR](IS, routeDefinition, r)
 		return r
 	}
 

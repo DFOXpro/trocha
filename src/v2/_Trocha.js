@@ -1,42 +1,48 @@
 // base path function
-include "_Route_path.js"
+// include "_Route_path.js"
 
 // Route classes
-include "_Route.js"
-include "_Alias.js"
-include "_Resource.js"
-include "_Scope.js"
+include "_Route2.js"
+// include "_Alias.js"
+// include "_Resource.js"
+// include "_Scope.js"
 
-/**
- * The main Class of the trocha library
- * @see https://dfoxpro.github.io/trochaJS/#101-intro-to-trocha-js
- * @module Trocha
- * @exports default, Trocha
- * @class
- */
-class Trocha extends Route {
+var _Trocha
+;(function() {
 	/**
-	 * @constr0uctor
+	 * The main Class of the trocha library
+	 * @see https://dfoxpro.github.io/trochaJS/#101-intro-to-trocha-js
+	 * @module Trocha
+	 * @exports default, Trocha
+	 * @class Trocha
+	 */
+	function Trocha(args) {
+		return _constructor(args)
+	}
+
+	/**
+	 * @constructor
+	 * @memberof Trocha
 	 * @see https://dfoxpro.github.io/trochaJS/#203-route-definition-parameters
 	 * @param {object} [arg]
 	 * @param {routeParamsDefinition} [arg.routes]
 	 * @param {routeParamsDefinition} arg.routes.<children_route>
 	 * @param {Trocha.ROUTE | Trocha.SCOPE | Trocha.RESOURCE | Trocha.ALIAS} [arg.routes.$type=Trocha.ROUTE]
-	 * @param {Trocha.COLON | Trocha.BRACKETS} [arg.idMode=Trocha.COLON]
-	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [arg.separator=Trocha.SLASH]
+	 * @param {Trocha.COLON | Trocha.BRACKETS} [arg.idMode = Trocha.COLON]
+	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [arg.separator = Trocha.SLASH]
 	 * @param {String} arg.routes.$alias
 	 * @param {String} arg.routes.$id
-	 * @param {string} [arg.customSelector=$]
+	 * @param {string} [arg.customSelector = '$']
 	 * @param {string} [arg.domain]
 	 * @param {string} [arg.pre]
 	 * @param {string} [arg.post]
-	 * @param {boolean} [firstSeparator=true]
-	 * @param {boolean} [arg.alwaysUrl=false]
-	 * @param {boolean} [arg.alwaysPost=false]
+	 * @param {boolean} [firstSeparator = true]
+	 * @param {boolean} [arg.alwaysUrl = false]
+	 * @param {boolean} [arg.alwaysPost = false]
 	 * @param {function | object<function>} [arg.fun]
 	 */
-	constructor(args = {}) {
-		super(
+	function _constructor(args = {}) {
+		var r = Route(
 			null,
 			null, //Because it's the root
 			args[CUSTOM_SELECTOR],
@@ -51,8 +57,9 @@ class Trocha extends Route {
 			args[ID_MODE],
 			args[SEPARATOR],
 			args[FIRST_SEPARATOR],
-			args[CUSTOM_FUNCTION],
+			args[CUSTOM_FUNCTION]
 		)
+		return r
 	}
 
 	//// STATIC AVAILABLE ATTRIBUTES
@@ -64,9 +71,8 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get ROUTE() {
-		return ROUTE
-	}
+	_newAttribute(Trocha, ROUTE, ROUTE)
+
 	/**
 	 * Route type optional to tree definition
 	 * Symbol for Scope type route
@@ -74,9 +80,8 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get SCOPE() {
-		return SCOPE
-	}
+	_newAttribute(Trocha, SCOPE, SCOPE)
+
 	/**
 	 * Route type that contain a CRUD like tree route definition
 	 * Symbol for Resource type route
@@ -84,9 +89,8 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get RESOURCE() {
-		return _RESOURCE
-	}
+	_newAttribute(Trocha, RESOURCE, _RESOURCE)
+
 	/**
 	 * Route type that can be used to abbreviate long name routes, like CDN
 	 * Symbol for Alias type route
@@ -94,9 +98,7 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get ALIAS() {
-		return _ALIAS
-	}
+	_newAttribute(Trocha, ALIAS, _ALIAS)
 
 	/// Offers all the request types
 	/**
@@ -105,9 +107,8 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get OPTIONS() {
-		return OPTIONS
-	}
+	_newAttribute(Trocha, OPTIONS, OPTIONS)
+
 	/**
 	 * Most common HTTP request method
 	 * It's tue default method for all routes
@@ -116,71 +117,62 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get GET() {
-		return GET
-	}
+	_newAttribute(Trocha, GET, GET)
+
 	/**
 	 * HTTP request method
 	 * Same as get without body response
 	 * @public
 	 * @static
 	 */
-	static get HEAD() {
-		return HEAD
-	}
+	_newAttribute(Trocha, HEAD, HEAD)
+
 	/**
 	 * HTTP request method
 	 * Used in REST for Create operations
 	 * @public
 	 * @static
 	 */
-	static get POST() {
-		return POST
-	}
+	_newAttribute(Trocha, POST, POST)
+
 	/**
 	 * HTTP request method
 	 * Used in REST for Create operations
 	 * @public
 	 * @static
 	 */
-	static get PUT() {
-		return PUT
-	}
+	_newAttribute(Trocha, PUT, PUT)
+
 	/**
 	 * HTTP request method
 	 * Used in REST for Update/Write operations
 	 * @public
 	 * @static
 	 */
-	static get PATCH() {
-		return PATCH
-	}
+	_newAttribute(Trocha, PATCH, PATCH)
+
 	/**
 	 * HTTP request method
 	 * Used in REST for Destroy/Remove operations
 	 * @public
 	 * @static
 	 */
-	static get DELETE() {
-		return DELETE
-	}
+	_newAttribute(Trocha, DELETE, DELETE)
+
 	/**
 	 * HTTP request method
 	 * Used for usage/error log client to server
 	 * @public
 	 * @static
 	 */
-	static get TRACE() {
-		return TRACE
-	}
+	_newAttribute(Trocha, TRACE, TRACE)
+
 	/**
 	 * HTTP request method
 	 * @public
 	 * @static
 	 */
-	static get CONNECT() {
-		return CONNECT
-	}
+	_newAttribute(Trocha, CONNECT, CONNECT)
 
 	/// Offers ID modes
 	/**
@@ -189,52 +181,54 @@ class Trocha extends Route {
 	 * @public
 	 * @static
 	 */
-	static get COLON() {
-		return COLON
-	}
+	_newAttribute(Trocha, COLON, COLON)
+
 	/**
 	 * Definition of Id used in CanJS and other frameworks
 	 * Symbol for "/{the_id}" id mode
 	 * @public
 	 * @static
 	 */
-	static get BRACKETS() {
-		return BRACKETS
-	}
+	_newAttribute(Trocha, BRACKETS, BRACKETS)
 
-	/*
+	/**
 	 * Offers basic resource structure
 	 * @See Route constructor for custom selector
+	 * @name $RESOURCE
+	 * @public
+	 * @memberof Route
+	 * @static
 	 */
-	static get $RESOURCE() {
-		return _basicResource()
-	}
+	_newAttribute(Trocha, DS + _RESOURCE, _basicResource())
 
 	/**
 	 * Standard definition of separator; used in Unix, http
 	 * Symbol for "/" separator, default separator
+	 * @name SLASH
 	 * @public
+	 * @memberof Route
 	 * @static
 	 */
-	static get SLASH() {
-		return SLASH
-	}
+	_newAttribute(Trocha, SLASH, SLASH)
+
 	/**
 	 * Used in MS Windows file system
 	 * Symbol for "\" separator
+	 * @name BACK_SLASH
 	 * @public
+	 * @memberof Route
 	 * @static
 	 */
-	static get BACK_SLASH() {
-		return BACK_SLASH
-	}
+	_newAttribute(Trocha, BACK_SLASH, BACK_SLASH)
+
 	/**
 	 * Used in localization libraries and other properties enviorements
 	 * Symbol for "." separator
+	 * @name DOT
 	 * @public
+	 * @memberof Route
 	 * @static
 	 */
-	static get DOT() {
-		return DOT
-	}
-}
+	_newAttribute(Trocha, DOT, DOT)
+	_Trocha = Trocha
+})()

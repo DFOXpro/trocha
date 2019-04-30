@@ -1,145 +1,10 @@
-/**
- * The Class where all other route types inherit
- * @module Route
- * @exports Route
- * @class
- */
+let Route;
 (() =>
-function Route () {
-	/**
-	 * Holds all the route information, note it's not protected(can't be inhered)
-	 * @private
-	 */
-	let _data = {
-		parent: null,
-		childs: {},
-		SS: DS, // selectedSelector
-		// next attributes just for root
-		alwaysPost: false,
-		alwaysUrl: false,
-		idMode: COLON,
-		domain: '',
-		post: '',
-		pre: '',
-		separator: _AVAILABLE_SEPARATORS[SLASH][SEPARATOR],
-		firstSeparator: _AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR]
-	}
-
-	/**
-	 * @param {Route} mySelf - tldr this
-	 * @param {string} id - id to compare to parents ids
-	 * @pure
-	 * @private
-	 * @recursive
-	 * @return {boolean} - does the parent or (parent parent and go on) have the id?
-	 */
-	const _anyParentHasThisId = (mySelf, id) => {
-		let SS = _data.SS
-		if (!_data.parent) return false
-		return (
-			_data.parent[SS + ID] === id ||
-			_anyParentHasThisId(_data.parent, id)
-		)
-	}
-
-	/**
-	 * Adds a (custom)getter of attribute to mySelf
-	 * @param {Route} mySelf - tldr this
-	 * @param {string} attribute - name of the attribute to expose
-	 * @param {function} fun - to use as a custom getter for attribute
-	 * @param {boolean} skipSelector - if false will add selectedSelector to getter name
-	 * @sideEffect mySelf
-	 * @private
-	 */
-	const _newGetter = (mySelf, attribute, fun, skipSelector) => {
-		let SS = skipSelector ? '' : _data.SS
-		Object.defineProperty(mySelf, SS + attribute, {
-			get() {
-				if (fun) return fun()
-				else return _data[attribute]
-			},
-			enumerable: true,
-			configurable: false
-		})
-	}
-
-	/**
-	 * @param {string} attribute - name of the attribute to add to _data then remove of mySelf
-	 * @pure false - depends on mySelf
-	 * @sideEffect mySelf
-	 */
-	const _setAndDisposeAttribute = attribute => {
-		let SS = _data.SS
-		_data[attribute] = posibleRouteDef[SS + attribute]
-		delete posibleRouteDef[SS + attribute]
-	}
-
-	/**
-	 * Constructor helper, set attributes and getters of current route
-	 * @param {Route} mySelf - tldr this
-	 * @param {string} attribute - name
-	 * @sideEffect mySelf - add getters, modify _data; posibleRouteDef - delete all attributes
-	 * @private
-	 */
-	const _defineMyAttributes = (mySelf, posibleRouteDef) => {
-		let SS = _data.SS
-
-		_setAndDisposeAttribute(NAME)
-		_setAndDisposeAttribute(ID)
-		_setAndDisposeAttribute(DEFAULT_ID)
-		_setAndDisposeAttribute(TYPE)
-		_setAndDisposeAttribute(METHOD)
-
-		_setAndDisposeAttribute(ALIAS)
-		_setAndDisposeAttribute(RESOURCE)
-
-		_setAndDisposeAttribute(HIDE)
-		_setAndDisposeAttribute(POSTFIX)
-		_setAndDisposeAttribute(JUST_ID)
-		_setAndDisposeAttribute(PARENT_ID)
-		if (false === posibleRouteDef[_data.parent[SS + ID]])
-			_setAndDisposeAttribute(_data.parent[SS + ID])
-		_newGetter(mySelf, NAME)
-		_newGetter(mySelf, ID) // @TODO DOCUMENT ME
-		_newGetter(mySelf, METHOD)
-		_newGetter(mySelf, AS, () => _as(mySelf))
-	}
-
-	/**
-	 * Constructor helper, create one child route
-	 * @param {Route} mySelf - tldr this
-	 * @param {object} routeDefinition - child route attributes
-	 * @param {string} name - route name
-	 * @sideEffect mySelf - add getters, modify _data; routeDefinition add $name
-	 * @private
-	 * @throws ERROR_ROUTE_ALREADY_DEFINE
-	 */
-	const _createChildRoute = (mySelf, routeDefinition, name) => {
-		let SS = _data.SS
-		if (_data.childs[name])
-			_throwError(mySelf, ERROR_ROUTE_ALREADY_DEFINE, name)
-		let routeSubclasses = [Route, Alias, Resource, Scope]
-		routeSubclasses.forEach(routeSubclass => {
-			if (routeSubclass.is(routeDefinition, SS))
-				routeDefinition = routeSubclass.diggest(routeDefinition, SS, SS)
-		})
-		routeDefinition[SS + NAME] = name
-		let routeTypes = {}
-		routeTypes[ROUTE] = Route
-		routeTypes[undefined] = Route
-		routeTypes[_ALIAS] = Alias
-		routeTypes[SCOPE] = Scope
-		routeTypes[_RESOURCE] = Resource
-
-		let newRoute = new routeTypes[routeDefinition[SS + TYPE]](
-			mySelf,
-			routeDefinition,
-			SS,
-			_data.root
-		)
-		_data.childs[name] = newRoute
-		_newGetter(mySelf, name, () => _data.childs[name], true)
-	}
+/**
+* The Class where all other route types inherit
+* @class Route
+*/
+Route = function Route () {
 
 	/**
 	 * Constructor helper, create child routes
@@ -320,37 +185,73 @@ function Route () {
 
 	toString = () => _as(this)
 
-	static DEFAULT_METHOD = GET
+};
 
+_newAttribute(
+	Route,
+	TRIM_SELECTOR,
+	/**
+	 * Add the routes defined (those without the current selector) to the
+	 * diggested routeDefinition(dest), note this only works with a selectorl else maybe
+	 * it's from function creation route like _newScope
+	 * @static
+	 * @pure
+	 * @side_effect dest
+	 * @memberof Route
+	 * @param {string} SS selectedSelector
+	 * @param {object} src routeDefinition in
+	 * @param {object} dest routeDefinition out
+	 */
+	function(IS, src, dest) {
+		if (IS === '') return
+		Object.keys(src).forEach(attribute => {
+			if (attribute.slice(0, 2) !== IS) dest[attribute] = src[attribute]
+			else _throwWarning(this, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute)
+		})
+	}
+)
+
+_newAttribute(
+	Route,
+	IS,
 	/**
 	 * Check if given routeDefinition is Route
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selectedSelector normally $
 	 * @static
 	 * @pure
+	 * @memberof Route
 	 * @return {boolean} routeDefinition is route?
 	 */
-	static is(routeDefinition, SS) {
+	function (routeDefinition, SS) {
 		return (
 			routeDefinition[SS + TYPE] === ROUTE ||
 			('object' === typeof routeDefinition &&
 				routeDefinition[SS + TYPE] === undefined)
 		)
 	}
+)
 
+_newAttribute(
+	Route,
+	DIGGEST,
 	/**
 	 * This function serve 2 purposes:
 	 * (With just first 3 params) Sanitize routeDefinition for ROUTE valid params (this behabior is override)
 	 * (With full params) add <routeDefinition>.<IS><attributes> to <dest>.<SS><attributes> (this behabior is not inhered)
+	 * @pure
+	 * @sideEffect dest
+	 * @static
 	 * @tobe_overload
+	 * @recursive 1 iteration
+	 * @memberof Route
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selector to be return
 	 * @param {string} IS - selector to be find
 	 * @param {object} dest - another routeDefinition
 	 * @param {array<string>} attributes - to be added from routeDefinition to dest
-	 * @sideEffect dest
 	 */
-	static diggest = (routeDefinition, SS, IS, dest, attributes) => {
+	function (routeDefinition, SS, IS, dest, attributes) {
 		if (dest && attributes)
 			// is used from subroutes
 			attributes.forEach(attribute => {
@@ -367,35 +268,10 @@ function Route () {
 				POSTFIX,
 				PARENT_ID
 			])
-			Route._trimSelector(IS, routeDefinition, r)
+			Route[TRIM_SELECTOR](IS, routeDefinition, r)
 			return r
 		}
 	}
-
-	/**
-	 * Add the routes defined (those without the current selector) to the
-	 * diggested routeDefinition(dest), note this only works with a selectorl else maybe
-	 * it's from function creation route like _newScope
-	 * @static
-	 * @pure false
-	 * @side_effect dest
-	 * @param {string} SS selectedSelector
-	 * @param {object} src routeDefinition in
-	 * @param {object} dest routeDefinition out
-	 */
-	static _trimSelector = (IS, src, dest) => {
-		if (IS === '') return
-		Object.keys(src).forEach(attribute => {
-			if (attribute.slice(0, 2) !== IS) dest[attribute] = src[attribute]
-			else _throwWarning(this, WARNING_ROUTE_ATTRIBUTE_NOT_SUPPORTED, attribute)
-		})
-	}
-}
-
-Object.defineProperty(Route, DEFAULT_METHOD, {
-  get: function() {
-    return GET
-  }
-})
+)
 
 )()
