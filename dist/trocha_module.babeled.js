@@ -41,7 +41,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license trocha@0.2.2 - 2019-05-08
+/** @license trocha@0.2.3 - 2019-05-09
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -628,13 +628,13 @@ function () {
       var r = s;
       if (myData[NAME] === undefined) return ''; // 1 print the domain
 
-      r = rootData[DOMAIN] && isFirtsParent && routeParams[URL] !== false && (routeParams[URL] || rootData[ALWAYS_URL]) ? rootData[DOMAIN] : s;
-      delete routeParams[URL]; // 2 add the prefix
+      r = rootData[DOMAIN] && isFirtsParent && routeParams[URL] !== false && (routeParams[URL] || rootData[ALWAYS_URL]) ? rootData[DOMAIN] : s; // 2 add the prefix
 
       r += rootData[PREFIX] && (routeParams[PREFIX] || routeParams[EXTENDED]) ? rootData[PREFIX] : s;
       delete routeParams[PREFIX]; // 3 print parent paths
 
       var parentPathArg = {};
+      parentPathArg[URL] = routeParams[URL];
       var parentPathResponse = parent[PATH](parentPathArg, function () {
         return true;
       });
@@ -643,7 +643,8 @@ function () {
       var _ = thisIsChildPath || rootData[FIRST_SEPARATOR] ? rootData[SEPARATOR] : s;
 
       parentPathArg[POSTFIX] = false;
-      r += parentPathResponse; // 4.A print name & id(name) from customNameFun like Alias
+      r += parentPathResponse;
+      delete routeParams[URL]; // 4.A print name & id(name) from customNameFun like Alias
 
       var hide = routeParams[HIDE] !== undefined ? routeParams[HIDE] : myData[HIDE] || myData[JUST_ID] && myData[DEFAULT_ID] === false;
       var customNameFromInhered;

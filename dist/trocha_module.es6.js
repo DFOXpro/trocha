@@ -1,4 +1,4 @@
-/** @license trocha@0.2.2 - 2019-05-08
+/** @license trocha@0.2.3 - 2019-05-09
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -514,7 +514,6 @@ class Route {
 			(routeParams[URL] || rootData[ALWAYS_URL])
 				? rootData[DOMAIN]
 				: s
-		delete routeParams[URL]
 
 		// 2 add the prefix
 		r +=
@@ -525,12 +524,14 @@ class Route {
 
 		// 3 print parent paths
 		let parentPathArg = {}
+		parentPathArg[URL] = routeParams[URL]
 		let parentPathResponse = parent[PATH](parentPathArg, () => true)
 		let thisIsChildPath = !! parentPathResponse
 		// 3.1 enable firstSeparator
 		let _ = (thisIsChildPath || rootData[FIRST_SEPARATOR]) ? rootData[SEPARATOR] : s
 		parentPathArg[POSTFIX] = false
 		r += parentPathResponse
+		delete routeParams[URL]
 
 		// 4.A print name & id(name) from customNameFun like Alias
 		let hide =
