@@ -1,4 +1,4 @@
-/** @license trocha@0.2.2 - 2019-04-16
+/** @license trocha@0.2.2 - 2019-05-08
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -501,6 +501,7 @@
 				parent = myData.parent || {},
 				rootData = myData.root,
 				SS = myData.SS,
+				isFirtsParent = !!parent[SS+DOMAIN],
 				_formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 			let r = s
 
@@ -509,7 +510,7 @@
 			// 1 print the domain
 			r =
 				rootData[DOMAIN] &&
-				// !parent[PATH] &&
+				isFirtsParent &&
 				routeParams[URL] !== false &&
 				(routeParams[URL] || rootData[ALWAYS_URL])
 					? rootData[DOMAIN]

@@ -41,7 +41,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-/** @license trocha@0.2.2 - 2019-04-16
+/** @license trocha@0.2.2 - 2019-05-08
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -622,13 +622,13 @@ function () {
           parent = myData.parent || {},
           rootData = myData.root,
           SS = myData.SS,
+          isFirtsParent = !!parent[SS + DOMAIN],
           _formatID = _FORMAT_ID_FUN(rootData[ID_MODE]);
 
       var r = s;
       if (myData[NAME] === undefined) return ''; // 1 print the domain
 
-      r = rootData[DOMAIN] && // !parent[PATH] &&
-      routeParams[URL] !== false && (routeParams[URL] || rootData[ALWAYS_URL]) ? rootData[DOMAIN] : s;
+      r = rootData[DOMAIN] && isFirtsParent && routeParams[URL] !== false && (routeParams[URL] || rootData[ALWAYS_URL]) ? rootData[DOMAIN] : s;
       delete routeParams[URL]; // 2 add the prefix
 
       r += rootData[PREFIX] && (routeParams[PREFIX] || routeParams[EXTENDED]) ? rootData[PREFIX] : s;
