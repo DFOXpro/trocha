@@ -1,3 +1,7 @@
+# 0.2.3 url hotfix
+
+- Fix domain printing in long routes with path arg url: true
+
 # 0.2.2 "First step in a long road"
 
 ## Fix

@@ -18,7 +18,6 @@ path(routeParams = {}, customNameFun) {
 		(routeParams[URL] || rootData[ALWAYS_URL])
 			? rootData[DOMAIN]
 			: s
-	delete routeParams[URL]
 
 	// 2 add the prefix
 	r +=
@@ -29,12 +28,14 @@ path(routeParams = {}, customNameFun) {
 
 	// 3 print parent paths
 	let parentPathArg = {}
+	parentPathArg[URL] = routeParams[URL]
 	let parentPathResponse = parent[PATH](parentPathArg, () => true)
 	let thisIsChildPath = !! parentPathResponse
 	// 3.1 enable firstSeparator
 	let _ = (thisIsChildPath || rootData[FIRST_SEPARATOR]) ? rootData[SEPARATOR] : s
 	parentPathArg[POSTFIX] = false
 	r += parentPathResponse
+	delete routeParams[URL]
 
 	// 4.A print name & id(name) from customNameFun like Alias
 	let hide =

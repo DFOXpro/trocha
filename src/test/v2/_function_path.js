@@ -32,6 +32,10 @@ describe('function path', () => {
 				}),
 				'https://mydomain.net.co/town/:town_name'
 			)
+			assert.equal(
+				myRoutes.town.house.path({url: true}),
+				'https://mydomain.net.co/town/:town_name/house/:address'
+			)
 			_myRoutesParams = { ...myRoutesParams }
 			_myRoutesParams.alwaysUrl = true
 			_myRoutes = new Trocha(_myRoutesParams)
