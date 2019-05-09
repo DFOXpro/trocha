@@ -111,7 +111,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='https://dfoxpro.github.io/trochaJS/0_2_1/'>Old 0.2.1 docs</a></li>
+            <li><a href='https://dfoxpro.github.io/trochaJS'>Current version docs</a></li>
             <li><a href='https://dfoxpro.github.io/trochaJS/0_2_0/'>Old 0.2.0 docs</a></li>
             <li><a href='https://dfoxpro.github.io/trochaJS/0_1_3/'>Old 0.1.3 docs</a></li>
             <li><a href='#100-contributing'>Español</a></li>
@@ -131,16 +131,14 @@
 <a href="https://github.com/DFOXpro/trocha"><img src="https://img.shields.io/badge/src-DFOXpro/trocha-brightgreen.svg?style=plastic&amp;logo=Github" alt="Github project" /></a>
 <a href="https://travis-ci.org/DFOXpro/trocha"><img src="https://img.shields.io/travis/DFOXpro/trocha.svg?logo=Travis%20CI&amp;logoColor=FFFFFF&amp;style=plastic" alt="Build Status" /></a></p>
 
-<p><a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&amp;logo=Node.js" alt="Test Node" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&amp;logo=Mozilla%20Firefox" alt="Test FX" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&amp;logo=Google%20Chrome" alt="Test Chromium" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&amp;logo=Microsoft%20Edge" alt="Test Edge" /></a>
-<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/11%20asserts-179/182-brightgreen.svg?style=plastic&amp;logo=Internet%20explorer&amp;color=important" alt="Test IE" /></a></p>
+<p><a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Node.js" alt="Test Node" /></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Mozilla%20Firefox" alt="Test FX" /></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Google%20Chrome" alt="Test Chromium" /></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Microsoft%20Edge" alt="Test Edge" /></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/11%20asserts-170/173-brightgreen.svg?style=plastic&amp;logo=Internet%20explorer&amp;color=important" alt="Test IE" /></a></p>
 
 <p><a href="https://twitter.com/dfoxpro"><img src="https://img.shields.io/badge/contact-@DFOXpro-informational.svg?style=plastic&amp;logo=Twitter" alt="Contact info" /></a>
 <a href="https://twitter.com/hashtag/TrochaJS"><img src="https://img.shields.io/badge/share-%23TrochaJS-informational.svg?style=plastic&amp;logo=Twitter" alt="Share info" /></a></p>
-
-<p><a href="#separator">New in 0.2.2: separator</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.1.svg?style=plastic&amp;logo=Github" alt="Commits since release" /></a></p>
 
 <p><a href="#idmode">New in 0.2.1: idMode</a> <a href="#"><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.0.svg?style=plastic&amp;logo=Github" alt="Commits since release" /></a></p>
 
@@ -1196,7 +1194,7 @@ New in <code class="prettyprint">0.2.1</code>! before this only <code class="pre
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"World"</span> <span class="p">}));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span><span class="na">name</span><span class="p">:</span> <span class="s1">'World'</span><span class="p">}));</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">TRCHid</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">$id</span><span class="p">);</span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myRoutes</span><span class="p">.</span><span class="nx">hello</span><span class="p">.</span><span class="nx">TRCHmethod</span><span class="p">);</span>
@@ -1223,57 +1221,26 @@ Object <span class="o">{</span>... trocha route object ...<span class="o">}</spa
 GET
 /hello/:name/<span class="nv">$id</span>
 </code></pre>
+<p>.
+<aside class="warning">
+Please dont use yet, see <a href="https://github.com/DFOXpro/trocha/issues/4">related bug</a>
+</aside></p>
+
 <p>If you have a route like this <code class="prettyprint">/asd/$id/qwe</code> you will notice you can&rsquo;t directly set an <code class="prettyprint">$id</code> route name, thats because by default the JSON constructor use <code class="prettyprint">$</code> as a prefix to reserved names.</p>
 
-<p>If you need to use it anyway, you can overide the selector, simply add <code class="prettyprint">customSelector: &#39;TRCH&#39;</code> to your inicializer object.</p>
-
+<p>If you need to use it anyway, you can overide the selector, simply add <code class="prettyprint">customSelector: &#39;TRCH&#39;</code> to your inicializer object.
 <aside class="notice">
-Note when you use custom selector it apply boot in constructor object and all routes object, see [Methods & attributes](#205_Methods_amp_attributes).
+Note when you use custom selector it apply boot in constructor object and all routes object, see <a href="#205_Methods_amp_attributes">Methods &amp; attributes</a>.
 </aside>
-
 <aside class="notice">
-Is recomended to use some acronym like `TRCH` for example isntead of just one char (maybe noisy within your routes) or unicode (maybe crash in some browsers/precompilers).
+Is recomended to use some acronym like <code class="prettyprint">TRCH</code> for example isntead of just one char (maybe noisy within your routes) or unicode (maybe crash in some browsers/precompilers).
 </aside>
-
 <aside class="warning">
-Avoid selectors like `/` this one have many other meanings in URL&rsquo;s standar;
+Avoid selectors like <code class="prettyprint">/</code> this one have many other meanings in URL&rsquo;s standar;</p>
 
-also avoid `_`, it&rsquo;s a separator within this library and
-finally any javascript variable illegal character like `#`, ``, `@`&hellip;
-</aside>
-
-          <h2 id="separator">separator</h2>
-<pre class="highlight javascript"><code><span class="nx">LOCALES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">({</span>
-  <span class="na">separator</span><span class="p">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="nx">DOT</span><span class="p">,</span>
-  <span class="c1">// firstSeparator: true,</span>
-  <span class="na">routes</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">store</span><span class="p">:</span> <span class="p">{</span> <span class="na">product</span><span class="p">:</span> <span class="p">{</span> <span class="na">info</span><span class="p">:</span> <span class="p">{</span> <span class="na">price</span><span class="p">:</span> <span class="p">{</span> <span class="na">discount</span><span class="p">:</span> <span class="p">{}</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">LOCALES</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">product</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">price</span><span class="p">.</span><span class="nx">discount</span><span class="p">.</span><span class="nx">path</span><span class="p">());</span>
-</code></pre><pre class="highlight coffeescript"><code><span class="nx">LOCALES</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span>
-    <span class="na">separator</span><span class="o">:</span> <span class="nx">Trocha</span><span class="p">.</span><span class="na">DOT</span>
-    <span class="c1"># firstSeparator: true</span>
-    <span class="na">routes</span><span class="o">:</span>
-        <span class="na">store</span><span class="o">:</span> <span class="na">product</span><span class="o">:</span> <span class="na">info</span><span class="o">:</span> <span class="na">price</span><span class="o">:</span> <span class="na">discount</span><span class="o">:</span> <span class="p">{}</span>
-<span class="nx">console</span><span class="p">.</span><span class="na">log</span> <span class="nx">LOCALES</span><span class="p">.</span><span class="na">store</span><span class="p">.</span><span class="na">product</span><span class="p">.</span><span class="na">info</span><span class="p">.</span><span class="na">price</span><span class="p">.</span><span class="na">discount</span><span class="p">.</span><span class="na">path</span><span class="p">()</span>
-</code></pre>
-<blockquote>
-<p>This should print:</p>
-</blockquote>
-<pre class="highlight shell"><code>store.product.info.price.discount
-</code></pre>
-<p>You can use Trocha also to declare attributes list (I.E. Localization engines). Using <code class="prettyprint">separator</code> will change this <code class="prettyprint">/asd/:asd_id/qwe</code> to <code class="prettyprint">asd.:asd_id.qwe</code> or <code class="prettyprint">\asd\:asd_id\qwe</code>.</p>
-
-<p>If you need the first separator to be (or not) present you can toggle with <code class="prettyprint">firstSeparator: &lt;Boolean&gt;</code>.</p>
-
-<p>Available separators are:</p>
-
-<ul>
-<li><code class="prettyprint">Trocha.SLASH</code> default, it&rsquo;s <code class="prettyprint">/</code>, firstSeparator enable</li>
-<li><code class="prettyprint">Trocha.BACK_SLASH</code> it&rsquo;s <code class="prettyprint">\</code>, firstSeparator enable</li>
-<li><code class="prettyprint">Trocha.DOT</code> it&rsquo;s <code class="prettyprint">.</code>, firstSeparator disable by default</li>
-</ul>
+<p>also avoid <code class="prettyprint">_</code>, it&rsquo;s a separator within this library and
+finally any javascript variable illegal character like <code class="prettyprint">#</code>, <code class="prettyprint">\</code>, <code class="prettyprint">@</code>&hellip;
+</aside></p>
 
           <h1 id="204-route-printing-parameters">204 - Route printing parameters</h1>
 <pre class="highlight javascript"><code><span class="nx">myRoutes</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trocha</span><span class="p">(</span> <span class="p">{</span>
