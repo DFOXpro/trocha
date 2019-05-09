@@ -1,5 +1,9 @@
 # 0.2.2b "First step in a long road"
 
+## Fix
+
+- Fix domain printing multiple times in a single call
+
 ## New Features
 
 - new separator and firstSeparator; now the result can be tokenized via SLASH `/a/b/c` (default) or DOT `a.b.c` or BACK_SLASH; intended for localization libraries and other cases.

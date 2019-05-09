@@ -4,6 +4,7 @@ path(routeParams = {}, customNameFun) {
 		parent = myData.parent || {},
 		rootData = myData.root,
 		SS = myData.SS,
+		isFirtsParent = !!parent[SS+DOMAIN],
 		_formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 	let r = s
 
@@ -12,7 +13,7 @@ path(routeParams = {}, customNameFun) {
 	// 1 print the domain
 	r =
 		rootData[DOMAIN] &&
-		// !parent[PATH] &&
+		isFirtsParent &&
 		routeParams[URL] !== false &&
 		(routeParams[URL] || rootData[ALWAYS_URL])
 			? rootData[DOMAIN]
