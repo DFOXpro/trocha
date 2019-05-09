@@ -31,7 +31,7 @@ class Scope extends Route {
 	 * @override
 	 */
 	path(routeParams = {}, force) {
-		return super.path(routeParams, function(myData) {
+		return super.path(routeParams, function(myData, _) {
 			if ('function' === typeof force && force() !== true)
 				_throwError(undefined, ERROR_SCOPE_AS_A_ROUTE)
 			return false

@@ -1,3 +1,9 @@
+/**
+ * The Class where all other route types inherit
+ * @module Route
+ * @exports Route
+ * @class
+ */
 class Route {
 	/**
 	 * Holds all the route information, note it's not protected(can't be inhered)
@@ -13,7 +19,9 @@ class Route {
 		idMode: COLON,
 		domain: '',
 		post: '',
-		pre: ''
+		pre: '',
+		separator: _AVAILABLE_SEPARATORS[SLASH][SEPARATOR],
+		firstSeparator: _AVAILABLE_SEPARATORS[SLASH][FIRST_SEPARATOR]
 	}
 
 	/**
@@ -189,6 +197,23 @@ class Route {
 			: mySelf.#data[NAME]
 	}
 
+	/**
+	 * This constructor should be used just for test'n debug purposes
+	 * pure false depends on #data initial attributes
+	 * @param {Route} myParent
+	 * @param {routeParamsDefinition} argRouteDef
+	 * @param {string} argCustomSelector
+	 * @param {Route} argRoot
+	 * @param {object} [argChildRoutes={}]
+	 * @param {string} [argDomain]
+	 * @param {boolean} [argAlwaysUrl]
+	 * @param {string} [argPre]
+	 * @param {string} [argPost]
+	 * @param {boolean} [argAlwaysPost]
+	 * @param {Trocha.COLON | Trocha.BRACKETS} [argIdMod=Trocha.COLON]
+	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [argSeparator=Trocha.SLASH]
+	 * @param {boolean} [argfirstSeparator=true]
+	 */
 	constructor(
 		myParent,
 		argRouteDef,
@@ -202,7 +227,9 @@ class Route {
 		argPost,
 		argAlwaysPost,
 		//argAlwaysPre,// @TODO
-		argIdMode
+		argIdMode,
+		argSeparator,
+		argfirstSeparator
 	) {
 		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
 		if (
@@ -217,7 +244,7 @@ class Route {
 		} else {
 			// It's the root route
 			const _setRootAttribute = (attribute, value) =>
-				(this.#data[attribute] = value || this.#data[attribute])
+				(this.#data[attribute] = value !== undefined ? value : this.#data[attribute])
 			_setRootAttribute(DOMAIN, argDomain)
 			this.#newGetter(this, DOMAIN)
 			_setRootAttribute(ALWAYS_URL, argAlwaysUrl)
@@ -225,6 +252,14 @@ class Route {
 			_setRootAttribute(POSTFIX, argPost)
 			_setRootAttribute(PREFIX, argPre)
 			_setRootAttribute(ID_MODE, argIdMode)
+
+			_setRootAttribute(SEPARATOR, _AVAILABLE_SEPARATORS[argSeparator][SEPARATOR])
+			_setRootAttribute(
+				FIRST_SEPARATOR,
+				argfirstSeparator !==  undefined ? argfirstSeparator : _AVAILABLE_SEPARATORS[argSeparator][FIRST_SEPARATOR]
+			)
+			_setRootAttribute(_PREID, this.#data[SEPARATOR] + _ID_MODE_REPLACE)
+
 			this.#data.root = this.#data
 			delete this[PATH]
 			this.#newGetter(this, _RESOURCE, () => _basicResource(SS))
@@ -277,7 +312,7 @@ class Route {
 	static DEFAULT_METHOD = GET
 
 	/**
-	 * Check if given routeDefinition is ROUTE
+	 * Check if given routeDefinition is Route
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selectedSelector normally $
 	 * @static

@@ -1,4 +1,32 @@
-/** @license trocha@0.2.2 - 2019-04-16
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: trocha_module.es6.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: trocha_module.es6.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @license trocha@0.2.1 - 2019-04-16
 * Trocha.js 
 * 
 * This source code is licensed under the Mozillas Public license 2.0 found in the 
@@ -58,7 +86,7 @@ const DOMAIN = 'domain'
 const ROUTES = 'routes'
 const ID_MODE = 'idMode'
 const JUST_ID = 'justId'
-// const AFTER_ID = 'afterId' // FAILS & no DOCS
+// const AFTER_ID = 'afterId' // FAILS &amp; no DOCS
 const FRAGMENT = 'fragment'
 const RESOURCE = 'resource'
 const PARENT_ID = 'parentId'
@@ -121,7 +149,7 @@ _AVAILABLE_ID_MODES[COLON] = `:${_ID_MODE_REPLACE}`
 
 /**
  * Interpolator of id mode to be used in path function
- * @todo should be Route protected(private & inheritable) method
+ * @todo should be Route protected(private &amp; inheritable) method
  * @param {string} currentIdMode - can be BRACKETS | COLON
  * @second_order
  * @pure
@@ -338,7 +366,7 @@ class Route {
 	 */
 	#diggestChildRoutes = (mySelf, argChildRoutes, skipResource) => {
 		let SS = mySelf.#data.SS
-		if (!skipResource && mySelf.#data[TYPE] === _RESOURCE) {
+		if (!skipResource &amp;&amp; mySelf.#data[TYPE] === _RESOURCE) {
 			let resourceChilds = mySelf.#data[RESOURCE]
 			delete resourceChilds[SS + ID]
 			mySelf.#diggestChildRoutes(mySelf, resourceChilds, true)
@@ -348,8 +376,8 @@ class Route {
 		while (posibleChildRoutesNames.length) {
 			let posibleChild = posibleChildRoutesNames.pop()
 			if (
-				// This case disable any <id>=false
-				argChildRoutes[posibleChild] === false &&
+				// This case disable any &lt;id>=false
+				argChildRoutes[posibleChild] === false &amp;&amp;
 				mySelf.#anyParentHasThisId(mySelf, posibleChild)
 			)
 				mySelf.#data[posibleChild] = false
@@ -422,7 +450,7 @@ class Route {
 		let SS = (this.#data.SS = argCustomSelector || DS) // selectedSelector
 		if (
 			myParent ||
-			(argRouteDef && argRouteDef[SS + NAME] && argRouteDef[SS + TYPE])
+			(argRouteDef &amp;&amp; argRouteDef[SS + NAME] &amp;&amp; argRouteDef[SS + TYPE])
 		) {
 			// It's a normal route
 			this.#data.parent = myParent
@@ -492,7 +520,7 @@ class Route {
 		)
 	}
 
-	// prettier-ignore // < Does not work ¬¬
+	// prettier-ignore // &lt; Does not work ¬¬
 /* Begin: src/v2/_Route_path.js */
 	path(routeParams = {}, customNameFun) {
 		const
@@ -507,9 +535,9 @@ class Route {
 
 		// 1 print the domain
 		r =
-			rootData[DOMAIN] &&
-			// !parent[PATH] &&
-			routeParams[URL] !== false &&
+			rootData[DOMAIN] &amp;&amp;
+			// !parent[PATH] &amp;&amp;
+			routeParams[URL] !== false &amp;&amp;
 			(routeParams[URL] || rootData[ALWAYS_URL])
 				? rootData[DOMAIN]
 				: s
@@ -517,7 +545,7 @@ class Route {
 
 		// 2 add the prefix
 		r +=
-			rootData[PREFIX] && (routeParams[PREFIX] || routeParams[EXTENDED])
+			rootData[PREFIX] &amp;&amp; (routeParams[PREFIX] || routeParams[EXTENDED])
 				? rootData[PREFIX]
 				: s
 		delete routeParams[PREFIX]
@@ -531,22 +559,22 @@ class Route {
 		parentPathArg[POSTFIX] = false
 		r += parentPathResponse
 
-		// 4.A print name & id(name) from customNameFun like Alias
+		// 4.A print name &amp; id(name) from customNameFun like Alias
 		let hide =
 			routeParams[HIDE] !== undefined
 				? routeParams[HIDE]
-				: myData[HIDE] || (myData[JUST_ID] && myData[DEFAULT_ID] === false)
+				: myData[HIDE] || (myData[JUST_ID] &amp;&amp; myData[DEFAULT_ID] === false)
 		let customNameFromInhered
 		if ('function' === typeof customNameFun)
 			customNameFromInhered = customNameFun(myData, _)
 		if ('string' === typeof customNameFromInhered) r += customNameFromInhered
 		else {
-			// 4.B print default name & id(name)
+			// 4.B print default name &amp; id(name)
 			let myId = _formatID(myData[ID])
 			if (
 				// 4.B.1 justId case
-				routeParams[JUST_ID] !== false &&
-				(myData[JUST_ID] && myData[ID] && myData[myData[ID]] !== false)
+				routeParams[JUST_ID] !== false &amp;&amp;
+				(myData[JUST_ID] &amp;&amp; myData[ID] &amp;&amp; myData[myData[ID]] !== false)
 			) {
 				r += _ + myId
 			} else {
@@ -562,9 +590,9 @@ class Route {
 		 * @TODO Document hide also remove postfix
 		 */
 		r +=
-			rootData[POSTFIX] &&
-			!hide &&
-			routeParams[POSTFIX] !== false &&
+			rootData[POSTFIX] &amp;&amp;
+			!hide &amp;&amp;
+			routeParams[POSTFIX] !== false &amp;&amp;
 			(rootData[ALWAYS_POST] ||
 				myData[POSTFIX] ||
 				routeParams[POSTFIX] ||
@@ -592,8 +620,8 @@ class Route {
 
 		// 6.1 RoR parentId
 		if (
-			parent[SS + ID] &&
-			!routeParams[parent[SS + ID]] &&
+			parent[SS + ID] &amp;&amp;
+			!routeParams[parent[SS + ID]] &amp;&amp;
 			(myData[ID] === false ||
 				routeParams[PARENT_ID] === false ||
 				myData[PARENT_ID] === false)
@@ -602,7 +630,7 @@ class Route {
 
 		// 6.2 Remove parents Ids designed in constructor
 		Object.keys(myData).forEach(idName => {
-			if (myData[idName] === false && !routeParams[idName])
+			if (myData[idName] === false &amp;&amp; !routeParams[idName])
 				return (r = r.replace(_formatID(idName, rootData[_PREID]), s))
 		})
 
@@ -625,14 +653,14 @@ class Route {
 							encodeURIComponent(key) +
 							'[]=' +
 							encodeURIComponent(value) +
-							(query[key].length - 1 !== _i || array.length - 1 !== i ? '&' : ''))
+							(query[key].length - 1 !== _i || array.length - 1 !== i ? '&amp;' : ''))
 				)
 			else
 				r +=
 					encodeURIComponent(key) +
 					'=' +
 					encodeURIComponent(query[key]) +
-					(array.length - 1 !== i ? '&' : '')
+					(array.length - 1 !== i ? '&amp;' : '')
 		})
 
 		// 8 Now add the fragment
@@ -657,7 +685,7 @@ class Route {
 	static is(routeDefinition, SS) {
 		return (
 			routeDefinition[SS + TYPE] === ROUTE ||
-			('object' === typeof routeDefinition &&
+			('object' === typeof routeDefinition &amp;&amp;
 				routeDefinition[SS + TYPE] === undefined)
 		)
 	}
@@ -665,17 +693,17 @@ class Route {
 	/**
 	 * This function serve 2 purposes:
 	 * (With just first 3 params) Sanitize routeDefinition for ROUTE valid params (this behabior is override)
-	 * (With full params) add <routeDefinition>.<IS><attributes> to <dest>.<SS><attributes> (this behabior is not inhered)
+	 * (With full params) add &lt;routeDefinition>.&lt;IS>&lt;attributes> to &lt;dest>.&lt;SS>&lt;attributes> (this behabior is not inhered)
 	 * @tobe_overload
 	 * @param {object} routeDefinition -
 	 * @param {string} SS - selector to be return
 	 * @param {string} IS - selector to be find
 	 * @param {object} dest - another routeDefinition
-	 * @param {array<string>} attributes - to be added from routeDefinition to dest
+	 * @param {array&lt;string>} attributes - to be added from routeDefinition to dest
 	 * @sideEffect dest
 	 */
 	static diggest = (routeDefinition, SS, IS, dest, attributes) => {
-		if (dest && attributes)
+		if (dest &amp;&amp; attributes)
 			// is used from subroutes
 			attributes.forEach(attribute => {
 				dest[SS + attribute] = routeDefinition[IS + attribute]
@@ -753,7 +781,7 @@ class Alias extends Route {
 	static is(routeDefinition, SS) {
 		return (
 			'string' === typeof routeDefinition ||
-			(routeDefinition[SS + TYPE] === _ALIAS && routeDefinition[SS + ALIAS])
+			(routeDefinition[SS + TYPE] === _ALIAS &amp;&amp; routeDefinition[SS + ALIAS])
 		)
 	}
 
@@ -772,10 +800,10 @@ class Alias extends Route {
 			const myId = _formatID(myData[ID], rootData[_PREID])
 			let r = s
 
-			if (myData[ID] && routeParams[JUST_ID]) {
+			if (myData[ID] &amp;&amp; routeParams[JUST_ID]) {
 				r += myId
 			} else {
-				let useID = !!myData[ID] && routeParams[myData[ID]] !== false
+				let useID = !!myData[ID] &amp;&amp; routeParams[myData[ID]] !== false
 				r += parent.constructor.name === 'Trocha' ? s : _
 				r += routeParams[HIDE] ? s : myData[ALIAS]
 				r += useID ? myId : s
@@ -808,7 +836,7 @@ class Resource extends Route {
 	 */
 	static is(routeDefinition, SS) {
 		return (
-			routeDefinition[SS + TYPE] === _RESOURCE && routeDefinition[SS + ID] // &&
+			routeDefinition[SS + TYPE] === _RESOURCE &amp;&amp; routeDefinition[SS + ID] // &amp;&amp;
 			// routeDefinition[SS+RESOURCE]
 		)
 	}
@@ -818,7 +846,7 @@ class Resource extends Route {
 	 */
 	path(routeParams = {}, force) {
 		return super.path(routeParams, function(myData, _) {
-			if ('function' === typeof force && force() !== true)
+			if ('function' === typeof force &amp;&amp; force() !== true)
 				_throwWarning(undefined, WARNING_RESOURCE_AS_A_ROUTE)
 			return false
 		})
@@ -849,8 +877,8 @@ class Scope extends Route {
 	 */
 	static is(routeDefinition, SS) {
 		return (
-			'object' === typeof routeDefinition &&
-			routeDefinition[SS + TYPE] === SCOPE &&
+			'object' === typeof routeDefinition &amp;&amp;
+			routeDefinition[SS + TYPE] === SCOPE &amp;&amp;
 			routeDefinition[SS + ID] // Should scope always have id????
 		)
 	}
@@ -860,7 +888,7 @@ class Scope extends Route {
 	 */
 	path(routeParams = {}, force) {
 		return super.path(routeParams, function(myData, _) {
-			if ('function' === typeof force && force() !== true)
+			if ('function' === typeof force &amp;&amp; force() !== true)
 				_throwError(undefined, ERROR_SCOPE_AS_A_ROUTE)
 			return false
 		})
@@ -881,7 +909,7 @@ class Trocha extends Route {
 	 * @see https://dfoxpro.github.io/trochaJS/#203-route-definition-parameters
 	 * @param {object} [arg]
 	 * @param {routeParamsDefinition} [arg.routes]
-	 * @param {routeParamsDefinition} arg.routes.<children_route>
+	 * @param {routeParamsDefinition} arg.routes.&lt;children_route>
 	 * @param {Trocha.ROUTE | Trocha.SCOPE | Trocha.RESOURCE | Trocha.ALIAS} [arg.routes.$type=Trocha.ROUTE]
 	 * @param {Trocha.COLON | Trocha.BRACKETS} [arg.idMode=Trocha.COLON]
 	 * @param {Trocha.SLASH | Trocha.BACK_SLASH | Trocha.DOT} [arg.separator=Trocha.SLASH]
@@ -1123,3 +1151,26 @@ export {
 	// Resource fun
 	_basicResource as $RESOURCE
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Route.html">Route</a></li><li><a href="Trocha.html">Trocha</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 16 2019 19:04:38 GMT-0500 (GMT-05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

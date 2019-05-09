@@ -70,7 +70,7 @@ describe('Trocha JS Routes List engine', ()=> {
 			r = new Trocha()
 			assert.instanceOf(r, Trocha)
 		})
-		return it('should create a valid trocha object', () => {
+		it('should create a valid trocha object', () => {
 			var r
 			r = new Trocha()
 			assert.isObject(r)
@@ -332,8 +332,8 @@ describe('Trocha JS Routes List engine', ()=> {
 		})
 	})
 
-	describe('Route types', function() {
-		it('should create a route(type route)', function() {
+	describe('Route types', () => {
+		it('should create a route(type route)', () => {
 			var r
 			r = new Trocha({
 				routes: {
@@ -384,7 +384,7 @@ describe('Trocha JS Routes List engine', ()=> {
 				name: 'route_from_method'
 			})
 		})
-		it('should create an alias(route type alias)', function() {
+		it('should create an alias(route type alias)', () => {
 			var r
 			r = new Trocha({
 				routes: {
@@ -460,7 +460,7 @@ describe('Trocha JS Routes List engine', ()=> {
 			assert.equal(r.method_alias.path(), 'asd/:qwe')
 			assert.equal(r.method_alias.$method, 'PATCH')
 		})
-		it('should create an resource(routes tree resource)', function() {
+		it('should create an resource(routes tree resource)', () => {
 			var r
 			r = new Trocha({
 				routes: {
@@ -484,7 +484,7 @@ describe('Trocha JS Routes List engine', ()=> {
 			assert.equal(r.services['new'].path(), '/services/new')
 			assert.equal(r.services.show.path(), '/services/:service_id')
 			assert.equal(r.services.edit.path(), '/services/:service_id/edit')
-			it('should create a custom resource', function() {
+			it('should create a custom resource', () => {
 				r = new Trocha({
 					routes: {
 						products: {
@@ -531,7 +531,7 @@ describe('Trocha JS Routes List engine', ()=> {
 				assert.equal(r.services.edit.path(), '/services/:service_id/edit')
 			})
 		})
-		it('should create an scope(route type scope)', function() {
+		it('should create an scope(route type scope)', () => {
 			var r
 			r = new Trocha({
 				routes: {
@@ -931,6 +931,73 @@ describe('Trocha JS Routes List engine', ()=> {
 				}
 			})
 			assert.equal(r.withId.path(), '/withId/:myId')
+		})
+	})
+
+	describe('0.2.2 custom separator & firstSeparator', () => {
+		var r
+		describe('Default separator', () => {
+			it('should set default separator', () => {
+				r = new Trocha({
+					// separator: Trocha.SLASH,
+					routes: {
+						hello: {
+							Susy: {},
+							myAlias: 'asd'
+						},
+						myResource: {
+							$type: Trocha.RESOURCE,
+							$id: 'miId'
+						}
+					}
+				})
+				assert.equal(r.hello.Susy.path(), '/hello/Susy')
+				assert.equal(r.hello.myAlias.path(), '/hello/asd')
+			})
+			it('should set firstSeparator', () => {
+				r = new Trocha({
+					firstSeparator: false,
+					routes: {
+						hello: { Susy: {} },
+						myAlias: {
+							$type: Trocha.ALIAS,
+							$alias: 'asd',
+							qwe: {}
+						},
+						myResource: {
+							$type: Trocha.RESOURCE,
+							$id: 'miId'
+						}
+					}
+				})
+				assert.equal(r.hello.Susy.path(), 'hello/Susy')
+				assert.equal(r.myAlias.qwe.path(), 'asd/qwe')
+				assert.equal(r.myResource.show.path(), 'myResource/:miId')
+				r = new Trocha({
+					separator: Trocha.BACK_SLASH,
+					firstSeparator: true,
+					routes: { hello: { Susy: {} } }
+				})
+				assert.equal(r.hello.Susy.path(), '\\hello\\Susy')
+			})
+		})
+		describe('Custom separator', () => {
+			it('should set DOT separator', () => {
+				r = new Trocha({
+					separator: Trocha.DOT,
+					routes: { hello: { Susy: {} } }
+				})
+				assert.equal(r.hello.Susy.path(), 'hello.Susy')
+				assert.equal(Trocha.DOT, 'DOT')
+			})
+			it('should set BACK_SLASH separator', () => {
+				r = new Trocha({
+					separator: Trocha.BACK_SLASH,
+					routes: { hello: { Susy: {} } }
+				})
+				assert.equal(r.hello.Susy.path(), 'hello\\Susy')
+				assert.equal(Trocha.BACK_SLASH, 'BACK_SLASH')
+			})
 		})
 	})
 

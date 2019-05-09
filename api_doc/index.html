@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>TrochaJS</h1><p><strong>TLDR</strong> It replace long, ugly, repetitibe url strings with clean objects</p>
+<p><a href="https://www.mozilla.org/en-US/MPL/2.0/FAQ"><img src="https://img.shields.io/npm/l/trocha.svg?style=plastic&amp;logo=Mozilla" alt="MPL license"></a>
+<a href="https://www.npmjs.com/package/trocha"><img src="https://img.shields.io/npm/v/trocha.svg?style=plastic&amp;logo=npm" alt="npm version"></a></p>
+<p><a href=""><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.2.0.svg?style=plastic&amp;logo=Github" alt="Commits since release"></a>
+<a href=""><img src="https://img.shields.io/github/commits-since/DFOXpro/trocha/0.1.3.svg?style=plastic&amp;logo=Github" alt="Commits since previous release"></a>
+<a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=plastic&amp;logo=Github" alt="PRs Welcome"></a></p>
+<!-- @TODO
+[![Code Climate](https://img.shields.io/codeclimate/github/DFOXpro/trocha.svg?style=plastic)](https://codeclimate.com/github/DFOXpro/trocha)
+-->
+<p><a href="https://npmcharts.com/compare/trocha?minimal=true"><img src="https://img.shields.io/npm/dm/trocha.svg?style=plastic" alt="npm downloads"></a>
+<a href="https://travis-ci.org/DFOXpro/trocha"><img src="https://img.shields.io/travis/DFOXpro/trocha.svg?logo=Travis%20CI&amp;logoColor=FFFFFF&amp;style=plastic" alt="Build Status"></a>
+<a href="https://david-dm.org/DFOXpro/trocha"><img src="https://img.shields.io/david/DFOXpro/trocha.svg?style=plastic" alt="Dependency Status"></a>
+<a href="https://david-dm.org/DFOXpro/trocha#info=devDependencies"><img src="https://img.shields.io/david/dev/DFOXpro/trocha.svg?style=plastic" alt="devDependency Status"></a></p>
+<p><a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Mozilla%20Firefox" alt="Test FX"></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Google%20Chrome" alt="Test Chromium"></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Microsoft%20Edge" alt="Test Edge"></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/11%20asserts-170/173-brightgreen.svg?style=plastic&amp;logo=Internet%20explorer&amp;color=important" alt="Test IE"></a>
+<a href="https://github.com/DFOXpro/trocha/tree/master/src/test"><img src="https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&amp;logo=Node.js" alt="Test Node"></a></p>
+<p><a href="https://twitter.com/dfoxpro"><img src="https://img.shields.io/badge/contact-@DFOXpro-informational.svg?style=plastic&amp;logo=Twitter" alt="Contact info"></a>
+<a href="https://twitter.com/hashtag/TrochaJS"><img src="https://img.shields.io/badge/share-%23TrochaJS-informational.svg?style=plastic&amp;logo=Twitter" alt="Share info"></a></p>
+<p>An standalone/agnostic library to print valid URLs, ideal for RESTful &amp; SPA frontEnd big projects.</p>
+<h2>Why this library exist</h2><p>This library take inspiration from Ruby routing system, where you describe the routes via a simple name tree and call those routes via dinamic function naming, preventing use of string in views and controllers.</p>
+<blockquote>
+<p>Ugly code example</p>
+</blockquote>
+<pre class="prettyprint source lang-javascript"><code>theRoute =
+    'https://my.domain.com.co/product/' +
+    myProduct.id +
+    '/buy' +
+    '?quantity=' +
+    sell.quantity</code></pre><blockquote>
+<p>With Trocha</p>
+</blockquote>
+<pre class="prettyprint source lang-javascript"><code>theRoute = myRoutes.product.buy.path({
+    product_id: myProduct.id,
+    query: { quantity: sell.quantity }
+})</code></pre><blockquote>
+<p>This will print</p>
+</blockquote>
+<pre class="prettyprint source lang-bash"><code>https://my.domain.com.co/product/&lt;product_id>/buy?quantity=&lt;sell.quantity></code></pre><p>Please see the full docs at <a href="https://dfoxpro.github.io/trochaJS">here: https://dfoxpro.github.io/trochaJS</a></p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Route.html">Route</a></li><li><a href="Trocha.html">Trocha</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 16 2019 19:04:38 GMT-0500 (GMT-05:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

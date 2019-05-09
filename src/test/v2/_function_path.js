@@ -40,6 +40,10 @@ describe('function path', () => {
 				'https://mydomain.net.co/town/:town_name'
 			)
 			assert.equal(
+				_myRoutes.town.house.path(),
+				'https://mydomain.net.co/town/:town_name/house/:address'
+			)
+			assert.equal(
 				_myRoutes.town.path({
 					url: false
 				}),

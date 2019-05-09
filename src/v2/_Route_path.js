@@ -1,9 +1,11 @@
 path(routeParams = {}, customNameFun) {
-	const myData = this.#data
-	const parent = myData.parent || {}
-	const rootData = myData.root
-	const SS = myData.SS
-	const _formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
+	const
+		myData = this.#data,
+		parent = myData.parent || {},
+		rootData = myData.root,
+		SS = myData.SS,
+		isFirtsParent = !!parent[SS+DOMAIN],
+		_formatID = _FORMAT_ID_FUN(rootData[ID_MODE])
 	let r = s
 
 	if (myData[NAME] === undefined) return ''
@@ -11,7 +13,7 @@ path(routeParams = {}, customNameFun) {
 	// 1 print the domain
 	r =
 		rootData[DOMAIN] &&
-		// !parent[PATH] &&
+		isFirtsParent &&
 		routeParams[URL] !== false &&
 		(routeParams[URL] || rootData[ALWAYS_URL])
 			? rootData[DOMAIN]
@@ -27,8 +29,12 @@ path(routeParams = {}, customNameFun) {
 
 	// 3 print parent paths
 	let parentPathArg = {}
+	let parentPathResponse = parent[PATH](parentPathArg, () => true)
+	let thisIsChildPath = !! parentPathResponse
+	// 3.1 enable firstSeparator
+	let _ = (thisIsChildPath || rootData[FIRST_SEPARATOR]) ? rootData[SEPARATOR] : s
 	parentPathArg[POSTFIX] = false
-	r += parent[PATH] ? parent[PATH](parentPathArg, () => true) : s
+	r += parentPathResponse
 
 	// 4.A print name & id(name) from customNameFun like Alias
 	let hide =
@@ -37,7 +43,7 @@ path(routeParams = {}, customNameFun) {
 			: myData[HIDE] || (myData[JUST_ID] && myData[DEFAULT_ID] === false)
 	let customNameFromInhered
 	if ('function' === typeof customNameFun)
-		customNameFromInhered = customNameFun(myData)
+		customNameFromInhered = customNameFun(myData, _)
 	if ('string' === typeof customNameFromInhered) r += customNameFromInhered
 	else {
 		// 4.B print default name & id(name)
@@ -52,7 +58,7 @@ path(routeParams = {}, customNameFun) {
 			// 4.B.2 hide case
 			let noIdentifier = myData[ID] ? routeParams[ID] === false : true
 			r += hide ? s : _ + myData[NAME]
-			r += noIdentifier ? s : _ + myId
+			r += noIdentifier ? s : rootData[SEPARATOR] + myId
 		}
 	}
 
@@ -97,19 +103,19 @@ path(routeParams = {}, customNameFun) {
 			routeParams[PARENT_ID] === false ||
 			myData[PARENT_ID] === false)
 	)
-		r = r.replace(_formatID(parent[SS + ID], _PREID), s)
+		r = r.replace(_formatID(parent[SS + ID], rootData[_PREID]), s)
 
 	// 6.2 Remove parents Ids designed in constructor
 	Object.keys(myData).forEach(idName => {
 		if (myData[idName] === false && !routeParams[idName])
-			return (r = r.replace(_formatID(idName, _PREID), s))
+			return (r = r.replace(_formatID(idName, rootData[_PREID]), s))
 	})
 
 	// 6.2 RoR selected Ids in path params
 	Object.keys(routeParams).forEach(idName => {
 		if (routeParams[idName] === false)
 			// Remove
-			r = r.replace(_formatID(idName, _PREID), s)
+			r = r.replace(_formatID(idName, rootData[_PREID]), s)
 		// Replace
 		else r = r.replace(_formatID(idName), routeParams[idName])
 	})
