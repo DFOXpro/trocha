@@ -1,4 +1,4 @@
-# 0.2.2b "First step in a long road"
+# 0.2.2 "First step in a long road"
 
 ## Fix
 

@@ -18,11 +18,11 @@
 [![Dependency Status](https://img.shields.io/david/DFOXpro/trocha.svg?style=plastic)](https://david-dm.org/DFOXpro/trocha)
 [![devDependency Status](https://img.shields.io/david/dev/DFOXpro/trocha.svg?style=plastic)](https://david-dm.org/DFOXpro/trocha#info=devDependencies)
 
-[![Test FX](https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&logo=Mozilla%20Firefox)](https://github.com/DFOXpro/trocha/tree/master/src/test)
-[![Test Chromium](https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&logo=Google%20Chrome)](https://github.com/DFOXpro/trocha/tree/master/src/test)
-[![Test Edge](https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&logo=Microsoft%20Edge)](https://github.com/DFOXpro/trocha/tree/master/src/test)
-[![Test IE](https://img.shields.io/badge/11%20asserts-170/173-brightgreen.svg?style=plastic&logo=Internet%20explorer&color=important)](https://github.com/DFOXpro/trocha/tree/master/src/test)
-[![Test Node](https://img.shields.io/badge/asserts-173/173-brightgreen.svg?style=plastic&logo=Node.js)](https://github.com/DFOXpro/trocha/tree/master/src/test)
+[![Test FX](https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&logo=Mozilla%20Firefox)](https://github.com/DFOXpro/trocha/tree/master/src/test)
+[![Test Chromium](https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&logo=Google%20Chrome)](https://github.com/DFOXpro/trocha/tree/master/src/test)
+[![Test Edge](https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&logo=Microsoft%20Edge)](https://github.com/DFOXpro/trocha/tree/master/src/test)
+[![Test IE](https://img.shields.io/badge/11%20asserts-179/182-brightgreen.svg?style=plastic&logo=Internet%20explorer&color=important)](https://github.com/DFOXpro/trocha/tree/master/src/test)
+[![Test Node](https://img.shields.io/badge/asserts-182/182-brightgreen.svg?style=plastic&logo=Node.js)](https://github.com/DFOXpro/trocha/tree/master/src/test)
 
 [![Contact info](https://img.shields.io/badge/contact-@DFOXpro-informational.svg?style=plastic&logo=Twitter)](https://twitter.com/dfoxpro)
 [![Share info](https://img.shields.io/badge/share-%23TrochaJS-informational.svg?style=plastic&logo=Twitter)](https://twitter.com/hashtag/TrochaJS)
